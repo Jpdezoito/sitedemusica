@@ -1,9 +1,32 @@
 (() => {
   const API_BASE = '';
   const LOCAL_MANIFEST_URL = new URL('music/tracks.json', window.location.href).toString();
+  const IS_GITHUB_PAGES = window.location.hostname.endsWith('github.io');
 
   function apiUrl(path) {
     return `${API_BASE}${path}`;
+  }
+
+  async function loadLocalLibrary() {
+    try {
+      const localResp = await fetch(LOCAL_MANIFEST_URL, { cache: 'no-store' });
+      if (!localResp.ok) {
+        throw new Error(`Manifest status ${localResp.status}`);
+      }
+      const payload = await localResp.json();
+      const list = Array.isArray(payload) ? payload : (Array.isArray(payload.tracks) ? payload.tracks : []);
+      state.tracks = list
+        .map((item, index) => normalizeLocalTrack(item, index))
+        .filter(Boolean);
+    } catch (_manifestErr) {
+      state.tracks = [];
+    }
+
+    setRuntimeMode('local');
+    renderLibrary();
+    renderQueue();
+    renderPlaylistDetail();
+    updateDeleteButtonState();
   }
 
   const state = {
@@ -813,6 +836,11 @@
   }
 
   async function loadLibrary(refresh = false) {
+    if (IS_GITHUB_PAGES) {
+      await loadLocalLibrary();
+      return;
+    }
+
     try {
       const resp = await fetch(apiUrl(`/api/tracks${refresh ? '?refresh=1' : ''}`));
       if (!resp.ok) {
@@ -826,24 +854,7 @@
       renderPlaylistDetail();
       updateDeleteButtonState();
     } catch (err) {
-      try {
-        const localResp = await fetch(LOCAL_MANIFEST_URL, { cache: 'no-store' });
-        if (!localResp.ok) {
-          throw new Error(`Manifest status ${localResp.status}`);
-        }
-        const payload = await localResp.json();
-        const list = Array.isArray(payload) ? payload : (Array.isArray(payload.tracks) ? payload.tracks : []);
-        state.tracks = list
-          .map((item, index) => normalizeLocalTrack(item, index))
-          .filter(Boolean);
-      } catch (_manifestErr) {
-        state.tracks = [];
-      }
-      setRuntimeMode('local');
-      renderLibrary();
-      renderQueue();
-      renderPlaylistDetail();
-      updateDeleteButtonState();
+      await loadLocalLibrary();
     }
   }
 
