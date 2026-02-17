@@ -15,7 +15,7 @@ const MUSIC_DIR = process.env.MUSIC_DIR && process.env.MUSIC_DIR.trim()
     ? process.env.MUSIC_DIR
     : path.resolve(PROJECT_ROOT, process.env.MUSIC_DIR))
   : path.resolve(PROJECT_ROOT, 'music');
-const WEB_DIR = path.resolve(__dirname, '..', 'web');
+const WEB_DIR = PROJECT_ROOT;
 const ALLOWED_EXTENSIONS = new Set(['.mp3', '.wav', '.m4a', '.ogg', '.flac']);
 
 const app = express();
