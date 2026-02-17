@@ -1,7 +1,7 @@
 (() => {
   const API_BASE = '';
   const LOCAL_MANIFEST_URL = new URL('music/tracks.json', window.location.href).toString();
-  const IS_GITHUB_PAGES = window.location.hostname.endsWith('github.io');
+  const SHOULD_USE_API = window.location.port === '3000';
 
   function apiUrl(path) {
     return `${API_BASE}${path}`;
@@ -836,7 +836,7 @@
   }
 
   async function loadLibrary(refresh = false) {
-    if (IS_GITHUB_PAGES) {
+    if (!SHOULD_USE_API) {
       await loadLocalLibrary();
       return;
     }
@@ -859,7 +859,7 @@
   }
 
   async function loadPlaylists() {
-    if (state.runtimeMode === 'local') {
+    if (!SHOULD_USE_API || state.runtimeMode === 'local') {
       state.playlists = [];
       state.currentPlaylistId = null;
       renderPlaylistList();
