@@ -1,6 +1,6 @@
 (() => {
-  const isLiveServer = window.location.port === '5500' || window.location.port === '5501';
-  const API_BASE = isLiveServer ? 'http://localhost:3000' : '';
+  const API_BASE = '';
+  const LOCAL_MANIFEST_URL = new URL('music/tracks.json', window.location.href).toString();
 
   function apiUrl(path) {
     return `${API_BASE}${path}`;
@@ -19,6 +19,7 @@
     isShuffle: false,
     repeatMode: 'off',
     shuffleBag: [],
+    runtimeMode: 'api',
     currentView: 'queue',
     audio: new Audio()
   };
@@ -83,9 +84,56 @@
     return state.tracks.find((track) => track.id === id) || null;
   }
 
+  function buildLocalStreamUrl(filename) {
+    const encodedPath = String(filename || '')
+      .split('/')
+      .filter(Boolean)
+      .map((part) => encodeURIComponent(part))
+      .join('/');
+    return new URL(`music/${encodedPath}`, window.location.href).toString();
+  }
+
+  function normalizeLocalTrack(item, index) {
+    if (!item) return null;
+    const raw = typeof item === 'string' ? { filename: item } : item;
+    const filename = String(raw.filename || raw.file || '').trim();
+    if (!filename) return null;
+
+    const parsedName = filename.split('/').pop() || filename;
+    const titleFromFile = parsedName.replace(/\.[^/.]+$/, '').replace(/[-_]+/g, ' ').trim();
+
+    return {
+      id: String(raw.id || `local-${index}-${filename.toLowerCase()}`),
+      filename,
+      title: raw.title || titleFromFile || `Faixa ${index + 1}`,
+      artist: raw.artist || 'Artista desconhecido',
+      album: raw.album || 'Sem álbum',
+      durationSec: Number(raw.durationSec) || 0,
+      streamUrl: raw.streamUrl || buildLocalStreamUrl(filename)
+    };
+  }
+
+  function setRuntimeMode(mode) {
+    state.runtimeMode = mode;
+    const isLocal = mode === 'local';
+    els.uploadButton.disabled = isLocal;
+    els.deleteTrackButton.disabled = isLocal || !state.selectedTrackId;
+    els.newPlaylist.disabled = isLocal;
+    els.playPlaylist.disabled = isLocal;
+    els.addToPlaylist.disabled = isLocal;
+    els.removeFromPlaylist.disabled = isLocal;
+    if (isLocal) {
+      setUploadStatus('Modo local ativo (sem backend): upload/exclusão/playlists desabilitados');
+    }
+  }
+
   function createCoverElement(trackId) {
     const cover = document.createElement('div');
     cover.className = 'cover';
+    if (state.runtimeMode === 'local') {
+      cover.classList.add('cover-fallback');
+      return cover;
+    }
     const img = new Image();
     img.onload = () => {
       cover.style.backgroundImage = `url("${apiUrl(`/api/cover/${encodeURIComponent(trackId)}`)}")`;
@@ -110,7 +158,7 @@
   function updateDeleteButtonState() {
     const isTrackView = state.currentView === 'queue' || state.currentView === 'library';
     const hasSelection = !!state.selectedTrackId;
-    els.deleteTrackButton.disabled = !(isTrackView && hasSelection);
+    els.deleteTrackButton.disabled = state.runtimeMode === 'local' || !(isTrackView && hasSelection);
   }
 
   function renderQueue() {
@@ -309,7 +357,8 @@
     const currentId = state.queue[state.currentIndex];
     if (!currentId) return;
     state.currentTrackId = currentId;
-    const url = apiUrl(`/api/stream/${encodeURIComponent(currentId)}`);
+    const currentTrack = getTrackById(currentId);
+    const url = currentTrack?.streamUrl || apiUrl(`/api/stream/${encodeURIComponent(currentId)}`);
     state.audio.src = url;
     if (autoplay) {
       state.audio.play();
@@ -375,6 +424,10 @@
   }
 
   async function deleteSelectedTrack() {
+    if (state.runtimeMode === 'local') {
+      alert('Exclusão disponível apenas com backend ativo.');
+      return;
+    }
     const trackId = state.selectedTrackId;
     if (!trackId) return;
     const track = getTrackById(trackId);
@@ -659,6 +712,11 @@
   }
 
   function uploadFiles(files) {
+    if (state.runtimeMode === 'local') {
+      setUploadStatus('Upload disponível apenas com backend ativo');
+      setTimeout(() => setUploadStatus(''), 3000);
+      return;
+    }
     const formData = new FormData();
     files.forEach((file) => formData.append('files', file));
     setUploadStatus('Enviando...');
@@ -718,6 +776,10 @@
   }
 
   async function createPlaylistFromPrompt() {
+    if (state.runtimeMode === 'local') {
+      alert('Playlists requerem backend ativo.');
+      return;
+    }
     const name = prompt('Nome da playlist');
     if (!name || !name.trim()) return;
     try {
@@ -733,6 +795,9 @@
   }
 
   async function updatePlaylist(id, payload) {
+    if (state.runtimeMode === 'local') {
+      return;
+    }
     try {
       const resp = await fetch(apiUrl(`/api/playlists/${encodeURIComponent(id)}`), {
         method: 'PUT',
@@ -750,20 +815,52 @@
   async function loadLibrary(refresh = false) {
     try {
       const resp = await fetch(apiUrl(`/api/tracks${refresh ? '?refresh=1' : ''}`));
+      if (!resp.ok) {
+        throw new Error(`API tracks status ${resp.status}`);
+      }
       const data = await resp.json();
       state.tracks = Array.isArray(data) ? data : (data.tracks || []);
+      setRuntimeMode('api');
       renderLibrary();
       renderQueue();
       renderPlaylistDetail();
       updateDeleteButtonState();
     } catch (err) {
-      console.error(err);
+      try {
+        const localResp = await fetch(LOCAL_MANIFEST_URL, { cache: 'no-store' });
+        if (!localResp.ok) {
+          throw new Error(`Manifest status ${localResp.status}`);
+        }
+        const payload = await localResp.json();
+        const list = Array.isArray(payload) ? payload : (Array.isArray(payload.tracks) ? payload.tracks : []);
+        state.tracks = list
+          .map((item, index) => normalizeLocalTrack(item, index))
+          .filter(Boolean);
+      } catch (_manifestErr) {
+        state.tracks = [];
+      }
+      setRuntimeMode('local');
+      renderLibrary();
+      renderQueue();
+      renderPlaylistDetail();
+      updateDeleteButtonState();
     }
   }
 
   async function loadPlaylists() {
+    if (state.runtimeMode === 'local') {
+      state.playlists = [];
+      state.currentPlaylistId = null;
+      renderPlaylistList();
+      renderPlaylistDetail();
+      renderAddMenuPlaylists();
+      return;
+    }
     try {
       const resp = await fetch(apiUrl('/api/playlists'));
+      if (!resp.ok) {
+        throw new Error(`API playlists status ${resp.status}`);
+      }
       const data = await resp.json();
       state.playlists = Array.isArray(data.playlists) ? data.playlists : [];
       const saved = localStorage.getItem('lastPlaylistId');
@@ -776,7 +873,11 @@
       renderPlaylistDetail();
       renderAddMenuPlaylists();
     } catch (err) {
-      console.error(err);
+      state.playlists = [];
+      state.currentPlaylistId = null;
+      renderPlaylistList();
+      renderPlaylistDetail();
+      renderAddMenuPlaylists();
     }
   }
 
@@ -800,14 +901,16 @@
     els.btnRepeat.textContent = state.repeatMode === 'one' ? '🔂' : '🔁';
   }
 
-  function init() {
+  async function init() {
     bindControls();
     initVolume();
     initPreferences();
     setView('queue');
-    loadLibrary();
-    loadPlaylists();
-    setUploadStatus('');
+    await loadLibrary();
+    await loadPlaylists();
+    if (state.runtimeMode !== 'local') {
+      setUploadStatus('');
+    }
     updateDeleteButtonState();
   }
 
