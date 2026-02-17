@@ -1,6 +1,6 @@
 (() => {
   const API_BASE = '';
-  const LOCAL_MANIFEST_URL = new URL('music/tracks.json', window.location.href).toString();
+  const LOCAL_PATH_CANDIDATES = ['', './', '../', '../../', '../../../'];
   const SHOULD_USE_API = window.location.port === '3000';
 
   function apiUrl(path) {
@@ -9,11 +9,10 @@
 
   async function loadLocalLibrary() {
     try {
-      const localResp = await fetch(LOCAL_MANIFEST_URL, { cache: 'no-store' });
-      if (!localResp.ok) {
-        throw new Error(`Manifest status ${localResp.status}`);
+      const payload = await resolveLocalManifest();
+      if (!payload) {
+        throw new Error('Manifesto local nao encontrado');
       }
-      const payload = await localResp.json();
       const list = Array.isArray(payload) ? payload : (Array.isArray(payload.tracks) ? payload.tracks : []);
       state.tracks = list
         .map((item, index) => normalizeLocalTrack(item, index))
@@ -43,6 +42,7 @@
     repeatMode: 'off',
     shuffleBag: [],
     runtimeMode: 'api',
+    localBasePath: '',
     currentView: 'queue',
     audio: new Audio()
   };
@@ -113,7 +113,25 @@
       .filter(Boolean)
       .map((part) => encodeURIComponent(part))
       .join('/');
-    return new URL(`music/${encodedPath}`, window.location.href).toString();
+    const basePath = state.localBasePath || '';
+    return new URL(`${basePath}music/${encodedPath}`, window.location.href).toString();
+  }
+
+  async function resolveLocalManifest() {
+    for (const basePath of LOCAL_PATH_CANDIDATES) {
+      const manifestUrl = new URL(`${basePath}music/tracks.json`, window.location.href).toString();
+      try {
+        const resp = await fetch(manifestUrl, { cache: 'no-store' });
+        if (!resp.ok) continue;
+        const payload = await resp.json();
+        state.localBasePath = basePath;
+        return payload;
+      } catch (_err) {
+        // tenta o próximo caminho
+      }
+    }
+
+    return null;
   }
 
   function normalizeLocalTrack(item, index) {
