@@ -907,6 +907,9 @@
     initPreferences();
     setView('queue');
     await loadLibrary();
+    if (state.runtimeMode === 'local' && state.tracks.length > 0) {
+      setView('library');
+    }
     await loadPlaylists();
     if (state.runtimeMode !== 'local') {
       setUploadStatus('');
