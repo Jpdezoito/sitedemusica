@@ -187,6 +187,7 @@
 
   function setPlayButton(isPlaying) {
     els.btnPlay.textContent = isPlaying ? '❚❚' : '►';
+    els.btnPlay.classList.toggle('active', isPlaying);
   }
 
   function setUploadStatus(message) {
