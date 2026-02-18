@@ -390,12 +390,18 @@ tr:hover {
   color: var(--text);
 }
 
+.controls #btnShuffle.active,
+.controls #btnRepeat.active,
+.controls #btnPlay.active,
 .controls button.active {
   background: var(--accent);
   color: #ffffff;
   border-color: var(--accent);
 }
 
+.controls #btnShuffle.active:hover,
+.controls #btnRepeat.active:hover,
+.controls #btnPlay.active:hover,
 .controls button.active:hover {
   background: var(--accent-strong);
   color: #ffffff;
