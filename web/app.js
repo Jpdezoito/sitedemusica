@@ -48,9 +48,7 @@
   };
 
   const STORAGE_KEYS = {
-    volume: 'playerVolume',
-    shuffle: 'playerShuffle',
-    repeat: 'playerRepeat'
+    volume: 'playerVolume'
   };
 
   const els = {
@@ -627,21 +625,28 @@
 
   function toggleShuffle() {
     state.isShuffle = !state.isShuffle;
-    els.btnShuffle.classList.toggle('active', state.isShuffle);
+    updateShuffleButton();
     resetShuffleBag();
-    localStorage.setItem(STORAGE_KEYS.shuffle, state.isShuffle ? '1' : '0');
   }
 
   function toggleRepeat() {
-    const order = ['off', 'one', 'all'];
+    const order = ['off', 'all', 'one'];
     const nextIndex = (order.indexOf(state.repeatMode) + 1) % order.length;
     state.repeatMode = order[nextIndex];
+    updateRepeatButton();
+  }
+
+  function updateShuffleButton() {
+    els.btnShuffle.classList.toggle('active', state.isShuffle);
+  }
+
+  function updateRepeatButton() {
+    els.btnRepeat.classList.toggle('active', state.repeatMode !== 'off');
     if (state.repeatMode === 'one') {
       els.btnRepeat.textContent = '🔂';
     } else {
       els.btnRepeat.textContent = '🔁';
     }
-    localStorage.setItem(STORAGE_KEYS.repeat, state.repeatMode);
   }
 
   function handleEnded() {
@@ -921,13 +926,10 @@
   }
 
   function initPreferences() {
-    const savedShuffle = localStorage.getItem(STORAGE_KEYS.shuffle);
-    state.isShuffle = savedShuffle === '1';
-    els.btnShuffle.classList.toggle('active', state.isShuffle);
-
-    const savedRepeat = localStorage.getItem(STORAGE_KEYS.repeat);
-    state.repeatMode = savedRepeat === 'one' || savedRepeat === 'all' ? savedRepeat : 'off';
-    els.btnRepeat.textContent = state.repeatMode === 'one' ? '🔂' : '🔁';
+    state.isShuffle = false;
+    state.repeatMode = 'off';
+    updateShuffleButton();
+    updateRepeatButton();
   }
 
   async function init() {

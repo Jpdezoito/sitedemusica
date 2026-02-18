@@ -372,6 +372,16 @@ tr:hover {
   border: 1px solid var(--border);
 }
 
+.controls button.active {
+  background: var(--accent);
+  color: #ffffff;
+  border-color: var(--accent);
+}
+
+.controls button.active:hover {
+  background: var(--accent-strong);
+}
+
 .timeline {
   display: flex;
   align-items: center;
