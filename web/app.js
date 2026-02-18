@@ -186,7 +186,7 @@
   }
 
   function setPlayButton(isPlaying) {
-    els.btnPlay.textContent = isPlaying ? '⏸' : '▶️';
+    els.btnPlay.textContent = isPlaying ? '❚❚' : '►';
   }
 
   function setUploadStatus(message) {
