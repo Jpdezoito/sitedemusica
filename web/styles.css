@@ -372,14 +372,30 @@ tr:hover {
   border: 1px solid var(--border);
 }
 
+.controls #btnShuffle,
+.controls #btnRepeat {
+  background: transparent;
+  color: var(--muted);
+  border-color: transparent;
+}
+
+.controls #btnShuffle:hover,
+.controls #btnRepeat:hover {
+  background: var(--panel-soft);
+  border-color: var(--border);
+  color: var(--text);
+}
+
 .controls button.active {
-  background: var(--accent);
-  color: #ffffff;
-  border-color: var(--accent);
+  background: rgba(43, 108, 176, 0.15);
+  color: var(--accent);
+  border-color: rgba(43, 108, 176, 0.45);
 }
 
 .controls button.active:hover {
-  background: var(--accent-strong);
+  background: rgba(43, 108, 176, 0.22);
+  color: var(--accent-strong);
+  border-color: rgba(30, 79, 138, 0.5);
 }
 
 .timeline {
