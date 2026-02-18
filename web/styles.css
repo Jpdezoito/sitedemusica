@@ -379,6 +379,10 @@ tr:hover {
   border-color: var(--border);
 }
 
+.controls #btnRepeat {
+  position: relative;
+}
+
 .controls #btnShuffle:hover,
 .controls #btnRepeat:hover {
   background: var(--panel-soft);
@@ -396,6 +400,17 @@ tr:hover {
   background: var(--accent-strong);
   color: #ffffff;
   border-color: var(--accent-strong);
+}
+
+.controls #btnRepeat.repeat-one::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  right: 6px;
+  top: 6px;
+  background: currentColor;
 }
 
 .timeline {

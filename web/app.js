@@ -642,11 +642,8 @@
 
   function updateRepeatButton() {
     els.btnRepeat.classList.toggle('active', state.repeatMode !== 'off');
-    if (state.repeatMode === 'one') {
-      els.btnRepeat.textContent = '🔂';
-    } else {
-      els.btnRepeat.textContent = '🔁';
-    }
+    els.btnRepeat.classList.toggle('repeat-one', state.repeatMode === 'one');
+    els.btnRepeat.textContent = '↻';
   }
 
   function handleEnded() {
