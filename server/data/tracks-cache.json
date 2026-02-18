@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-17T13:10:16.789Z",
+  "updatedAt": "2026-02-18T07:15:11.234Z",
   "tracks": [
     {
       "id": "edfba9b7229e58f7b9e23037a73b93fb48faec6c",
@@ -82,16 +82,6 @@
       "sizeBytes": 4379766
     },
     {
-      "id": "0e5a4534e70640315d81ebc75496ebe6efbad61a",
-      "filename": "MULHERES-DO-VELHO-OESTE_1.mp3",
-      "relPath": "MULHERES-DO-VELHO-OESTE_1.mp3",
-      "title": "MULHERES-DO-VELHO-OESTE_1",
-      "artist": "Desconhecido",
-      "album": "Desconhecido",
-      "durationSec": 195,
-      "sizeBytes": 4379766
-    },
-    {
       "id": "cb00d642e3e8db63818cbe64eea225bd8c3ff5d5",
       "filename": "PYKE-VERSÃO-FEMININA.mp3",
       "relPath": "PYKE-VERSÃO-FEMININA.mp3",
@@ -122,14 +112,14 @@
       "sizeBytes": 3515382
     },
     {
-      "id": "8ada243869a724411403f3a3a2bdea71ade2d178",
-      "filename": "RAP-DO-JIGEN-_Phonk-_-Hip-Hop-Agressivo_.mp3",
-      "relPath": "RAP-DO-JIGEN-_Phonk-_-Hip-Hop-Agressivo_.mp3",
-      "title": "RAP-DO-JIGEN-_Phonk-_-Hip-Hop-Agressivo_",
+      "id": "3a9a9b510927b083a715ec7667af5e7dad6c4ee8",
+      "filename": "Rap-do-Zed,-Yone,-Talon-e-Yasuo.mp3",
+      "relPath": "Rap-do-Zed,-Yone,-Talon-e-Yasuo.mp3",
+      "title": "Rap-do-Zed,-Yone,-Talon-e-Yasuo",
       "artist": "Desconhecido",
       "album": "Desconhecido",
-      "durationSec": 154,
-      "sizeBytes": 3515382
+      "durationSec": 148,
+      "sizeBytes": 3267414
     },
     {
       "id": "5e922474764cf767a3e0e6eb2f9e702afe2ad530",
@@ -182,16 +172,6 @@
       "sizeBytes": 2471042
     },
     {
-      "id": "4c4c7962c5572e61a964bcad411bfe727ba3ca3e",
-      "filename": "RISCADO NO ABISMO12WF.mp3",
-      "relPath": "RISCADO NO ABISMO12WF.mp3",
-      "title": "RISCADO NO ABISMO12WF",
-      "artist": "Desconhecido",
-      "album": "Desconhecido",
-      "durationSec": 154,
-      "sizeBytes": 2471042
-    },
-    {
       "id": "15299c2c10a1fa19a9f49a1b04089817efce21d0",
       "filename": "THREE-BLADES-IN-THE-BREL.mp3",
       "relPath": "THREE-BLADES-IN-THE-BREL.mp3",
@@ -229,6 +209,16 @@
       "artist": "Desconhecido",
       "album": "Desconhecido",
       "durationSec": 152,
+      "sizeBytes": 3676422
+    },
+    {
+      "id": "3025fea90446ead7165e6017e250620946b98187",
+      "filename": "Twisted-Fate-&-Yasuo-no-Velho-Oeste.mp3",
+      "relPath": "Twisted-Fate-&-Yasuo-no-Velho-Oeste.mp3",
+      "title": "Twisted-Fate-&-Yasuo-no-Velho-Oeste",
+      "artist": "Desconhecido",
+      "album": "Desconhecido",
+      "durationSec": 170,
       "sizeBytes": 3676422
     },
     {
