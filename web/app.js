@@ -26,6 +26,8 @@
     renderQueue();
     renderPlaylistDetail();
     updateDeleteButtonState();
+    state.localDurationJobId += 1;
+    hydrateLocalDurations(state.localDurationJobId);
   }
 
   const state = {
@@ -43,12 +45,14 @@
     shuffleBag: [],
     runtimeMode: 'api',
     localBasePath: '',
+    localDurationJobId: 0,
     currentView: 'queue',
     audio: new Audio()
   };
 
   const STORAGE_KEYS = {
-    volume: 'playerVolume'
+    volume: 'playerVolume',
+    localDurations: 'localTrackDurationsV1'
   };
 
   const els = {
@@ -150,6 +154,95 @@
       durationSec: Number(raw.durationSec) || 0,
       streamUrl: raw.streamUrl || buildLocalStreamUrl(filename)
     };
+  }
+
+  function readLocalDurationCache() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEYS.localDurations);
+      const parsed = raw ? JSON.parse(raw) : {};
+      return parsed && typeof parsed === 'object' ? parsed : {};
+    } catch (_err) {
+      return {};
+    }
+  }
+
+  function writeLocalDurationCache(cache) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.localDurations, JSON.stringify(cache));
+    } catch (_err) {
+      return;
+    }
+  }
+
+  function getDurationCacheKey(track) {
+    return String(track?.filename || '').trim().toLowerCase();
+  }
+
+  function loadAudioDurationSeconds(streamUrl, timeoutMs = 12000) {
+    return new Promise((resolve) => {
+      const audio = new Audio();
+      let done = false;
+      const finish = (value) => {
+        if (done) return;
+        done = true;
+        window.clearTimeout(timeoutId);
+        audio.onloadedmetadata = null;
+        audio.onerror = null;
+        audio.onabort = null;
+        audio.src = '';
+        resolve(Number.isFinite(value) && value > 0 ? value : 0);
+      };
+      const timeoutId = window.setTimeout(() => finish(0), timeoutMs);
+      audio.preload = 'metadata';
+      audio.onloadedmetadata = () => finish(Math.round(audio.duration || 0));
+      audio.onerror = () => finish(0);
+      audio.onabort = () => finish(0);
+      audio.src = streamUrl;
+    });
+  }
+
+  async function hydrateLocalDurations(jobId) {
+    if (state.runtimeMode !== 'local') return;
+    if (jobId !== state.localDurationJobId) return;
+
+    const cache = readLocalDurationCache();
+    let changedFromCache = false;
+
+    state.tracks.forEach((track) => {
+      if ((track.durationSec || 0) > 0) return;
+      const key = getDurationCacheKey(track);
+      const cached = Number(cache[key]);
+      if (Number.isFinite(cached) && cached > 0) {
+        track.durationSec = cached;
+        changedFromCache = true;
+      }
+    });
+
+    if (changedFromCache) {
+      renderLibrary();
+      renderQueue();
+      renderPlaylistDetail();
+      updateNowPlaying();
+    }
+
+    let changed = false;
+    for (const track of state.tracks) {
+      if (jobId !== state.localDurationJobId) return;
+      if ((track.durationSec || 0) > 0) continue;
+      const duration = await loadAudioDurationSeconds(track.streamUrl);
+      if (duration <= 0) continue;
+      track.durationSec = duration;
+      cache[getDurationCacheKey(track)] = duration;
+      changed = true;
+    }
+
+    if (!changed) return;
+    writeLocalDurationCache(cache);
+    if (jobId !== state.localDurationJobId) return;
+    renderLibrary();
+    renderQueue();
+    renderPlaylistDetail();
+    updateNowPlaying();
   }
 
   function setRuntimeMode(mode) {
