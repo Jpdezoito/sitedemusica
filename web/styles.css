@@ -21,6 +21,7 @@ body {
   font-family: var(--font);
   background: var(--bg);
   color: var(--text);
+  min-height: 100svh;
   min-height: 100vh;
   min-height: 100dvh;
   overflow-x: hidden;
@@ -30,6 +31,7 @@ body {
 .app {
   display: grid;
   grid-template-columns: 260px 1fr;
+  min-height: 100svh;
   min-height: 100vh;
   min-height: 100dvh;
   overflow-x: hidden;
@@ -1011,8 +1013,13 @@ select:focus-visible {
       "controls"
       "timeline"
       "volume";
-    padding: 10px 12px 12px;
+    padding: 10px 12px calc(12px + env(safe-area-inset-bottom));
     gap: 8px;
+  }
+
+  .app {
+    min-height: 100svh;
+    min-height: 100dvh;
   }
 
   .now-playing {
