@@ -582,6 +582,24 @@ tr:hover {
   gap: 6px;
 }
 
+.theme-vinyl .timeline,
+.theme-vinyl .volume,
+.theme-vinyl .controls,
+.theme-vinyl .now-block {
+  min-width: 0;
+}
+
+@media (max-width: 1360px) {
+  .theme-vinyl .player {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "now controls"
+      "timeline volume";
+    row-gap: 10px;
+    height: auto;
+  }
+}
+
 .controls {
   display: flex;
   gap: 8px;
