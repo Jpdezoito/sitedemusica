@@ -63,6 +63,13 @@
     let beatHighs = 0;
     let audioGraphFailed = false;
 
+    function updateLayerInsets() {
+      const player = document.querySelector('.player');
+      const playerHeight = player ? Math.max(0, Math.round(player.getBoundingClientRect().height || 0)) : 0;
+      const inset = playerHeight > 0 ? playerHeight : 0;
+      layer.style.setProperty('--vizBottomInset', `${inset}px`);
+    }
+
     function writeLevels(nextBass, nextMids, nextHighs, nextBeatBass, nextBeatMids, nextBeatHighs) {
       const topMix = clamp(nextMids * 0.65 + nextHighs * 0.35, 0, 1);
       const bottomMix = clamp(nextBass * 0.75 + nextMids * 0.25, 0, 1);
@@ -240,6 +247,7 @@
 
     function refreshTheme() {
       // Cores são derivadas de CSS variables em runtime.
+      updateLayerInsets();
       clearAll();
     }
 
@@ -252,7 +260,10 @@
       }
     });
 
+    window.addEventListener('resize', updateLayerInsets);
+
     updateLayerVisibility();
+    updateLayerInsets();
     clearAll();
 
     const api = {

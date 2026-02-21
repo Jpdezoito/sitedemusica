@@ -182,6 +182,7 @@
     themeMode: document.querySelector('#themeMode'),
     themeSelect: document.querySelector('#appearanceThemeSelect'),
     layoutSelect: document.querySelector('#appearanceLayoutSelect'),
+    appearanceModelSelect: document.querySelector('#appearanceModelSelect'),
     themeDot: document.querySelector('#themeDot'),
     appearanceButton: document.querySelector('#appearanceButton'),
     appearanceModal: document.querySelector('#appearanceModal'),
@@ -555,6 +556,9 @@
     if (persist) {
       localStorage.setItem(STORAGE_KEYS.layout, normalized);
     }
+    if (neonVisualizer) {
+      neonVisualizer.refreshTheme();
+    }
   }
 
   function initAppearance() {
@@ -868,6 +872,9 @@
     if (els.playbackModelQuick) {
       els.playbackModelQuick.innerHTML = '';
     }
+    if (els.appearanceModelSelect) {
+      els.appearanceModelSelect.innerHTML = '';
+    }
     PLAYBACK_MODELS.forEach((model) => {
       const option = document.createElement('option');
       option.value = model.id;
@@ -881,6 +888,12 @@
         quickOption.textContent = model.name;
         els.playbackModelQuick.appendChild(quickOption);
       }
+      if (els.appearanceModelSelect) {
+        const modalOption = document.createElement('option');
+        modalOption.value = model.id;
+        modalOption.textContent = model.name;
+        els.appearanceModelSelect.appendChild(modalOption);
+      }
     });
   }
 
@@ -893,6 +906,9 @@
     if (els.playbackModelQuick) {
       els.playbackModelQuick.value = selected.id;
     }
+    if (els.appearanceModelSelect) {
+      els.appearanceModelSelect.value = selected.id;
+    }
     if (els.player) {
       els.player.dataset.model = selected.id;
     }
@@ -904,6 +920,9 @@
     }
     if (persist) {
       localStorage.setItem(STORAGE_KEYS.playbackModel, selected.id);
+    }
+    if (neonVisualizer) {
+      neonVisualizer.refreshTheme();
     }
     updateNowPlaying();
   }
@@ -1226,6 +1245,13 @@
 
     if (els.playbackModelQuick) {
       els.playbackModelQuick.addEventListener('change', (event) => {
+        const nextId = event.target.value;
+        applyPlaybackModel(nextId, true);
+      });
+    }
+
+    if (els.appearanceModelSelect) {
+      els.appearanceModelSelect.addEventListener('change', (event) => {
         const nextId = event.target.value;
         applyPlaybackModel(nextId, true);
       });

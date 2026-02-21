@@ -6,6 +6,7 @@
   --vizBeatBass: 0;
   --vizBeatMids: 0;
   --vizBeatHigh: 0;
+  --vizBottomInset: 0px;
   --vizBassColor: #39FF14;
   --vizMidsColor: #00D9FF;
   --vizHighColor: #FF4DFF;
@@ -94,7 +95,7 @@ body > main {
 }
 
 .corner-glow.bl {
-  bottom: -7vmin;
+  bottom: calc(-7vmin + var(--vizBottomInset));
   left: -7vmin;
   opacity: calc(0.20 + var(--vizBass) * 0.82 + var(--vizBeatBass) * 0.24);
   transform: scale(calc(0.94 + var(--vizBass) * 0.18 + var(--vizBeatBass) * 0.06));
@@ -114,7 +115,7 @@ body > main {
 }
 
 .corner-glow.br {
-  bottom: -7vmin;
+  bottom: calc(-7vmin + var(--vizBottomInset));
   right: -7vmin;
   opacity: calc(0.18 + var(--vizMix) * 0.76 + (var(--vizBeatBass) + var(--vizBeatMids)) * 0.11);
   transform: scale(calc(0.94 + var(--vizMix) * 0.16 + var(--vizBeatMids) * 0.04));

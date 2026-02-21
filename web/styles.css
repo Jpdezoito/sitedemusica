@@ -558,6 +558,25 @@ tr:hover {
   min-width: 128px;
 }
 
+.theme-vinyl .player,
+.theme-vinyl .player[data-model],
+.theme-vinyl .player[data-model='pulse-ring'],
+.theme-vinyl .player[data-model='prism-clip'],
+.theme-vinyl .player[data-model='orbit-sphere'],
+.theme-vinyl .player[data-model='holo-puck-dock'],
+.theme-vinyl .player[data-model='modu-stack'],
+.theme-vinyl .player[data-model='neck-link'],
+.theme-vinyl .player[data-model='nano-tape'],
+.theme-vinyl .player[data-model='wave-card'] {
+  height: auto;
+  min-height: 122px;
+}
+
+.theme-vinyl .now-block {
+  justify-content: flex-start;
+  gap: 6px;
+}
+
 .controls {
   display: flex;
   gap: 8px;
@@ -798,6 +817,7 @@ select:focus-visible {
   position: relative;
   z-index: 1;
   width: min(92vw, 460px);
+  max-height: calc(100dvh - 28px);
   background: var(--surface);
   color: var(--text);
   border: 1px solid var(--border);
@@ -805,6 +825,8 @@ select:focus-visible {
   box-shadow: var(--shadow);
   padding: 14px;
   pointer-events: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .appearance-header {
@@ -823,6 +845,7 @@ select:focus-visible {
 .appearance-body {
   display: grid;
   gap: 12px;
+  overflow: auto;
 }
 
 .appearance-body .appearance-field {
@@ -852,6 +875,11 @@ select:focus-visible {
   background: var(--surface);
   color: var(--text);
   border: 1px solid var(--border);
+}
+
+.appearance-panel .model-select,
+.appearance-panel select {
+  width: 100%;
 }
 
 .appearance-panel select:hover,
@@ -993,5 +1021,17 @@ select:focus-visible {
 
   .card-header {
     padding: 12px;
+  }
+
+  .appearance-modal {
+    align-items: flex-start;
+    justify-content: center;
+    padding: 8px;
+  }
+
+  .appearance-panel {
+    width: min(96vw, 520px);
+    max-height: calc(100dvh - 16px);
+    margin-top: max(2px, env(safe-area-inset-top));
   }
 }
