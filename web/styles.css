@@ -21,15 +21,19 @@ body {
   font-family: var(--font);
   background: var(--bg);
   color: var(--text);
-  height: 100dvh;
-  overflow: hidden;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .app {
   display: grid;
   grid-template-columns: 260px 1fr;
-  height: 100dvh;
-  overflow: hidden;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 .sidebar {
