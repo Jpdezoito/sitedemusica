@@ -4,10 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Meu Player de Músicas</title>
+  <link rel="stylesheet" href="web/themes.css">
   <link rel="stylesheet" href="web/styles.css">
+  <link rel="stylesheet" href="web/visualizer.css">
+  <script src="web/themes.js"></script>
+  <script>
+    (function () {
+      var validThemes = ['minimal', 'darkpro', 'neon', 'retro', 'glass', 'vinyl', 'studio', 'ocean'];
+      var validLayouts = ['compact', 'split', 'fullscreen'];
+      var savedTheme = localStorage.getItem('player_theme') || 'minimal';
+      var savedLayout = localStorage.getItem('player_layout') || 'compact';
+      var theme = validThemes.indexOf(savedTheme) >= 0 ? savedTheme : 'minimal';
+      var layout = validLayouts.indexOf(savedLayout) >= 0 ? savedLayout : 'compact';
+      document.documentElement.classList.add('theme-' + theme);
+      document.documentElement.classList.add('layout-' + layout);
+    })();
+  </script>
 </head>
 <body>
-  <div class="app">
+  <div id="cornerGlowLayer" aria-hidden="true"></div>
+  <div id="app" class="app">
     <aside class="sidebar">
       <div class="logo">Reprodutor Multimidia</div>
       <nav>
@@ -177,7 +193,19 @@
       </section>
 
       <footer class="player">
-        <div class="now-playing" id="nowPlaying">Nenhuma faixa selecionada</div>
+        <div class="now-block">
+          <div class="vinyl-stage" aria-hidden="true">
+            <div class="vinyl-disc" id="vinylDisc">
+              <div class="vinyl-label" id="vinylLabel">VP</div>
+            </div>
+            <div class="vinyl-led" id="vinylLed" aria-label="status pause"></div>
+          </div>
+          <div class="now-playing" id="nowPlaying">Nenhuma faixa selecionada</div>
+          <div class="model-active">
+            <span id="playbackModelActive">Modelo: PulseRing Player</span>
+            <select id="playbackModelQuick" class="model-select"></select>
+          </div>
+        </div>
         <div class="timeline">
           <span id="currentTime">0:00</span>
           <input type="range" id="seekBar" min="0" max="100" value="0">
@@ -190,15 +218,51 @@
           <button id="btnNext" title="Proxima">⏭</button>
           <button id="btnStop" title="Stop">⏹</button>
           <button id="btnRepeat" title="Repeat">↻</button>
+          <button id="appearanceButton" title="Aparência" aria-label="Abrir aparencia">⚙️ Aparência</button>
         </div>
         <div class="volume">
           <span>Volume</span>
           <input type="range" id="volume" min="0" max="1" step="0.01" value="0.8">
+          <div class="vu-meters" aria-hidden="true">
+            <span class="vu-label">L</span>
+            <div id="vuLeft" class="vu-track"><span class="vu-fill"></span></div>
+            <span class="vu-label">R</span>
+            <div id="vuRight" class="vu-track"><span class="vu-fill"></span></div>
+          </div>
         </div>
       </footer>
     </main>
   </div>
 
+  <div id="appearanceModal" class="appearance-modal hidden" aria-hidden="true">
+    <div id="appearanceOverlay" class="appearance-overlay"></div>
+    <div class="appearance-panel" role="dialog" aria-modal="true" aria-labelledby="appearanceTitle">
+      <div class="appearance-header">
+        <h2 id="appearanceTitle">Aparência</h2>
+        <button id="appearanceClose" type="button" class="ghost">Fechar</button>
+      </div>
+      <div class="appearance-body">
+        <label class="appearance-field" for="appearanceThemeSelect">
+          <span>Tema</span>
+          <select id="appearanceThemeSelect" class="model-select"></select>
+        </label>
+        <label class="appearance-field" for="appearanceLayoutSelect">
+          <span>Layout</span>
+          <select id="appearanceLayoutSelect" class="model-select">
+            <option value="compact">Compact</option>
+            <option value="split">Split</option>
+            <option value="fullscreen">Fullscreen</option>
+          </select>
+        </label>
+        <label class="appearance-field appearance-toggle" for="cornerGlowToggle">
+          <span>Iluminação neon (4 cantos)</span>
+          <input id="cornerGlowToggle" type="checkbox" checked>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <script src="web/visualizer.js"></script>
   <script src="web/app.js"></script>
 </body>
 </html>

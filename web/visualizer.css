@@ -1,0 +1,140 @@
+#cornerGlowLayer {
+  --vizBass: 0;
+  --vizMids: 0;
+  --vizHigh: 0;
+  --vizMix: 0;
+  --vizBeatBass: 0;
+  --vizBeatMids: 0;
+  --vizBeatHigh: 0;
+  --vizBassColor: #39FF14;
+  --vizMidsColor: #00D9FF;
+  --vizHighColor: #FF4DFF;
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+#cornerGlowLayer.viz-off {
+  display: none;
+}
+
+#app,
+.app,
+body > main {
+  position: relative;
+  z-index: 10;
+}
+
+.corner-glow {
+  position: absolute;
+  width: 56vmin;
+  height: 56vmin;
+  filter: blur(18px);
+  opacity: 0.26;
+  transform: scale(1);
+  will-change: opacity, transform;
+  mix-blend-mode: screen;
+  background: radial-gradient(
+    circle at 30% 30%,
+    color-mix(in srgb, var(--accent2) 65%, transparent) 0%,
+    transparent 60%
+  );
+}
+
+.corner-glow::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 72% 72%,
+    color-mix(in srgb, var(--accent) 54%, transparent) 0%,
+    transparent 64%
+  );
+}
+
+.corner-glow.tl {
+  top: -7vmin;
+  left: -7vmin;
+  opacity: calc(0.18 + var(--vizHigh) * 0.72 + var(--vizBeatHigh) * 0.22);
+  transform: scale(calc(0.94 + var(--vizHigh) * 0.14 + var(--vizBeatHigh) * 0.06));
+  background: radial-gradient(
+    circle at 30% 30%,
+    color-mix(in srgb, var(--vizHighColor) 78%, transparent) 0%,
+    transparent 62%
+  );
+}
+
+.corner-glow.tl::after {
+  background: radial-gradient(
+    circle at 72% 72%,
+    color-mix(in srgb, #FFD166 52%, transparent) 0%,
+    transparent 64%
+  );
+}
+
+.corner-glow.tr {
+  top: -7vmin;
+  right: -7vmin;
+  opacity: calc(0.18 + var(--vizMids) * 0.72 + var(--vizBeatMids) * 0.22);
+  transform: scale(calc(0.94 + var(--vizMids) * 0.14 + var(--vizBeatMids) * 0.06));
+  background: radial-gradient(
+    circle at 30% 30%,
+    color-mix(in srgb, var(--vizMidsColor) 80%, transparent) 0%,
+    transparent 62%
+  );
+}
+
+.corner-glow.tr::after {
+  background: radial-gradient(
+    circle at 72% 72%,
+    color-mix(in srgb, #7AF7FF 50%, transparent) 0%,
+    transparent 64%
+  );
+}
+
+.corner-glow.bl {
+  bottom: -7vmin;
+  left: -7vmin;
+  opacity: calc(0.20 + var(--vizBass) * 0.82 + var(--vizBeatBass) * 0.24);
+  transform: scale(calc(0.94 + var(--vizBass) * 0.18 + var(--vizBeatBass) * 0.06));
+  background: radial-gradient(
+    circle at 30% 30%,
+    color-mix(in srgb, var(--vizBassColor) 84%, transparent) 0%,
+    transparent 60%
+  );
+}
+
+.corner-glow.bl::after {
+  background: radial-gradient(
+    circle at 72% 72%,
+    color-mix(in srgb, #B4FF5E 48%, transparent) 0%,
+    transparent 64%
+  );
+}
+
+.corner-glow.br {
+  bottom: -7vmin;
+  right: -7vmin;
+  opacity: calc(0.18 + var(--vizMix) * 0.76 + (var(--vizBeatBass) + var(--vizBeatMids)) * 0.11);
+  transform: scale(calc(0.94 + var(--vizMix) * 0.16 + var(--vizBeatMids) * 0.04));
+  background: radial-gradient(
+    circle at 30% 30%,
+    color-mix(in srgb, var(--vizBassColor) 50%, var(--vizMidsColor) 50%) 0%,
+    transparent 62%
+  );
+}
+
+.corner-glow.br::after {
+  background: radial-gradient(
+    circle at 72% 72%,
+    color-mix(in srgb, var(--vizHighColor) 42%, transparent) 0%,
+    transparent 64%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #cornerGlowLayer {
+    display: none;
+  }
+}

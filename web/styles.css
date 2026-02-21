@@ -1,7 +1,7 @@
 :root {
   --bg: #f6f7fb;
-  --panel: #ffffff;
-  --panel-soft: #f1f3f9;
+  --panel: var(--surface);
+  --panel-soft: var(--surface2);
   --accent: #2b6cb0;
   --accent-strong: #1e4f8a;
   --text: #1a202c;
@@ -18,7 +18,7 @@
 
 body {
   margin: 0;
-  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font);
   background: var(--bg);
   color: var(--text);
   height: 100dvh;
@@ -66,7 +66,7 @@ nav {
 
 .nav-item:hover,
 .nav-item.active {
-  background: var(--panel-soft);
+  background: var(--hover);
   color: var(--text);
 }
 
@@ -114,7 +114,7 @@ nav {
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 8px 10px;
-  background: var(--panel);
+  background: var(--surface);
   color: var(--text);
   min-width: 220px;
 }
@@ -154,6 +154,29 @@ nav {
   flex: 0 0 auto;
 }
 
+.appearance-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.appearance-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.theme-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 1px solid var(--border);
+}
+
 button {
   cursor: pointer;
   border: none;
@@ -173,7 +196,7 @@ button:active {
 
 button.primary {
   background: var(--accent);
-  color: #ffffff;
+  color: var(--onAccent, #ffffff);
 }
 
 button.primary:hover {
@@ -181,8 +204,8 @@ button.primary:hover {
 }
 
 button.ghost {
-  background: var(--panel);
-  color: var(--text);
+  background: var(--btnBg);
+  color: var(--btnText);
   border: 1px solid var(--border);
 }
 
@@ -255,7 +278,7 @@ thead {
 
 th,
  td {
-  padding: 10px 14px;
+  padding: 12px 14px;
   text-align: left;
   font-size: 14px;
   border-bottom: 1px solid var(--border);
@@ -267,15 +290,17 @@ th {
 }
 
 tr:hover {
-  background: #f1f5f9;
+  background: var(--hover);
 }
 
 .row-selected {
-  background: rgba(43, 108, 176, 0.12);
+  background: var(--hover);
+  box-shadow: inset 3px 0 0 var(--accent);
 }
 
 .row-playing {
-  background: rgba(43, 108, 176, 0.12);
+  background: var(--hover);
+  box-shadow: inset 3px 0 0 var(--accent);
 }
 
 .empty {
@@ -364,9 +389,173 @@ tr:hover {
   background: rgba(43, 108, 176, 0.12);
 }
 
+.now-block {
+  grid-area: now;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .now-playing {
   font-weight: 600;
-  grid-area: now;
+}
+
+.model-active {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.model-select {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px 8px;
+  background: var(--panel);
+  color: var(--text);
+  font-size: 12px;
+  min-width: 160px;
+}
+
+.player {
+  transition: all var(--transition);
+}
+
+.player[data-model='pulse-ring'] .controls button {
+  border-radius: 999px;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+}
+
+.player[data-model='pulse-ring'] {
+  border-top-width: 2px;
+  height: 96px;
+}
+
+.player[data-model='pulse-ring'] .now-block {
+  justify-content: center;
+}
+
+.player[data-model='prism-clip'] {
+  box-shadow: none;
+  border-top-style: dashed;
+  border-top-width: 2px;
+  height: 78px;
+}
+
+.player[data-model='prism-clip'] .controls button {
+  border-radius: 6px;
+  font-size: 12px;
+  padding: 6px 8px;
+}
+
+.player[data-model='prism-clip'] .timeline,
+.player[data-model='prism-clip'] .volume {
+  opacity: 0.78;
+}
+
+.player[data-model='orbit-sphere'] {
+  height: 102px;
+}
+
+.player[data-model='orbit-sphere'] .controls button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  padding: 0;
+}
+
+.player[data-model='orbit-sphere'] .controls {
+  gap: 12px;
+}
+
+.player[data-model='orbit-sphere'] .now-playing {
+  font-size: 18px;
+}
+
+.player[data-model='holo-puck-dock'] {
+  height: 114px;
+  box-shadow: 0 -18px 28px rgba(16, 24, 40, 0.14);
+  border-top-width: 3px;
+}
+
+.player[data-model='holo-puck-dock'] .timeline,
+.player[data-model='holo-puck-dock'] .volume {
+  font-size: 12px;
+}
+
+.player[data-model='holo-puck-dock'] .controls button {
+  padding: 10px 13px;
+}
+
+.player[data-model='modu-stack'] {
+  border-top-width: 4px;
+  height: 90px;
+}
+
+.player[data-model='modu-stack'] .controls {
+  gap: 4px;
+}
+
+.player[data-model='modu-stack'] .controls button {
+  border-radius: 4px;
+}
+
+.player[data-model='modu-stack'] .timeline {
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  padding: 0 10px;
+}
+
+.player[data-model='neck-link'] .timeline,
+.player[data-model='neck-link'] .volume {
+  opacity: 0.88;
+}
+
+.player[data-model='neck-link'] .controls button {
+  border-radius: 18px;
+}
+
+.player[data-model='neck-link'] {
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+  height: 92px;
+}
+
+.player[data-model='nano-tape'] .controls button {
+  border-radius: 3px;
+}
+
+.player[data-model='nano-tape'] {
+  border-top-style: double;
+  border-top-width: 4px;
+  height: 86px;
+}
+
+.player[data-model='nano-tape'] .now-playing {
+  letter-spacing: 0.4px;
+}
+
+.player[data-model='wave-card'] {
+  height: 78px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  box-shadow: none;
+}
+
+.player[data-model='wave-card'] .controls button {
+  padding: 6px 8px;
+  border-radius: 8px;
+}
+
+.player[data-model='wave-card'] .now-playing {
+  font-size: 13px;
+}
+
+.player[data-model='wave-card'] .model-select {
+  min-width: 128px;
 }
 
 .controls {
@@ -377,9 +566,15 @@ tr:hover {
   grid-area: controls;
 }
 
+#appearanceButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .controls button {
-  background: var(--panel-soft);
-  color: var(--text);
+  background: var(--btnBg);
+  color: var(--btnText);
   padding: 8px 10px;
   border: 1px solid var(--border);
 }
@@ -397,7 +592,7 @@ tr:hover {
 
 .controls #btnShuffle:hover,
 .controls #btnRepeat:hover {
-  background: var(--panel-soft);
+  background: var(--hover);
   border-color: var(--border);
   color: var(--text);
 }
@@ -407,7 +602,7 @@ tr:hover {
 .controls #btnPlay.active,
 .controls button.active {
   background: var(--accent);
-  color: #ffffff;
+  color: var(--onAccent, #ffffff);
   border-color: var(--accent);
 }
 
@@ -416,7 +611,7 @@ tr:hover {
 .controls #btnPlay.active:hover,
 .controls button.active:hover {
   background: var(--accent-strong);
-  color: #ffffff;
+  color: var(--onAccent, #ffffff);
   border-color: var(--accent-strong);
 }
 
@@ -452,12 +647,41 @@ tr:hover {
   grid-area: volume;
 }
 
+.vu-meters {
+  display: none;
+  align-items: center;
+  gap: 6px;
+}
+
+.vu-label {
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.vu-track {
+  --vu-level: 0.05;
+  width: 64px;
+  height: 8px;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.vu-fill {
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  transform: scaleX(var(--vu-level));
+}
+
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
-  height: 6px;
+  height: 5px;
   border-radius: 999px;
-  background: #dbe2ec;
+  background: var(--progressBg);
   outline: none;
 }
 
@@ -467,7 +691,7 @@ input[type="range"]::-webkit-slider-thumb {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--progressFill);
   cursor: pointer;
 }
 
@@ -475,7 +699,7 @@ input[type="range"]::-moz-range-thumb {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--progressFill);
   cursor: pointer;
 }
 
@@ -534,8 +758,111 @@ td.icon {
   margin-top: 4px;
 }
 
+button:focus-visible,
+.input:focus-visible,
+.model-select:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
 .hidden {
   display: none;
+}
+
+.appearance-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.appearance-modal.hidden {
+  display: none;
+}
+
+.appearance-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 0;
+  pointer-events: auto;
+}
+
+.appearance-panel {
+  position: relative;
+  z-index: 1;
+  width: min(92vw, 460px);
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 14px;
+  pointer-events: auto;
+}
+
+.appearance-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.appearance-header h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.appearance-body {
+  display: grid;
+  gap: 12px;
+}
+
+.appearance-body .appearance-field {
+  display: grid;
+  gap: 6px;
+}
+
+.appearance-body .appearance-field span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.appearance-body .appearance-toggle {
+  grid-template-columns: 1fr auto;
+  align-items: center;
+}
+
+.appearance-body .appearance-toggle input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+}
+
+.appearance-panel select,
+.appearance-panel button,
+.appearance-panel .model-select {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.appearance-panel select:hover,
+.appearance-panel button:hover {
+  background: var(--hover);
+}
+
+.appearance-panel select:focus-visible,
+.appearance-panel button:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
 }
 
 @media (max-width: 1024px) {
@@ -646,6 +973,10 @@ td.icon {
 
   .controls {
     justify-content: flex-start;
+  }
+
+  #appearanceButton {
+    order: 99;
   }
 
   .controls button {
