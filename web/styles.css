@@ -16,6 +16,11 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  height: 100%;
+}
+
 body {
   margin: 0;
   font-family: var(--font);
@@ -930,8 +935,10 @@ select:focus-visible {
     z-index: 40;
     height: auto;
     flex-direction: row;
-    align-items: center;
-    overflow-x: auto;
+    align-items: flex-start;
+    overflow-x: visible;
+    overflow-y: visible;
+    flex-wrap: wrap;
     border-right: none;
     border-bottom: 1px solid var(--border);
     padding: 12px 14px;
@@ -940,7 +947,8 @@ select:focus-visible {
   nav {
     flex-direction: row;
     gap: 8px;
-    white-space: nowrap;
+    white-space: normal;
+    flex-wrap: wrap;
   }
 
   .logo {
@@ -990,6 +998,10 @@ select:focus-visible {
 }
 
 @media (max-width: 600px) {
+  .main {
+    padding-bottom: calc(178px + env(safe-area-inset-bottom));
+  }
+
   .topbar {
     padding: 12px 14px;
   }
@@ -1007,6 +1019,12 @@ select:focus-visible {
   }
 
   .player {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 60;
+    width: 100%;
     grid-template-columns: 1fr;
     grid-template-areas:
       "now"
@@ -1015,6 +1033,8 @@ select:focus-visible {
       "volume";
     padding: 10px 12px calc(12px + env(safe-area-inset-bottom));
     gap: 8px;
+    max-height: 46svh;
+    overflow-y: auto;
   }
 
   .app {
