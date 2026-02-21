@@ -7,6 +7,49 @@
     return `${API_BASE}${path}`;
   }
 
+  const PLAYBACK_MODELS = [
+    {
+      id: 'pulse-ring',
+      name: 'PulseRing Player',
+      description: 'Pulseira com anel giratorio e controle por toque/pulso.'
+    },
+    {
+      id: 'prism-clip',
+      name: 'PrismClip',
+      description: 'Clip magnetico com tela e-ink e modo stealth.'
+    },
+    {
+      id: 'orbit-sphere',
+      name: 'OrbitSphere',
+      description: 'Esfera de bolso com anel externo para navegar playlists.'
+    },
+    {
+      id: 'holo-puck-dock',
+      name: 'HoloPuck Dock',
+      description: 'Dock de mesa com controle por gesto/toque e visual holografico.'
+    },
+    {
+      id: 'modu-stack',
+      name: 'ModuStack',
+      description: 'Sistema modular magnetico para montar bateria/armazenamento/amp.'
+    },
+    {
+      id: 'neck-link',
+      name: 'NeckLink',
+      description: 'Colar com conducao ossea focado em corrida e rua.'
+    },
+    {
+      id: 'nano-tape',
+      name: 'NanoTape',
+      description: 'Visual retro-futurista com chavinhas fisicas e slider de volume.'
+    },
+    {
+      id: 'wave-card',
+      name: 'WaveCard',
+      description: 'Player ultrafino tamanho cartao, resistente a agua/queda.'
+    }
+  ];
+
   async function loadLocalLibrary() {
     try {
       const payload = await resolveLocalManifest();
@@ -46,13 +89,15 @@
     runtimeMode: 'api',
     localBasePath: '',
     localDurationJobId: 0,
+    playbackModelId: PLAYBACK_MODELS[0].id,
     currentView: 'queue',
     audio: new Audio()
   };
 
   const STORAGE_KEYS = {
     volume: 'playerVolume',
-    localDurations: 'localTrackDurationsV1'
+    localDurations: 'localTrackDurationsV1',
+    playbackModel: 'playerPlaybackModel'
   };
 
   const els = {
@@ -84,6 +129,8 @@
     removeFromPlaylist: document.querySelector('#removeFromPlaylist'),
     defaultVolume: document.querySelector('#defaultVolume'),
     themeMode: document.querySelector('#themeMode'),
+    playbackModel: document.querySelector('#playbackModel'),
+    playbackModelDescription: document.querySelector('#playbackModelDescription'),
     btnPlay: document.querySelector('#btnPlay'),
     btnStop: document.querySelector('#btnStop'),
     btnPrev: document.querySelector('#btnPrev'),
@@ -467,17 +514,44 @@
   }
 
   function updateNowPlaying() {
+    const currentModel = PLAYBACK_MODELS.find((model) => model.id === state.playbackModelId) || PLAYBACK_MODELS[0];
     const trackId = state.currentTrackId;
     const track = trackId ? getTrackById(trackId) : null;
     if (!track) {
-      els.nowPlaying.textContent = 'Nenhuma faixa selecionada';
+      els.nowPlaying.textContent = `Nenhuma faixa selecionada • Modelo: ${currentModel.name}`;
       els.duration.textContent = '0:00';
       els.currentTime.textContent = '0:00';
       els.seekBar.value = 0;
       return;
     }
-    els.nowPlaying.textContent = `${track.title} — ${track.artist}`;
+    els.nowPlaying.textContent = `${track.title} — ${track.artist} • Modelo: ${currentModel.name}`;
     els.duration.textContent = formatSeconds(track.durationSec || state.audio.duration || 0);
+  }
+
+  function renderPlaybackModels() {
+    if (!els.playbackModel) return;
+    els.playbackModel.innerHTML = '';
+    PLAYBACK_MODELS.forEach((model) => {
+      const option = document.createElement('option');
+      option.value = model.id;
+      option.textContent = model.name;
+      els.playbackModel.appendChild(option);
+    });
+  }
+
+  function applyPlaybackModel(modelId, persist = true) {
+    const selected = PLAYBACK_MODELS.find((model) => model.id === modelId) || PLAYBACK_MODELS[0];
+    state.playbackModelId = selected.id;
+    if (els.playbackModel) {
+      els.playbackModel.value = selected.id;
+    }
+    if (els.playbackModelDescription) {
+      els.playbackModelDescription.textContent = selected.description;
+    }
+    if (persist) {
+      localStorage.setItem(STORAGE_KEYS.playbackModel, selected.id);
+    }
+    updateNowPlaying();
   }
 
   function setQueueFromIndex(startIndex) {
@@ -787,6 +861,13 @@
       localStorage.setItem('playerVolume', String(value));
     });
 
+    if (els.playbackModel) {
+      els.playbackModel.addEventListener('change', (event) => {
+        const nextId = event.target.value;
+        applyPlaybackModel(nextId, true);
+      });
+    }
+
     els.navItems.forEach((item) => {
       item.addEventListener('click', (event) => {
         event.preventDefault();
@@ -1021,6 +1102,10 @@
     state.repeatMode = 'off';
     updateShuffleButton();
     updateRepeatButton();
+
+    renderPlaybackModels();
+    const savedModelId = localStorage.getItem(STORAGE_KEYS.playbackModel);
+    applyPlaybackModel(savedModelId || PLAYBACK_MODELS[0].id, false);
   }
 
   async function init() {
