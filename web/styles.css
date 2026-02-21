@@ -136,7 +136,8 @@ nav {
 }
 
 .player {
-  height: 90px;
+  min-height: 90px;
+  height: auto;
   position: sticky;
   left: 0;
   right: 0;
@@ -431,7 +432,7 @@ tr:hover {
 
 .player[data-model='pulse-ring'] {
   border-top-width: 2px;
-  height: 96px;
+  min-height: 96px;
 }
 
 .player[data-model='pulse-ring'] .now-block {
@@ -442,7 +443,7 @@ tr:hover {
   box-shadow: none;
   border-top-style: dashed;
   border-top-width: 2px;
-  height: 78px;
+  min-height: 78px;
 }
 
 .player[data-model='prism-clip'] .controls button {
@@ -457,7 +458,7 @@ tr:hover {
 }
 
 .player[data-model='orbit-sphere'] {
-  height: 102px;
+  min-height: 102px;
 }
 
 .player[data-model='orbit-sphere'] .controls button {
@@ -476,7 +477,7 @@ tr:hover {
 }
 
 .player[data-model='holo-puck-dock'] {
-  height: 114px;
+  min-height: 114px;
   box-shadow: 0 -18px 28px rgba(16, 24, 40, 0.14);
   border-top-width: 3px;
 }
@@ -492,7 +493,7 @@ tr:hover {
 
 .player[data-model='modu-stack'] {
   border-top-width: 4px;
-  height: 90px;
+  min-height: 90px;
 }
 
 .player[data-model='modu-stack'] .controls {
@@ -521,7 +522,7 @@ tr:hover {
 .player[data-model='neck-link'] {
   border-top-left-radius: 18px;
   border-top-right-radius: 18px;
-  height: 92px;
+  min-height: 92px;
 }
 
 .player[data-model='nano-tape'] .controls button {
@@ -531,7 +532,7 @@ tr:hover {
 .player[data-model='nano-tape'] {
   border-top-style: double;
   border-top-width: 4px;
-  height: 86px;
+  min-height: 86px;
 }
 
 .player[data-model='nano-tape'] .now-playing {
@@ -539,7 +540,7 @@ tr:hover {
 }
 
 .player[data-model='wave-card'] {
-  height: 78px;
+  min-height: 78px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   box-shadow: none;
