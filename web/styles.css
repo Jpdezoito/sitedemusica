@@ -477,6 +477,27 @@ tr:hover {
   height: 40px;
   border-radius: 50%;
   padding: 0;
+  font-size: 16px;
+}
+
+.player[data-model='orbit-sphere'] #appearanceButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  padding: 0;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  overflow: hidden;
+  text-indent: -9999px;
+}
+
+.player[data-model='orbit-sphere'] #appearanceButton::before {
+  content: '⚙️';
+  text-indent: 0;
+  position: absolute;
 }
 
 .player[data-model='orbit-sphere'] .controls {
