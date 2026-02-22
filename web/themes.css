@@ -1128,8 +1128,10 @@ body.player-paused.theme-retro .now-playing::before,
 }
 
 .layout-compact .player {
-  height: 72px;
+  height: auto;
+  min-height: 72px;
   grid-template-columns: 1.2fr 1.2fr 0.9fr 0.9fr;
+  grid-auto-rows: min-content;
   padding: 8px 12px;
 }
 
@@ -1235,6 +1237,23 @@ body.player-paused .row-playing {
   .layout-split #playlistsView,
   .layout-split #settingsView {
     grid-column: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .layout-compact .player {
+    padding: 6px 10px;
+    gap: 8px;
+    min-height: 60px;
+  }
+
+  .layout-compact .controls {
+    gap: 6px;
+  }
+
+  .layout-compact .controls button {
+    padding: 5px 7px;
+    font-size: 13px;
   }
 }
 
