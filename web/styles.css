@@ -437,25 +437,28 @@ tr:hover {
   padding: 0;
 }
 
-.player[data-model='pulse-ring'] #appearanceButton {
-  width: auto;
-  height: 38px;
-  padding: 0 12px;
-  border-radius: 19px;
+/* High specificity override for GitHub Pages compatibility */
+html .player[data-model='pulse-ring'] #appearanceButton {
   display: inline-flex !important;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  white-space: nowrap;
-  line-height: 1;
-  text-indent: 0;
-  position: relative;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  vertical-align: middle !important;
+  text-indent: 0 !important;
+  position: relative !important;
+  width: auto !important;
+  height: 38px !important;
+  padding: 0 12px !important;
+  border-radius: 19px !important;
 }
 
-.player[data-model='pulse-ring'] #appearanceButton .btn-icon,
-.player[data-model='pulse-ring'] #appearanceButton .btn-label {
-  line-height: 1;
-  vertical-align: middle;
+html .player[data-model='pulse-ring'] #appearanceButton .btn-icon,
+html .player[data-model='pulse-ring'] #appearanceButton .btn-label {
+  line-height: 1 !important;
+  vertical-align: middle !important;
+  display: inline-flex !important;
 }
 
 .player[data-model='pulse-ring'] {
