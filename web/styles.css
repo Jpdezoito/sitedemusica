@@ -437,6 +437,27 @@ tr:hover {
   padding: 0;
 }
 
+.player[data-model='pulse-ring'] #appearanceButton {
+  width: auto;
+  height: 38px;
+  padding: 0 12px;
+  border-radius: 19px;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+  line-height: 1;
+  text-indent: 0;
+  position: relative;
+}
+
+.player[data-model='pulse-ring'] #appearanceButton .btn-icon,
+.player[data-model='pulse-ring'] #appearanceButton .btn-label {
+  line-height: 1;
+  vertical-align: middle;
+}
+
 .player[data-model='pulse-ring'] {
   border-top-width: 2px;
   min-height: 96px;
