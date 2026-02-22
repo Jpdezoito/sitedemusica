@@ -633,9 +633,29 @@ tr:hover {
 }
 
 #appearanceButton {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+#appearanceButton .btn-icon {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  line-height: 1;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+#appearanceButton .btn-label {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  vertical-align: middle;
 }
 
 .controls button {
@@ -1101,6 +1121,15 @@ select:focus-visible {
 
   #appearanceButton {
     order: 99;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+  }
+
+  #appearanceButton .btn-icon,
+  #appearanceButton .btn-label {
+    line-height: 1;
   }
 
   .controls button {
