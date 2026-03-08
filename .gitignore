@@ -15,3 +15,6 @@ Thumbs.db
 
 # Runtime/cache
 server/data/tracks-cache.json
+
+# Local temporary files
+Novo Documento de Texto.txt
