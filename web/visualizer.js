@@ -180,7 +180,12 @@
         if (!VISUALIZER_SOURCE_CACHE.has(audioEl)) {
           const sourceNode = audioContext.createMediaElementSource(audioEl);
           sourceNode.connect(analyser);
-          analyser.connect(audioContext.destination);
+          const turboGainNode = audioContext.createGain();
+          const savedTurbo = parseFloat(document.getElementById('turboGain')?.value || '1');
+          turboGainNode.gain.value = Number.isFinite(savedTurbo) ? Math.max(1, Math.min(4, savedTurbo)) : 1;
+          analyser.connect(turboGainNode);
+          turboGainNode.connect(audioContext.destination);
+          window.__vizTurboGain = turboGainNode;
           VISUALIZER_SOURCE_CACHE.set(audioEl, sourceNode);
         }
       } catch (error) {

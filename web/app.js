@@ -139,6 +139,7 @@
 
   const STORAGE_KEYS = {
     volume: 'playerVolume',
+    turboGain: 'playerTurboGain',
     localDurations: 'localTrackDurationsV1',
     playbackModel: 'playerPlaybackModel',
     theme: 'player_theme',
@@ -203,7 +204,8 @@
     seekBar: document.querySelector('#seekBar'),
     currentTime: document.querySelector('#currentTime'),
     duration: document.querySelector('#duration'),
-    volume: document.querySelector('#volume')
+    volume: document.querySelector('#volume'),
+    turboGain: document.querySelector('#turboGain')
   };
 
   function formatSeconds(sec) {
@@ -226,7 +228,7 @@
       return;
     }
 
-    const isVolumeSlider = rangeElement === els.volume || rangeElement === els.defaultVolume;
+    const isVolumeSlider = rangeElement === els.volume || rangeElement === els.defaultVolume || rangeElement === els.turboGain;
     const tickSize = isVolumeSlider ? 18 : 24;
     const ticks = `repeating-linear-gradient(90deg, transparent 0 ${tickSize}px, var(--tick) ${tickSize}px ${tickSize + 1}px)`;
     rangeElement.style.background = `${ticks}, ${fill}`;
@@ -237,6 +239,9 @@
     paintRangeFill(els.volume, Number(els.volume?.value || 0) * 100);
     if (els.defaultVolume) {
       paintRangeFill(els.defaultVolume, Number(els.defaultVolume.value || 0) * 100);
+    }
+    if (els.turboGain) {
+      paintRangeFill(els.turboGain, (Number(els.turboGain.value || 1) - 1) / 3 * 100);
     }
   }
 
@@ -1322,6 +1327,17 @@
       updateVuMeters();
     });
 
+    if (els.turboGain) {
+      els.turboGain.addEventListener('input', () => {
+        const value = Math.max(1, Math.min(4, Number(els.turboGain.value)));
+        if (window.__vizTurboGain) {
+          window.__vizTurboGain.gain.value = value;
+        }
+        localStorage.setItem(STORAGE_KEYS.turboGain, String(value));
+        syncRangeVisuals();
+      });
+    }
+
     state.audio.addEventListener('timeupdate', () => {
       if (!state.audio.duration) return;
       const pct = (state.audio.currentTime / state.audio.duration) * 100;
@@ -1524,6 +1540,11 @@
     state.audio.volume = initial;
     if (els.defaultVolume) {
       els.defaultVolume.value = initial;
+    }
+    if (els.turboGain) {
+      const savedTurbo = Number(localStorage.getItem(STORAGE_KEYS.turboGain));
+      const initialTurbo = Number.isFinite(savedTurbo) && savedTurbo >= 1 ? Math.min(4, savedTurbo) : 1;
+      els.turboGain.value = initialTurbo;
     }
     syncRangeVisuals();
     updateVuMeters();
