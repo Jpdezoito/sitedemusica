@@ -116,6 +116,9 @@
     queue: [],
     currentIndex: -1,
     currentTrackId: null,
+    playRequestId: 0,
+    lastPlaybackFailureKey: '',
+    playbackFailureCounts: {},
     selectedTrackId: null,
     selectedPlaylistTrackId: null,
     libraryQuery: '',
@@ -136,6 +139,9 @@
     currentView: 'queue',
     audio: new Audio()
   };
+
+  state.audio.preload = 'auto';
+  state.audio.playsInline = true;
 
   const STORAGE_KEYS = {
     volume: 'playerVolume',
@@ -938,16 +944,134 @@
     resetShuffleBag();
   }
 
-  function loadCurrentTrack(autoplay = true) {
+  function clearPlaybackErrorState() {
+    state.lastPlaybackFailureKey = '';
+    if (els.player) {
+      els.player.classList.remove('player-error');
+    }
+  }
+
+  function getPlaybackErrorMessage(error) {
+    if (!error) return 'erro desconhecido';
+    const code = Number(error.code);
+    if (code === 1) return 'reproducao interrompida';
+    if (code === 2) return 'falha de rede';
+    if (code === 3) return 'arquivo corrompido ou incompleto';
+    if (code === 4) return 'formato nao suportado pelo celular';
+    if (typeof error.message === 'string' && error.message.trim()) {
+      return error.message.trim();
+    }
+    return 'erro desconhecido';
+  }
+
+  function isAutoplayBlocked(error) {
+    const name = String(error?.name || '');
+    const message = String(error?.message || '').toLowerCase();
+    return name === 'NotAllowedError' || message.includes('gesture') || message.includes('user activation');
+  }
+
+  function canAdvanceToAnotherTrack() {
+    if (state.queue.length <= 1) return false;
+    if (state.isShuffle) return true;
+    if (state.currentIndex < state.queue.length - 1) return true;
+    return state.repeatMode === 'all';
+  }
+
+  function handlePlaybackFailure(error, options = {}) {
+    const trackId = options.trackId || state.currentTrackId;
+    if (!trackId || trackId !== state.currentTrackId) return;
+
+    const failureKey = [
+      trackId,
+      options.reason || 'playback',
+      error?.name || '',
+      Number.isFinite(Number(error?.code)) ? Number(error.code) : 'na'
+    ].join(':');
+
+    if (state.lastPlaybackFailureKey === failureKey) {
+      return;
+    }
+
+    state.lastPlaybackFailureKey = failureKey;
+
+    if (error?.name === 'AbortError') {
+      return;
+    }
+
+    if (els.player) {
+      els.player.classList.add('player-error');
+    }
+    setPlayButton(false);
+
+    if (isAutoplayBlocked(error)) {
+      setUploadStatus('O celular bloqueou a proxima faixa automaticamente. Toque em Play para continuar.');
+      return;
+    }
+
+    const currentTrack = getTrackById(trackId);
+    const failures = (state.playbackFailureCounts[trackId] || 0) + 1;
+    state.playbackFailureCounts[trackId] = failures;
+    const shouldSkip = options.allowAutoSkip && failures <= 2 && canAdvanceToAnotherTrack();
+
+    if (shouldSkip) {
+      setUploadStatus(`Falha ao tocar ${currentTrack?.title || 'a faixa atual'}. Pulando para a proxima.`);
+      nextTrack(false, { userInitiated: false, allowAutoSkip: true, reason: 'playback-failure' });
+      return;
+    }
+
+    setUploadStatus(`Nao foi possivel tocar ${currentTrack?.title || 'a faixa atual'}: ${getPlaybackErrorMessage(error)}.`);
+  }
+
+  async function playCurrentAudio(options = {}) {
+    const trackId = options.trackId || state.currentTrackId;
+    if (!trackId || trackId !== state.currentTrackId) return false;
+
+    const requestId = ++state.playRequestId;
+
+    try {
+      const playResult = state.audio.play();
+      if (playResult && typeof playResult.then === 'function') {
+        await playResult;
+      }
+      if (requestId !== state.playRequestId || trackId !== state.currentTrackId) {
+        return false;
+      }
+      delete state.playbackFailureCounts[trackId];
+      clearPlaybackErrorState();
+      setUploadStatus('');
+      setPlayButton(true);
+      return true;
+    } catch (error) {
+      if (requestId !== state.playRequestId || trackId !== state.currentTrackId) {
+        return false;
+      }
+      handlePlaybackFailure(error, {
+        trackId,
+        reason: options.reason || 'play',
+        allowAutoSkip: Boolean(options.allowAutoSkip)
+      });
+      return false;
+    }
+  }
+
+  function loadCurrentTrack(autoplay = true, options = {}) {
     const currentId = state.queue[state.currentIndex];
     if (!currentId) return;
     state.currentTrackId = currentId;
     const currentTrack = getTrackById(currentId);
     const url = currentTrack?.streamUrl || apiUrl(`/api/stream/${encodeURIComponent(currentId)}`);
+    state.playRequestId += 1;
+    state.lastPlaybackFailureKey = '';
     state.audio.src = url;
+    state.audio.load();
     if (autoplay) {
-      state.audio.play();
-      setPlayButton(true);
+      void playCurrentAudio({
+        trackId: currentId,
+        reason: options.reason || 'load-track',
+        allowAutoSkip: Boolean(options.allowAutoSkip)
+      });
+    } else {
+      setPlayButton(false);
     }
     updateNowPlaying();
     renderQueue();
@@ -956,14 +1080,14 @@
 
   function playFromIndex(index) {
     setQueueFromIndex(index);
-    loadCurrentTrack(true);
+    loadCurrentTrack(true, { reason: 'library-select', allowAutoSkip: false });
   }
 
   function playQueueIndex(index) {
     if (index < 0 || index >= state.queue.length) return;
     state.currentIndex = index;
     resetShuffleBag();
-    loadCurrentTrack(true);
+    loadCurrentTrack(true, { reason: 'queue-select', allowAutoSkip: false });
   }
 
   function playPlaylistTracks(trackIds) {
@@ -972,7 +1096,7 @@
     state.queue = filtered;
     state.currentIndex = 0;
     resetShuffleBag();
-    loadCurrentTrack(true);
+    loadCurrentTrack(true, { reason: 'playlist-play', allowAutoSkip: true });
   }
 
   function clearQueue() {
@@ -980,9 +1104,13 @@
     state.currentIndex = -1;
     state.currentTrackId = null;
     state.shuffleBag = [];
+    state.playRequestId += 1;
+    state.playbackFailureCounts = {};
     state.audio.pause();
     state.audio.src = '';
+    clearPlaybackErrorState();
     setPlayButton(false);
+    setUploadStatus('');
     updateNowPlaying();
     renderQueue();
     renderLibrary();
@@ -993,7 +1121,7 @@
     state.queue.push(state.selectedTrackId);
     if (state.currentIndex === -1) {
       state.currentIndex = 0;
-      loadCurrentTrack(true);
+      loadCurrentTrack(true, { reason: 'queue-start', allowAutoSkip: true });
       return;
     }
     resetShuffleBag();
@@ -1050,7 +1178,7 @@
         } else {
           const nextIndex = Math.min(previousIndex, state.queue.length - 1);
           state.currentIndex = nextIndex;
-          loadCurrentTrack(true);
+          loadCurrentTrack(true, { reason: 'delete-replace', allowAutoSkip: true });
         }
       } else if (state.currentTrackId) {
         state.currentIndex = state.queue.indexOf(state.currentTrackId);
@@ -1079,16 +1207,21 @@
   }
 
   function stopPlayback() {
+    state.playRequestId += 1;
     state.audio.pause();
     state.audio.currentTime = 0;
+    clearPlaybackErrorState();
     setPlayButton(false);
   }
 
   function togglePlayPause() {
     if (state.currentIndex === -1) return;
     if (state.audio.paused) {
-      state.audio.play();
-      setPlayButton(true);
+      void playCurrentAudio({
+        trackId: state.currentTrackId,
+        reason: 'toggle-play',
+        allowAutoSkip: false
+      });
     } else {
       state.audio.pause();
       setPlayButton(false);
@@ -1117,7 +1250,7 @@
     return state.shuffleBag.shift() || null;
   }
 
-  function nextTrack(manual = false) {
+  function nextTrack(manual = false, options = {}) {
     if (state.queue.length === 0) return;
 
     if (state.isShuffle) {
@@ -1128,7 +1261,10 @@
           const fallbackId = getNextShuffleId();
           if (fallbackId) {
             state.currentIndex = state.queue.indexOf(fallbackId);
-            loadCurrentTrack(true);
+            loadCurrentTrack(true, {
+              reason: options.reason || (manual ? 'manual-next' : 'auto-next'),
+              allowAutoSkip: true
+            });
           }
         } else if (manual) {
           stopPlayback();
@@ -1136,19 +1272,28 @@
         return;
       }
       state.currentIndex = state.queue.indexOf(nextId);
-      loadCurrentTrack(true);
+      loadCurrentTrack(true, {
+        reason: options.reason || (manual ? 'manual-next' : 'auto-next'),
+        allowAutoSkip: true
+      });
       return;
     }
 
     if (state.currentIndex < state.queue.length - 1) {
       state.currentIndex += 1;
-      loadCurrentTrack(true);
+      loadCurrentTrack(true, {
+        reason: options.reason || (manual ? 'manual-next' : 'auto-next'),
+        allowAutoSkip: true
+      });
       return;
     }
 
     if (state.repeatMode === 'all') {
       state.currentIndex = 0;
-      loadCurrentTrack(true);
+      loadCurrentTrack(true, {
+        reason: options.reason || (manual ? 'manual-next' : 'auto-next'),
+        allowAutoSkip: true
+      });
       return;
     }
 
@@ -1165,7 +1310,7 @@
     }
     if (state.currentIndex > 0) {
       state.currentIndex -= 1;
-      loadCurrentTrack(true);
+      loadCurrentTrack(true, { reason: 'manual-prev', allowAutoSkip: true });
     }
   }
 
@@ -1195,10 +1340,22 @@
   function handleEnded() {
     if (state.repeatMode === 'one') {
       state.audio.currentTime = 0;
-      state.audio.play();
+      void playCurrentAudio({
+        trackId: state.currentTrackId,
+        reason: 'repeat-one',
+        allowAutoSkip: true
+      });
       return;
     }
-    nextTrack(false);
+    nextTrack(false, { reason: 'ended', allowAutoSkip: true });
+  }
+
+  function handleAudioError() {
+    handlePlaybackFailure(state.audio.error, {
+      trackId: state.currentTrackId,
+      reason: 'audio-error',
+      allowAutoSkip: true
+    });
   }
 
   function bindControls() {
@@ -1349,8 +1506,14 @@
     });
 
     state.audio.addEventListener('ended', handleEnded);
+    state.audio.addEventListener('error', handleAudioError);
+
+    state.audio.addEventListener('loadedmetadata', () => {
+      updateNowPlaying();
+    });
 
     state.audio.addEventListener('play', () => {
+      clearPlaybackErrorState();
       setPlayButton(true);
     });
 

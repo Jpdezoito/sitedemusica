@@ -234,6 +234,8 @@ app.get('/api/stream/:id', (req, res) => {
 
   if (!range) {
     res.writeHead(200, {
+      'Accept-Ranges': 'bytes',
+      'Cache-Control': 'no-store',
       'Content-Type': mimeType,
       'Content-Length': stat.size
     });
@@ -254,6 +256,7 @@ app.get('/api/stream/:id', (req, res) => {
   res.writeHead(206, {
     'Content-Range': `bytes ${start}-${end}/${stat.size}`,
     'Accept-Ranges': 'bytes',
+    'Cache-Control': 'no-store',
     'Content-Length': chunkSize,
     'Content-Type': mimeType
   });
