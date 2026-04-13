@@ -429,20 +429,20 @@ tr:hover {
 
 select option,
 .model-select option {
-  background-color: var(--surface);
-  color: var(--text);
+  background-color: #111827 !important;
+  color: #f9fafb !important;
 }
 
 select option:checked,
 .model-select option:checked {
-  background-color: var(--accent);
-  color: var(--onAccent, #ffffff);
+  background-color: #2563eb !important;
+  color: #ffffff !important;
 }
 
 select option:disabled,
 .model-select option:disabled {
-  background-color: var(--surface);
-  color: var(--muted);
+  background-color: #111827 !important;
+  color: #9ca3af !important;
 }
 
 .player {
