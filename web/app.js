@@ -40,6 +40,8 @@
     studio: 'Studio / DAW'
   };
   let neonVisualizer = null;
+  let playerResizeObserver = null;
+  let playerReserveFrame = 0;
 
   function apiUrl(path) {
     return `${API_BASE}${path}`;
@@ -248,6 +250,35 @@
     }
     if (els.turboGain) {
       paintRangeFill(els.turboGain, (Number(els.turboGain.value || 1) - 1) / 3 * 100);
+    }
+  }
+
+  function updatePlayerReservedHeight() {
+    if (!els.player) return;
+    const rect = els.player.getBoundingClientRect();
+    const height = Math.ceil(rect.height || els.player.offsetHeight || 0);
+    if (height > 0) {
+      ROOT.style.setProperty('--player-reserved-height', `${height + 28}px`);
+    }
+  }
+
+  function schedulePlayerReservedHeightUpdate() {
+    if (playerReserveFrame) {
+      cancelAnimationFrame(playerReserveFrame);
+    }
+    playerReserveFrame = requestAnimationFrame(() => {
+      playerReserveFrame = 0;
+      updatePlayerReservedHeight();
+    });
+  }
+
+  function initPlayerReservedHeight() {
+    schedulePlayerReservedHeightUpdate();
+    window.addEventListener('resize', schedulePlayerReservedHeightUpdate);
+
+    if ('ResizeObserver' in window && els.player) {
+      playerResizeObserver = new ResizeObserver(schedulePlayerReservedHeightUpdate);
+      playerResizeObserver.observe(els.player);
     }
   }
 
@@ -529,6 +560,7 @@
       neonVisualizer.refreshTheme();
     }
     syncRangeVisuals();
+    schedulePlayerReservedHeightUpdate();
   }
 
   function initNeonVisualizer() {
@@ -570,6 +602,7 @@
     if (neonVisualizer) {
       neonVisualizer.refreshTheme();
     }
+    schedulePlayerReservedHeightUpdate();
   }
 
   function initAppearance() {
@@ -936,6 +969,7 @@
       neonVisualizer.refreshTheme();
     }
     updateNowPlaying();
+    schedulePlayerReservedHeightUpdate();
   }
 
   function setQueueFromIndex(startIndex) {
@@ -1730,6 +1764,7 @@
     bindControls();
     initVolume();
     initPreferences();
+    initPlayerReservedHeight();
     setView('queue');
     await loadLibrary();
     if (state.runtimeMode === 'local' && state.tracks.length > 0) {
