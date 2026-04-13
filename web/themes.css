@@ -602,9 +602,12 @@ body.player-paused.theme-retro .now-playing::before,
 .theme-glass .topbar,
 .theme-glass .sidebar,
 .theme-glass .card,
-.theme-glass .player,
 .theme-glass .dropdown-menu {
   position: relative;
+}
+
+.theme-glass .player,
+.theme-glass .dropdown-menu {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
