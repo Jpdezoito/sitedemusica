@@ -1034,6 +1034,7 @@ body.player-paused.theme-retro .now-playing::before,
   background: var(--knob);
 }
 
+.theme-studio #turboGain,
 .theme-studio #volume {
   height: 9px;
   border: 1px solid var(--border);
@@ -1043,6 +1044,7 @@ body.player-paused.theme-retro .now-playing::before,
     var(--progressBg);
 }
 
+.theme-studio #turboGain::-webkit-slider-thumb,
 .theme-studio #volume::-webkit-slider-thumb {
   width: 10px;
   height: 16px;
@@ -1051,6 +1053,7 @@ body.player-paused.theme-retro .now-playing::before,
   background: var(--knob);
 }
 
+.theme-studio #turboGain::-moz-range-thumb,
 .theme-studio #volume::-moz-range-thumb {
   width: 10px;
   height: 16px;
