@@ -1193,3 +1193,220 @@ select:focus-visible {
     margin-top: max(2px, env(safe-area-inset-top));
   }
 }
+
+.layout-fullscreen body {
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.layout-fullscreen .app,
+.layout-fullscreen .main {
+  height: 100dvh;
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+.layout-fullscreen .player,
+.layout-fullscreen .player[data-model],
+.layout-fullscreen.theme-vinyl .player,
+.layout-fullscreen.theme-vinyl .player[data-model] {
+  width: 100vw;
+  height: 100dvh;
+  min-height: 0;
+  max-height: none;
+  overflow: hidden;
+  align-content: center;
+  justify-content: center;
+  grid-template-columns: minmax(0, min(920px, 94vw));
+  grid-template-rows: minmax(0, auto) auto auto auto;
+  padding:
+    max(16px, env(safe-area-inset-top))
+    clamp(14px, 4vw, 48px)
+    max(16px, env(safe-area-inset-bottom));
+  gap: clamp(10px, 2.4dvh, 22px);
+}
+
+.layout-fullscreen .now-block,
+.layout-fullscreen .timeline,
+.layout-fullscreen .controls,
+.layout-fullscreen .volume {
+  width: 100%;
+  max-width: 920px;
+  min-width: 0;
+}
+
+.layout-fullscreen .now-block {
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+.layout-fullscreen .now-playing {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  font-size: clamp(1rem, 3.2vmin, 2.2rem);
+  line-height: 1.15;
+}
+
+.layout-fullscreen .model-active {
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
+.layout-fullscreen .model-select {
+  max-width: min(100%, 260px);
+}
+
+.layout-fullscreen .controls {
+  justify-content: center;
+  align-items: center;
+  gap: clamp(6px, 1.4vmin, 14px);
+}
+
+.layout-fullscreen .controls button,
+.layout-fullscreen .player[data-model='holo-puck-dock'] .controls button,
+.layout-fullscreen .player[data-model='prism-clip'] .controls button,
+.layout-fullscreen .player[data-model='wave-card'] .controls button {
+  min-width: clamp(34px, 7vmin, 52px);
+  min-height: clamp(34px, 7vmin, 52px);
+  padding: clamp(6px, 1.6vmin, 12px);
+  font-size: clamp(0.78rem, 2.6vmin, 1.05rem);
+}
+
+.layout-fullscreen .player[data-model='pulse-ring'] .controls button,
+.layout-fullscreen .player[data-model='orbit-sphere'] .controls button {
+  width: clamp(36px, 7vmin, 54px);
+  height: clamp(36px, 7vmin, 54px);
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+}
+
+html.layout-fullscreen .player[data-model='pulse-ring'] #appearanceButton,
+.layout-fullscreen .player[data-model='orbit-sphere'] #appearanceButton {
+  width: clamp(36px, 7vmin, 54px) !important;
+  height: clamp(36px, 7vmin, 54px) !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  gap: 0 !important;
+  overflow: hidden !important;
+  text-indent: 0 !important;
+}
+
+.layout-fullscreen #appearanceButton {
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.layout-fullscreen #appearanceButton .btn-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.layout-fullscreen #appearanceButton .btn-label {
+  display: none !important;
+}
+
+.layout-fullscreen .timeline,
+.layout-fullscreen .volume {
+  justify-content: center;
+  gap: clamp(6px, 1.6vmin, 12px);
+}
+
+.layout-fullscreen .timeline input[type="range"],
+.layout-fullscreen .volume input[type="range"] {
+  min-width: 0;
+}
+
+@media (max-width: 600px), (max-height: 520px) {
+  .layout-fullscreen .player,
+  .layout-fullscreen .player[data-model],
+  .layout-fullscreen.theme-vinyl .player,
+  .layout-fullscreen.theme-vinyl .player[data-model] {
+    grid-template-columns: minmax(0, 1fr);
+    padding:
+      max(10px, env(safe-area-inset-top))
+      12px
+      max(10px, env(safe-area-inset-bottom));
+    gap: clamp(7px, 1.8dvh, 12px);
+  }
+
+  .layout-fullscreen .now-playing {
+    font-size: clamp(0.9rem, 4.8vmin, 1.25rem);
+  }
+
+  .layout-fullscreen .model-active {
+    font-size: 11px;
+    gap: 6px;
+  }
+
+  .layout-fullscreen .model-select {
+    font-size: 11px;
+    min-width: 0;
+    width: min(100%, 220px);
+  }
+
+  .layout-fullscreen .controls {
+    max-width: 360px;
+    margin-inline: auto;
+  }
+
+  .layout-fullscreen .controls button,
+  .layout-fullscreen .player[data-model='holo-puck-dock'] .controls button,
+  .layout-fullscreen .player[data-model='prism-clip'] .controls button,
+  .layout-fullscreen .player[data-model='wave-card'] .controls button {
+    min-width: 34px;
+    min-height: 34px;
+    padding: 6px 8px;
+    font-size: 0.82rem;
+  }
+
+  .layout-fullscreen .player[data-model='pulse-ring'] .controls button,
+  .layout-fullscreen .player[data-model='orbit-sphere'] .controls button {
+    width: 36px;
+    height: 36px;
+  }
+
+  html.layout-fullscreen .player[data-model='pulse-ring'] #appearanceButton,
+  .layout-fullscreen .player[data-model='orbit-sphere'] #appearanceButton {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .layout-fullscreen #appearanceButton .btn-label {
+    display: none !important;
+  }
+
+  .layout-fullscreen .timeline {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .layout-fullscreen .volume {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+}
+
+@media (max-height: 420px) {
+  .layout-fullscreen .model-active {
+    display: none;
+  }
+
+  .layout-fullscreen .controls button,
+  .layout-fullscreen .player[data-model='pulse-ring'] .controls button,
+  .layout-fullscreen .player[data-model='orbit-sphere'] .controls button,
+  html.layout-fullscreen .player[data-model='pulse-ring'] #appearanceButton,
+  .layout-fullscreen .player[data-model='orbit-sphere'] #appearanceButton {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
+    padding: 0 !important;
+  }
+}
