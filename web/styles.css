@@ -427,6 +427,24 @@ tr:hover {
   min-width: 160px;
 }
 
+select option,
+.model-select option {
+  background-color: var(--surface);
+  color: var(--text);
+}
+
+select option:checked,
+.model-select option:checked {
+  background-color: var(--accent);
+  color: var(--onAccent, #ffffff);
+}
+
+select option:disabled,
+.model-select option:disabled {
+  background-color: var(--surface);
+  color: var(--muted);
+}
+
 .player {
   transition: all var(--transition);
 }
