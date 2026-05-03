@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-18T07:15:11.234Z",
+  "updatedAt": "2026-05-03T23:42:52.404Z",
   "tracks": [
     {
       "id": "edfba9b7229e58f7b9e23037a73b93fb48faec6c",
@@ -12,6 +12,16 @@
       "sizeBytes": 5429910
     },
     {
+      "id": "187f7fa5951b32860f9518f44d41956963350bac",
+      "filename": "3-caras.mp3",
+      "relPath": "3-caras.mp3",
+      "title": "3-caras",
+      "artist": "Desconhecido",
+      "album": "Desconhecido",
+      "durationSec": 197,
+      "sizeBytes": 4701126
+    },
+    {
       "id": "ece0294863c48219d48caf6ed7ac4c6276ae0651",
       "filename": "AKASHI-SEIJURO-—-“DOBREM-SE”-(Rap-Pesado).mp3",
       "relPath": "AKASHI-SEIJURO-—-“DOBREM-SE”-(Rap-Pesado).mp3",
@@ -20,6 +30,16 @@
       "album": "Desconhecido",
       "durationSec": 241,
       "sizeBytes": 5475654
+    },
+    {
+      "id": "74688526091c699add1557a27609fb6b435c5070",
+      "filename": "braço-direito.mp3",
+      "relPath": "braço-direito.mp3",
+      "title": "braço-direito",
+      "artist": "Desconhecido",
+      "album": "Desconhecido",
+      "durationSec": 192,
+      "sizeBytes": 4554486
     },
     {
       "id": "a52cb3fe54f4e81eb5308102251a4d5a9e32b6fa",
@@ -42,26 +62,6 @@
       "sizeBytes": 3501318
     },
     {
-      "id": "09d6b7aa0c811f2ae746cf3a015b3f8a4a9bb54b",
-      "filename": "ete.mp3",
-      "relPath": "ete.mp3",
-      "title": "ete",
-      "artist": "Desconhecido",
-      "album": "Desconhecido",
-      "durationSec": 213,
-      "sizeBytes": 3413958
-    },
-    {
-      "id": "40c2ccc5b0f14577cf0c59af9ca42d6b8999e8fe",
-      "filename": "Eu quero ficarQWQWR.mp3",
-      "relPath": "Eu quero ficarQWQWR.mp3",
-      "title": "Eu quero ficarQWQWR",
-      "artist": "Desconhecido",
-      "album": "Desconhecido",
-      "durationSec": 205,
-      "sizeBytes": 3283973
-    },
-    {
       "id": "df0f3b58045b30ea4c33913220210d076d2a997d",
       "filename": "LEÃO-x-PANTERA.mp3",
       "relPath": "LEÃO-x-PANTERA.mp3",
@@ -70,6 +70,16 @@
       "album": "Desconhecido",
       "durationSec": 198,
       "sizeBytes": 4214862
+    },
+    {
+      "id": "e1d1bd327e2c357159c51da252486c83dd45f79f",
+      "filename": "Mente-acordada-enquanto-o-mundo-dorme-.mp3",
+      "relPath": "Mente-acordada-enquanto-o-mundo-dorme-.mp3",
+      "title": "Mente-acordada-enquanto-o-mundo-dorme-",
+      "artist": "Desconhecido",
+      "album": "Desconhecido",
+      "durationSec": 141,
+      "sizeBytes": 3150390
     },
     {
       "id": "2734c3ff2382fe45ef46f63bb9f89f38d68874b6",
@@ -92,6 +102,16 @@
       "sizeBytes": 3712158
     },
     {
+      "id": "7b18d9c3776e930dc690139d983ad72321af80fe",
+      "filename": "pyke.mp3",
+      "relPath": "pyke.mp3",
+      "title": "pyke",
+      "artist": "Desconhecido",
+      "album": "Desconhecido",
+      "durationSec": 148,
+      "sizeBytes": 3370422
+    },
+    {
       "id": "4e9a0fa53eca50dadd8a3faa6b317efebc60174c",
       "filename": "RAP-DO-CHARIZARD.mp3",
       "relPath": "RAP-DO-CHARIZARD.mp3",
@@ -100,6 +120,16 @@
       "album": "Desconhecido",
       "durationSec": 168,
       "sizeBytes": 3733734
+    },
+    {
+      "id": "0f5365bb21e437a506f62d396db5dfbc19b27d7f",
+      "filename": "RAP-DO-ITACHI-UCHIHA-—-“SANGUE-E-LUA”.mp3",
+      "relPath": "RAP-DO-ITACHI-UCHIHA-—-“SANGUE-E-LUA”.mp3",
+      "title": "RAP-DO-ITACHI-UCHIHA-—-“SANGUE-E-LUA”",
+      "artist": "Desconhecido",
+      "album": "Desconhecido",
+      "durationSec": 213,
+      "sizeBytes": 4620798
     },
     {
       "id": "1f2c7454c3fcf8b67737f5cc6d0e0f70d92059f8",
@@ -115,21 +145,11 @@
       "id": "3a9a9b510927b083a715ec7667af5e7dad6c4ee8",
       "filename": "Rap-do-Zed,-Yone,-Talon-e-Yasuo.mp3",
       "relPath": "Rap-do-Zed,-Yone,-Talon-e-Yasuo.mp3",
-      "title": "Rap-do-Zed,-Yone,-Talon-e-Yasuo",
+      "title": "Quatro Nomes no Escuro",
       "artist": "Desconhecido",
       "album": "Desconhecido",
       "durationSec": 148,
       "sizeBytes": 3267414
-    },
-    {
-      "id": "5e922474764cf767a3e0e6eb2f9e702afe2ad530",
-      "filename": "RAP-DO-ZORO-&-MIHAWK-(Sonho-do-Zoro-Duelo,-respeito-e-disciplina).mp3",
-      "relPath": "RAP-DO-ZORO-&-MIHAWK-(Sonho-do-Zoro-Duelo,-respeito-e-disciplina).mp3",
-      "title": "RAP-DO-ZORO-&-MIHAWK-(Sonho-do-Zoro-Duelo,-respeito-e-disciplina)",
-      "artist": "Desconhecido",
-      "album": "Desconhecido",
-      "durationSec": 238,
-      "sizeBytes": 5176470
     },
     {
       "id": "3bdcf47c11484e8f3b49a12d24f4900841d5a806",
@@ -162,14 +182,54 @@
       "sizeBytes": 3030272
     },
     {
+      "id": "55f6dc5f989a881e18d64193afa73c4d867f2bab",
+      "filename": "Reis-Sem-Coroa.mp3",
+      "relPath": "Reis-Sem-Coroa.mp3",
+      "title": "Reis-Sem-Coroa",
+      "artist": "Desconhecido",
+      "album": "Desconhecido",
+      "durationSec": 265,
+      "sizeBytes": 5992950
+    },
+    {
       "id": "b8485f8a74edf76911c8d7f4cb800c84875725da",
       "filename": "RISCADO NO ABISMO.mp3",
       "relPath": "RISCADO NO ABISMO.mp3",
-      "title": "RISCADO NO ABISMO",
-      "artist": "Desconhecido",
+      "title": "Riscado no Abismo",
+      "artist": "IA",
       "album": "Desconhecido",
       "durationSec": 154,
-      "sizeBytes": 2471042
+      "sizeBytes": 2475235
+    },
+    {
+      "id": "ddc4002dcbed61dc682ab16fe3d8db5c550e92a9",
+      "filename": "SONHO-RESPEITO, ESFORÇO, DISCIPLINA.mp3",
+      "relPath": "SONHO-RESPEITO, ESFORÇO, DISCIPLINA.mp3",
+      "title": "SONHO-RESPEITO, ESFORÇO, DISCIPLINA",
+      "artist": "Desconhecido",
+      "album": "Desconhecido",
+      "durationSec": 238,
+      "sizeBytes": 5176470
+    },
+    {
+      "id": "d6535bdae7919c1431729a53276410d6ebd10214",
+      "filename": "tf-no-mid.mp3",
+      "relPath": "tf-no-mid.mp3",
+      "title": "tf-no-mid",
+      "artist": "Desconhecido",
+      "album": "Desconhecido",
+      "durationSec": 142,
+      "sizeBytes": 3168822
+    },
+    {
+      "id": "ba18ad4bbba459d7b2dd26b1dcc1b35f946f0bfa",
+      "filename": "Three cuts in the night.mp3",
+      "relPath": "Three cuts in the night.mp3",
+      "title": "Three cuts in the night",
+      "artist": "Desconhecido",
+      "album": "Desconhecido",
+      "durationSec": 196,
+      "sizeBytes": 3137687
     },
     {
       "id": "15299c2c10a1fa19a9f49a1b04089817efce21d0",
@@ -192,14 +252,24 @@
       "sizeBytes": 3710742
     },
     {
-      "id": "aed9840b2edcbef4c3c53a19fe4d4a05cc8ef9f9",
-      "filename": "TRÊS CORTES NA NOITE.mp3",
-      "relPath": "TRÊS CORTES NA NOITE.mp3",
-      "title": "TRÊS CORTES NA NOITE",
+      "id": "6ac779e21d1c42d947b7e524ed9f9e945dd62cca",
+      "filename": "Três cortes na noite 2.mp3",
+      "relPath": "Três cortes na noite 2.mp3",
+      "title": "Três cortes na noite 2",
       "artist": "Desconhecido",
       "album": "Desconhecido",
-      "durationSec": 196,
-      "sizeBytes": 3137687
+      "durationSec": 205,
+      "sizeBytes": 3283973
+    },
+    {
+      "id": "2ae10c4b7ca94541904ac510ecc6ae0ed483f33c",
+      "filename": "Três cortes na noite.mp3",
+      "relPath": "Três cortes na noite.mp3",
+      "title": "Três cortes na noite",
+      "artist": "Desconhecido",
+      "album": "Desconhecido",
+      "durationSec": 213,
+      "sizeBytes": 3413958
     },
     {
       "id": "8eb136315502bb61a248c3d187a633a042caaacf",
@@ -215,11 +285,11 @@
       "id": "3025fea90446ead7165e6017e250620946b98187",
       "filename": "Twisted-Fate-&-Yasuo-no-Velho-Oeste.mp3",
       "relPath": "Twisted-Fate-&-Yasuo-no-Velho-Oeste.mp3",
-      "title": "Twisted-Fate-&-Yasuo-no-Velho-Oeste",
+      "title": "Wild West Cartas & Lãmina",
       "artist": "Desconhecido",
       "album": "Desconhecido",
       "durationSec": 170,
-      "sizeBytes": 3676422
+      "sizeBytes": 3680521
     },
     {
       "id": "41ebbd018730d363576ad07192b5aa1709ef3f59",
@@ -230,6 +300,16 @@
       "album": "Desconhecido",
       "durationSec": 202,
       "sizeBytes": 4760190
+    },
+    {
+      "id": "4853bf78f5408808660fa47ec114c8e351a7700e",
+      "filename": "Uncrowned-Kings.mp3",
+      "relPath": "Uncrowned-Kings.mp3",
+      "title": "Uncrowned-Kings",
+      "artist": "Desconhecido",
+      "album": "Desconhecido",
+      "durationSec": 240,
+      "sizeBytes": 5807526
     },
     {
       "id": "bc60da3b17d10c6ccf4d568a8be6cf9b31d62bc3",
@@ -252,6 +332,16 @@
       "sizeBytes": 5130966
     },
     {
+      "id": "e8ee7b9a9990ca8f54dfa88921046b7dd3f367e7",
+      "filename": "Velozmente.mp3",
+      "relPath": "Velozmente.mp3",
+      "title": "Velozmente",
+      "artist": "Desconhecido",
+      "album": "Desconhecido",
+      "durationSec": 175,
+      "sizeBytes": 3805638
+    },
+    {
       "id": "3d4c7fc436759e1f2e7b3776bdba8bc38eea2836",
       "filename": "VP.mp3",
       "relPath": "VP.mp3",
@@ -262,14 +352,84 @@
       "sizeBytes": 4678278
     },
     {
+      "id": "f447b8089b8525d557bfe1e711728fec58600c25",
+      "filename": "Wild-West-League-of-Legends real.mp3",
+      "relPath": "Wild-West-League-of-Legends real.mp3",
+      "title": "Wild-West-League-of-Legends real",
+      "artist": "Desconhecido",
+      "album": "Desconhecido",
+      "durationSec": 298,
+      "sizeBytes": 7852878
+    },
+    {
       "id": "e49c39eb391ef9143f7caf971ddd226705d66055",
       "filename": "Wild-West-League-of-Legends.mp3",
       "relPath": "Wild-West-League-of-Legends.mp3",
       "title": "Wild-West-League-of-Legends",
       "artist": "Desconhecido",
       "album": "Desconhecido",
-      "durationSec": 298,
-      "sizeBytes": 7852878
+      "durationSec": 142,
+      "sizeBytes": 3207606
+    },
+    {
+      "id": "1a3a2eddab03bc3f16e777b7f1580876c7ae4976",
+      "filename": "Yasuo-+-Twisted-Fate-(só-MALE,-cantado).mp3",
+      "relPath": "Yasuo-+-Twisted-Fate-(só-MALE,-cantado).mp3",
+      "title": "Yasuo-+-Twisted-Fate-(só-MALE,-cantado)",
+      "artist": "Desconhecido",
+      "album": "Desconhecido",
+      "durationSec": 185,
+      "sizeBytes": 3941862
+    },
+    {
+      "id": "2b66ccbe00792950a29565ee2c95c404118d8c68",
+      "filename": "Yasuo-e-Katarina (1).mp3",
+      "relPath": "Yasuo-e-Katarina (1).mp3",
+      "title": "Yasuo-e-Katarina (1)",
+      "artist": "Desconhecido",
+      "album": "Desconhecido",
+      "durationSec": 162,
+      "sizeBytes": 3329094
+    },
+    {
+      "id": "db903e98c655e91a941840047ef0036f90888b35",
+      "filename": "Yasuo-e-Katarina.mp3",
+      "relPath": "Yasuo-e-Katarina.mp3",
+      "title": "Yasuo-e-Katarina",
+      "artist": "Desconhecido",
+      "album": "Desconhecido",
+      "durationSec": 113,
+      "sizeBytes": 2483334
+    },
+    {
+      "id": "276c5a25beb5e4da09c115c5600ce4216537fab2",
+      "filename": "Yasuo-velho-oeste (1).mp3",
+      "relPath": "Yasuo-velho-oeste (1).mp3",
+      "title": "Yasuo-velho-oeste (1)",
+      "artist": "Desconhecido",
+      "album": "Desconhecido",
+      "durationSec": 133,
+      "sizeBytes": 2891670
+    },
+    {
+      "id": "dc8a744e7890f2b89f49b5d189fdeb5fcb2ba5aa",
+      "filename": "Yasuo-Velho-oeste.mp3",
+      "relPath": "Yasuo-Velho-oeste.mp3",
+      "title": "Yasuo-Velho-oeste",
+      "artist": "Desconhecido",
+      "album": "Desconhecido",
+      "durationSec": 172,
+      "sizeBytes": 3890502
+    },
+    {
+      "id": "bebb4eab87a7924fba1ff36d25f874ac3843e28f",
+      "filename": "YASUO-x-IRELIA-—-STORM-AND-BLADES.mp3",
+      "relPath": "YASUO-x-IRELIA-—-STORM-AND-BLADES.mp3",
+      "title": "YASUO-x-IRELIA-—-STORM-AND-BLADES",
+      "artist": "Desconhecido",
+      "album": "Desconhecido",
+      "durationSec": 198,
+      "sizeBytes": 4316886
     }
   ]
 }

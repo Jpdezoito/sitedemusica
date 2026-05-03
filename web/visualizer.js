@@ -269,15 +269,14 @@
       if (!ctx || !frequencyData) return;
       resizeCanvas();
 
-      if (!isFullscreenLayout()) {
+      const fullscreen = isFullscreenLayout();
+      if (!fullscreen) {
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-        particles.length = 0;
-        return;
       }
 
       ctx.save();
       ctx.globalCompositeOperation = 'source-over';
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.22)';
+      ctx.fillStyle = fullscreen ? 'rgba(0, 0, 0, 0.22)' : 'rgba(0, 0, 0, 0.12)';
       ctx.fillRect(0, 0, canvasWidth, canvasHeight);
       ctx.restore();
 
