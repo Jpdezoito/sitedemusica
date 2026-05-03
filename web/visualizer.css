@@ -134,6 +134,118 @@ body > main {
   );
 }
 
+.layout-fullscreen #cornerGlowLayer {
+  background:
+    radial-gradient(circle at 50% 34%, color-mix(in srgb, var(--accent) 18%, transparent) 0%, transparent 30%),
+    linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--bg) 76%, #000000) 78%, var(--bg) 100%);
+}
+
+.layout-fullscreen #cornerGlowLayer::before,
+.layout-fullscreen #cornerGlowLayer::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  will-change: opacity, transform;
+}
+
+.layout-fullscreen #cornerGlowLayer::before {
+  bottom: calc(var(--vizBottomInset) + 8dvh);
+  width: min(1120px, 86vw);
+  height: min(46dvh, 420px);
+  transform: translateX(-50%) scaleY(calc(0.76 + var(--vizBass) * 0.34 + var(--vizBeatBass) * 0.08));
+  transform-origin: center bottom;
+  opacity: calc(0.34 + var(--vizMix) * 0.48);
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0 2%,
+      color-mix(in srgb, var(--vizBassColor) 80%, transparent) 2% 3.8%,
+      transparent 3.8% 6.1%,
+      color-mix(in srgb, var(--vizMidsColor) 74%, transparent) 6.1% 7.9%,
+      transparent 7.9% 10.7%,
+      color-mix(in srgb, var(--vizHighColor) 70%, transparent) 10.7% 12.4%,
+      transparent 12.4% 15.6%,
+      color-mix(in srgb, var(--vizBassColor) 72%, transparent) 15.6% 17.2%,
+      transparent 17.2% 20.2%,
+      color-mix(in srgb, var(--vizMidsColor) 76%, transparent) 20.2% 21.9%,
+      transparent 21.9% 25.3%,
+      color-mix(in srgb, var(--vizHighColor) 68%, transparent) 25.3% 26.9%,
+      transparent 26.9% 30.5%,
+      color-mix(in srgb, var(--vizBassColor) 84%, transparent) 30.5% 32.4%,
+      transparent 32.4% 36.1%,
+      color-mix(in srgb, var(--vizMidsColor) 72%, transparent) 36.1% 37.8%,
+      transparent 37.8% 41.7%,
+      color-mix(in srgb, var(--vizHighColor) 74%, transparent) 41.7% 43.6%,
+      transparent 43.6% 47.8%,
+      color-mix(in srgb, var(--vizBassColor) 82%, transparent) 47.8% 49.8%,
+      transparent 49.8% 54.2%,
+      color-mix(in srgb, var(--vizMidsColor) 80%, transparent) 54.2% 56.2%,
+      transparent 56.2% 60.1%,
+      color-mix(in srgb, var(--vizHighColor) 66%, transparent) 60.1% 62%,
+      transparent 62% 65.6%,
+      color-mix(in srgb, var(--vizBassColor) 76%, transparent) 65.6% 67.4%,
+      transparent 67.4% 70.8%,
+      color-mix(in srgb, var(--vizMidsColor) 74%, transparent) 70.8% 72.6%,
+      transparent 72.6% 76%,
+      color-mix(in srgb, var(--vizHighColor) 78%, transparent) 76% 77.8%,
+      transparent 77.8% 81.1%,
+      color-mix(in srgb, var(--vizBassColor) 80%, transparent) 81.1% 83%,
+      transparent 83% 86%,
+      color-mix(in srgb, var(--vizMidsColor) 70%, transparent) 86% 87.7%,
+      transparent 87.7% 90.4%,
+      color-mix(in srgb, var(--vizHighColor) 72%, transparent) 90.4% 92.2%,
+      transparent 92.2% 100%
+    );
+  clip-path: polygon(
+    0 84%,
+    5% 62%,
+    10% 78%,
+    15% 44%,
+    20% 70%,
+    25% 36%,
+    30% 76%,
+    35% 52%,
+    40% 32%,
+    45% 68%,
+    50% 24%,
+    55% 66%,
+    60% 38%,
+    65% 74%,
+    70% 48%,
+    75% 72%,
+    80% 40%,
+    85% 68%,
+    90% 58%,
+    95% 80%,
+    100% 86%,
+    100% 100%,
+    0 100%
+  );
+  filter: drop-shadow(0 0 24px color-mix(in srgb, var(--accent) 54%, transparent));
+}
+
+.layout-fullscreen #cornerGlowLayer::after {
+  bottom: calc(var(--vizBottomInset) + 12dvh);
+  width: min(760px, 72vw);
+  height: min(38dvh, 360px);
+  border-radius: 50%;
+  transform:
+    translateX(-50%)
+    scale(calc(0.82 + var(--vizMix) * 0.28 + var(--vizBeatMids) * 0.05));
+  opacity: calc(0.24 + var(--vizMids) * 0.34 + var(--vizBeatHigh) * 0.18);
+  background:
+    radial-gradient(circle, transparent 0 38%, color-mix(in srgb, var(--vizHighColor) 58%, transparent) 39% 40%, transparent 41% 50%),
+    radial-gradient(circle, transparent 0 56%, color-mix(in srgb, var(--vizMidsColor) 46%, transparent) 57% 58%, transparent 59% 100%);
+}
+
+.layout-fullscreen .corner-glow {
+  width: 74vmin;
+  height: 74vmin;
+  filter: blur(22px);
+}
+
 @media (prefers-reduced-motion: reduce) {
   #cornerGlowLayer {
     display: none;

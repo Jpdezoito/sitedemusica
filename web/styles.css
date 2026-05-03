@@ -113,6 +113,50 @@ nav {
   flex-wrap: wrap;
 }
 
+.upload-action {
+  position: relative;
+  display: inline-flex;
+}
+
+.upload-local-hint {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  z-index: 50;
+  width: min(260px, calc(100vw - 32px));
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--text);
+  box-shadow: var(--shadow);
+  font-size: 13px;
+  line-height: 1.35;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity var(--transition), transform var(--transition);
+}
+
+.upload-local-hint::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 20px;
+  width: 10px;
+  height: 10px;
+  border-left: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+  background: var(--panel);
+  transform: rotate(45deg);
+}
+
+.upload-action.is-local:hover .upload-local-hint,
+.upload-action.is-local:focus-within .upload-local-hint {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .upload-status {
   color: var(--muted);
   font-size: 13px;
@@ -267,6 +311,97 @@ button:disabled {
   align-items: center;
 }
 
+.youtube-browser {
+  display: grid;
+  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.youtube-panel .card-body {
+  padding: 16px;
+}
+
+.youtube-form {
+  display: grid;
+  gap: 10px;
+}
+
+.youtube-form label,
+.youtube-volume span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.youtube-load-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+}
+
+.youtube-load-row .input {
+  min-width: 0;
+  width: 100%;
+}
+
+.youtube-controls {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.youtube-volume {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.youtube-note {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.youtube-stage {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #000000;
+  box-shadow: var(--shadow);
+}
+
+.youtube-player {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  min-height: 280px;
+  background: #000000;
+}
+
+#youtubePlayer,
+#youtubePlayer iframe,
+.youtube-player iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.youtube-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  background: #111827;
+  font-weight: 600;
+}
+
 .table-wrap {
   overflow: auto;
   max-height: none;
@@ -415,6 +550,7 @@ tr:hover {
   gap: 8px;
   font-size: 12px;
   color: var(--muted);
+  min-width: 0;
 }
 
 .model-select {
@@ -425,6 +561,7 @@ tr:hover {
   color: var(--text);
   font-size: 12px;
   min-width: 160px;
+  max-width: 100%;
 }
 
 select option,
@@ -706,6 +843,17 @@ html .player[data-model='pulse-ring'] #appearanceButton .btn-label {
   vertical-align: middle;
 }
 
+.appearance-icon {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex: 0 0 auto;
+}
+
 #appearanceButton .btn-label {
   display: inline-flex;
   align-items: center;
@@ -725,6 +873,53 @@ html .player[data-model='pulse-ring'] #appearanceButton .btn-label {
   background: var(--panel);
   color: var(--text);
   border-color: var(--border);
+}
+
+.controls #btnShuffle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.controls #btnStop {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shuffle-icon {
+  display: block;
+  width: 18px;
+  height: 14px;
+  overflow: visible;
+}
+
+.shuffle-icon path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.shuffle-icon-on {
+  display: none;
+}
+
+.controls #btnShuffle.active .shuffle-icon-off {
+  display: none;
+}
+
+.controls #btnShuffle.active .shuffle-icon-on {
+  display: block;
+}
+
+.stop-icon {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 1px;
+  background: currentColor;
 }
 
 .controls #btnRepeat {
@@ -1089,6 +1284,14 @@ select:focus-visible {
   .split {
     grid-template-columns: 1fr;
   }
+
+  .youtube-browser {
+    grid-template-columns: 1fr;
+  }
+
+  .youtube-player {
+    min-height: 220px;
+  }
 }
 
 @media (max-width: 900px) {
@@ -1212,6 +1415,15 @@ select:focus-visible {
 
   .volume {
     justify-content: flex-start;
+  }
+
+  .youtube-load-row,
+  .youtube-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .youtube-player {
+    min-height: 180px;
   }
 
   .table-wrap table {
@@ -1449,5 +1661,237 @@ html.layout-fullscreen .player[data-model='pulse-ring'] #appearanceButton,
     min-width: 32px !important;
     min-height: 32px !important;
     padding: 0 !important;
+  }
+}
+
+/* Fullscreen is a visual stage with the transport docked at the bottom. */
+.layout-fullscreen .player,
+.layout-fullscreen .player[data-model],
+.layout-fullscreen.theme-vinyl .player,
+.layout-fullscreen.theme-vinyl .player[data-model] {
+  position: fixed !important;
+  inset: auto 0 0 0 !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 104px !important;
+  max-height: min(34dvh, 240px) !important;
+  overflow: visible !important;
+  display: grid !important;
+  grid-template-columns: minmax(220px, 1.15fr) minmax(260px, 1.6fr) auto minmax(210px, 0.9fr) !important;
+  grid-template-areas: "now timeline controls volume" !important;
+  align-items: center !important;
+  justify-items: stretch !important;
+  align-content: center !important;
+  justify-content: stretch !important;
+  gap: clamp(10px, 1.8vw, 22px) !important;
+  padding:
+    14px
+    clamp(16px, 3vw, 44px)
+    max(14px, env(safe-area-inset-bottom)) !important;
+  border-top: 1px solid color-mix(in srgb, var(--border) 72%, transparent) !important;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--panel) 86%, transparent), var(--panel)),
+    color-mix(in srgb, var(--bg) 80%, #000000) !important;
+  box-shadow: 0 -18px 42px rgba(0, 0, 0, 0.28) !important;
+  backdrop-filter: blur(18px);
+}
+
+.layout-fullscreen .now-block,
+.layout-fullscreen .timeline,
+.layout-fullscreen .controls,
+.layout-fullscreen .volume {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.layout-fullscreen .now-block {
+  align-items: flex-start !important;
+  text-align: left !important;
+}
+
+.layout-fullscreen .now-playing {
+  font-size: clamp(0.95rem, 1.45vw, 1.35rem) !important;
+  line-height: 1.2 !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  overflow: hidden !important;
+}
+
+.layout-fullscreen .model-active {
+  justify-content: flex-start !important;
+  flex-wrap: wrap !important;
+  overflow: visible !important;
+  row-gap: 6px !important;
+  padding: 3px !important;
+}
+
+.layout-fullscreen #playbackModelQuick {
+  width: 190px !important;
+  min-width: 190px !important;
+  max-width: 190px !important;
+  height: 32px !important;
+  line-height: 1.2 !important;
+  padding-right: 30px !important;
+  flex: 0 0 auto !important;
+}
+
+.layout-fullscreen #playbackModelActive {
+  display: none !important;
+}
+
+.layout-fullscreen .controls {
+  flex-wrap: nowrap !important;
+  justify-content: center !important;
+}
+
+.layout-fullscreen .controls button,
+.layout-fullscreen .player[data-model='holo-puck-dock'] .controls button,
+.layout-fullscreen .player[data-model='prism-clip'] .controls button,
+.layout-fullscreen .player[data-model='wave-card'] .controls button {
+  min-width: 40px !important;
+  min-height: 40px !important;
+  padding: 8px 10px !important;
+  font-size: 0.95rem !important;
+}
+
+.layout-fullscreen .player[data-model='pulse-ring'] .controls button,
+.layout-fullscreen .player[data-model='orbit-sphere'] .controls button,
+html.layout-fullscreen .player[data-model='pulse-ring'] #appearanceButton,
+.layout-fullscreen .player[data-model='orbit-sphere'] #appearanceButton {
+  width: 42px !important;
+  height: 42px !important;
+}
+
+.layout-fullscreen .timeline,
+.layout-fullscreen .volume {
+  justify-content: stretch !important;
+}
+
+@media (max-width: 1100px) {
+  .layout-fullscreen .player,
+  .layout-fullscreen .player[data-model],
+  .layout-fullscreen.theme-vinyl .player,
+  .layout-fullscreen.theme-vinyl .player[data-model] {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    grid-template-areas:
+      "now controls"
+      "timeline timeline"
+      "volume volume" !important;
+    max-height: min(42dvh, 300px) !important;
+  }
+
+  .layout-fullscreen .controls {
+    justify-content: flex-end !important;
+  }
+}
+
+@media (max-width: 640px), (max-height: 520px) {
+  .layout-fullscreen .player,
+  .layout-fullscreen .player[data-model],
+  .layout-fullscreen.theme-vinyl .player,
+  .layout-fullscreen.theme-vinyl .player[data-model] {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-areas:
+      "now"
+      "timeline"
+      "controls"
+      "volume" !important;
+    gap: 9px !important;
+    max-height: min(58dvh, 380px) !important;
+    padding: 12px 12px max(12px, env(safe-area-inset-bottom)) !important;
+  }
+
+  .layout-fullscreen .now-block,
+  .layout-fullscreen .now-playing,
+  .layout-fullscreen .model-active {
+    text-align: center !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .layout-fullscreen #playbackModelQuick {
+    width: 190px !important;
+    min-width: 190px !important;
+    max-width: min(100%, 190px) !important;
+  }
+
+  .layout-fullscreen .controls {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+  }
+
+  .layout-fullscreen .controls button,
+  .layout-fullscreen .player[data-model='pulse-ring'] .controls button,
+  .layout-fullscreen .player[data-model='orbit-sphere'] .controls button,
+  html.layout-fullscreen .player[data-model='pulse-ring'] #appearanceButton,
+  .layout-fullscreen .player[data-model='orbit-sphere'] #appearanceButton {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+  }
+}
+
+html.layout-fullscreen #appearanceButton,
+html.layout-fullscreen .player #appearanceButton,
+html.layout-fullscreen .player[data-model] #appearanceButton,
+html.layout-fullscreen.theme-vinyl .player #appearanceButton,
+html.layout-fullscreen.theme-vinyl .player[data-model] #appearanceButton {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  min-height: 42px !important;
+  max-width: 42px !important;
+  padding: 0 !important;
+  gap: 0 !important;
+  overflow: hidden !important;
+  border-radius: 50% !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  text-indent: 0 !important;
+}
+
+html.layout-fullscreen #appearanceButton .btn-icon,
+html.layout-fullscreen .player #appearanceButton .btn-icon,
+html.layout-fullscreen .player[data-model] #appearanceButton .btn-icon,
+html.layout-fullscreen.theme-vinyl .player #appearanceButton .btn-icon,
+html.layout-fullscreen.theme-vinyl .player[data-model] #appearanceButton .btn-icon {
+  display: block !important;
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  min-height: 16px !important;
+  margin: 0 !important;
+  line-height: 1 !important;
+  text-indent: 0 !important;
+}
+
+html.layout-fullscreen #appearanceButton .btn-label,
+html.layout-fullscreen .player #appearanceButton .btn-label,
+html.layout-fullscreen .player[data-model] #appearanceButton .btn-label,
+html.layout-fullscreen.theme-vinyl .player #appearanceButton .btn-label,
+html.layout-fullscreen.theme-vinyl .player[data-model] #appearanceButton .btn-label {
+  display: none !important;
+}
+
+html.layout-fullscreen .player[data-model='orbit-sphere'] #appearanceButton::before {
+  content: none !important;
+}
+
+@media (max-width: 640px), (max-height: 520px) {
+  html.layout-fullscreen #appearanceButton,
+  html.layout-fullscreen .player #appearanceButton,
+  html.layout-fullscreen .player[data-model] #appearanceButton,
+  html.layout-fullscreen.theme-vinyl .player #appearanceButton,
+  html.layout-fullscreen.theme-vinyl .player[data-model] #appearanceButton {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    max-width: 36px !important;
   }
 }

@@ -10,6 +10,12 @@
     return from + (to - from) * amount;
   }
 
+  function smoothPeak(current, target, attack, decay) {
+    return target > current
+      ? lerp(current, target, attack)
+      : lerp(current, target, decay);
+  }
+
   function createCorner(className) {
     const corner = document.createElement('div');
     corner.className = `corner-glow ${className}`;
@@ -83,6 +89,16 @@
       layer.style.setProperty('--vizBeatHigh', String(nextBeatHighs));
     }
 
+    function publishVuLevels(left, right, mix) {
+      window.dispatchEvent(new CustomEvent('audio-visualizer-levels', {
+        detail: {
+          left: clamp(left, 0, 1),
+          right: clamp(right, 0, 1),
+          mix: clamp(mix, 0, 1)
+        }
+      }));
+    }
+
     function updateLayerVisibility() {
       const isOff = !enabled || prefersReducedMotion.matches;
       layer.classList.toggle('viz-off', isOff);
@@ -121,9 +137,9 @@
       const midsTarget = getBandEnergy(160, 2000);
       const highsTarget = getBandEnergy(2000, 8000);
 
-      bassLevel = lerp(bassLevel, bassTarget, 0.2);
-      midsLevel = lerp(midsLevel, midsTarget, 0.28);
-      highsLevel = lerp(highsLevel, highsTarget, 0.35);
+      bassLevel = smoothPeak(bassLevel, bassTarget, 0.72, 0.11);
+      midsLevel = smoothPeak(midsLevel, midsTarget, 0.62, 0.14);
+      highsLevel = smoothPeak(highsLevel, highsTarget, 0.78, 0.18);
 
       const bassOut = clamp(Math.pow(bassLevel, 0.86), 0, 1);
       const midsOut = clamp(Math.pow(midsLevel, 0.9), 0, 1);
@@ -141,6 +157,10 @@
       prevMidsOut = midsOut;
       prevHighsOut = highsOut;
 
+      const leftVu = clamp(bassOut * 0.58 + midsOut * 0.30 + highsOut * 0.12 + beatBass * 0.08, 0, 1);
+      const rightVu = clamp(bassOut * 0.20 + midsOut * 0.38 + highsOut * 0.42 + beatHighs * 0.08, 0, 1);
+      const mixVu = clamp((leftVu + rightVu) / 2, 0, 1);
+
       writeLevels(
         bassOut,
         midsOut,
@@ -149,6 +169,7 @@
         clamp(beatMids, 0, 1),
         clamp(beatHighs, 0, 1)
       );
+      publishVuLevels(leftVu, rightVu, mixVu);
 
       frameId = requestAnimationFrame(render);
     }
@@ -205,6 +226,7 @@
       beatMids = 0;
       beatHighs = 0;
       writeLevels(0, 0, 0, 0, 0, 0);
+      publishVuLevels(0, 0, 0);
     }
 
     async function start() {

@@ -139,6 +139,10 @@
     appearanceListenersBound: false,
     bodyOverflowBeforeAppearance: '',
     currentView: 'queue',
+    youtubePlayer: null,
+    youtubeApiPromise: null,
+    youtubeVideoId: '',
+    vuLevels: { left: 0, right: 0, mix: 0 },
     audio: new Audio()
   };
 
@@ -152,7 +156,9 @@
     playbackModel: 'playerPlaybackModel',
     theme: 'player_theme',
     layout: 'player_layout',
-    visualizer: 'player_corner_glow'
+    visualizer: 'player_corner_glow',
+    youtubeUrl: 'playerYouTubeUrl',
+    youtubeVolume: 'playerYouTubeVolume'
   };
 
   const els = {
@@ -173,11 +179,20 @@
     navItems: Array.from(document.querySelectorAll('.nav-item[data-view]')),
     queueView: document.querySelector('#queueView'),
     libraryView: document.querySelector('#libraryView'),
+    youtubeView: document.querySelector('#youtubeView'),
+    youtubeForm: document.querySelector('#youtubeForm'),
+    youtubeUrl: document.querySelector('#youtubeUrl'),
+    youtubeStatus: document.querySelector('#youtubeStatus'),
+    youtubePlayer: document.querySelector('#youtubePlayer'),
+    youtubePlayButton: document.querySelector('#youtubePlayButton'),
+    youtubePauseButton: document.querySelector('#youtubePauseButton'),
+    youtubeVolume: document.querySelector('#youtubeVolume'),
     playlistsView: document.querySelector('#playlistsView'),
     settingsView: document.querySelector('#settingsView'),
     playlistList: document.querySelector('#playlistList'),
     newPlaylist: document.querySelector('#newPlaylist'),
     mainTitle: document.querySelector('#mainTitle'),
+    uploadAction: document.querySelector('#uploadAction'),
     uploadButton: document.querySelector('#uploadButton'),
     deleteTrackButton: document.querySelector('#deleteTrackButton'),
     uploadInput: document.querySelector('#uploadInput'),
@@ -225,6 +240,150 @@
     return `${minutes}:${seconds}`;
   }
 
+  function extractYouTubeVideoId(rawValue) {
+    const value = String(rawValue || '').trim();
+    if (/^[a-zA-Z0-9_-]{11}$/.test(value)) {
+      return value;
+    }
+
+    const match = value.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([a-zA-Z0-9_-]{11})/);
+    if (match) {
+      return match[1];
+    }
+
+    try {
+      const url = new URL(value);
+      const host = url.hostname.replace(/^www\./, '');
+      if ((host === 'youtube.com' || host === 'm.youtube.com' || host === 'music.youtube.com') && url.searchParams.get('v')) {
+        return url.searchParams.get('v').slice(0, 11);
+      }
+      if (host === 'youtu.be') {
+        return url.pathname.split('/').filter(Boolean)[0] || '';
+      }
+    } catch (_err) {
+      return '';
+    }
+
+    return '';
+  }
+
+  function setYouTubeStatus(message) {
+    if (els.youtubeStatus) {
+      els.youtubeStatus.textContent = message;
+    }
+  }
+
+  function loadYouTubeApi() {
+    if (window.YT && typeof window.YT.Player === 'function') {
+      return Promise.resolve(window.YT);
+    }
+    if (state.youtubeApiPromise) {
+      return state.youtubeApiPromise;
+    }
+
+    state.youtubeApiPromise = new Promise((resolve, reject) => {
+      const previousReady = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = () => {
+        if (typeof previousReady === 'function') {
+          previousReady();
+        }
+        resolve(window.YT);
+      };
+
+      if (document.querySelector('script[data-youtube-api="true"]')) {
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = 'https://www.youtube.com/iframe_api';
+      script.async = true;
+      script.dataset.youtubeApi = 'true';
+      script.onerror = () => reject(new Error('Falha ao carregar API do YouTube'));
+      document.head.appendChild(script);
+    });
+
+    return state.youtubeApiPromise;
+  }
+
+  function applyYouTubeVolume() {
+    const value = Math.max(0, Math.min(100, Number(els.youtubeVolume?.value || 100)));
+    if (state.youtubePlayer && typeof state.youtubePlayer.setVolume === 'function') {
+      state.youtubePlayer.setVolume(value);
+    }
+    localStorage.setItem(STORAGE_KEYS.youtubeVolume, String(value));
+    syncRangeVisuals();
+  }
+
+  function renderYouTubeFallback(videoId) {
+    if (!els.youtubePlayer) return;
+    els.youtubePlayer.innerHTML = '';
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.youtube.com/embed/${encodeURIComponent(videoId)}?autoplay=1&playsinline=1&rel=0`;
+    iframe.title = 'Player do YouTube';
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    iframe.allowFullscreen = true;
+    els.youtubePlayer.appendChild(iframe);
+  }
+
+  async function loadYouTubeVideo(rawValue) {
+    const videoId = extractYouTubeVideoId(rawValue);
+    if (!videoId || videoId.length !== 11) {
+      setYouTubeStatus('Link do YouTube invalido.');
+      return;
+    }
+
+    state.youtubeVideoId = videoId;
+    localStorage.setItem(STORAGE_KEYS.youtubeUrl, String(rawValue || videoId));
+    setYouTubeStatus('Carregando video...');
+
+    try {
+      const YT = await loadYouTubeApi();
+      if (state.youtubePlayer && typeof state.youtubePlayer.loadVideoById === 'function') {
+        state.youtubePlayer.loadVideoById(videoId);
+        applyYouTubeVolume();
+        setYouTubeStatus('Video carregado.');
+        return;
+      }
+
+      state.youtubePlayer = new YT.Player('youtubePlayer', {
+        width: '100%',
+        height: '100%',
+        videoId,
+        playerVars: {
+          autoplay: 1,
+          playsinline: 1,
+          rel: 0,
+          modestbranding: 1
+        },
+        events: {
+          onReady: () => {
+            applyYouTubeVolume();
+            setYouTubeStatus('Video carregado.');
+          },
+          onStateChange: (event) => {
+            if (window.YT && event.data === window.YT.PlayerState.PLAYING && !state.audio.paused) {
+              state.audio.pause();
+            }
+          }
+        }
+      });
+    } catch (_err) {
+      renderYouTubeFallback(videoId);
+      setYouTubeStatus('Video carregado. Controle de volume do YouTube indisponivel sem a API.');
+    }
+  }
+
+  function initYouTube() {
+    if (els.youtubeVolume) {
+      const savedVolume = Number(localStorage.getItem(STORAGE_KEYS.youtubeVolume));
+      els.youtubeVolume.value = Number.isFinite(savedVolume) ? Math.max(0, Math.min(100, savedVolume)) : 100;
+    }
+    if (els.youtubeUrl) {
+      els.youtubeUrl.value = localStorage.getItem(STORAGE_KEYS.youtubeUrl) || '';
+    }
+    syncRangeVisuals();
+  }
+
   function paintRangeFill(rangeElement, valuePct) {
     if (!rangeElement) return;
     const pct = Math.min(100, Math.max(0, Number(valuePct) || 0));
@@ -250,6 +409,9 @@
     }
     if (els.turboGain) {
       paintRangeFill(els.turboGain, (Number(els.turboGain.value || 1) - 1) / 3 * 100);
+    }
+    if (els.youtubeVolume) {
+      paintRangeFill(els.youtubeVolume, Number(els.youtubeVolume.value || 0));
     }
   }
 
@@ -425,6 +587,25 @@
   function setRuntimeMode(mode) {
     state.runtimeMode = mode;
     const isLocal = mode === 'local';
+    ROOT.classList.toggle('runtime-local', isLocal);
+    if (els.uploadAction) {
+      els.uploadAction.classList.toggle('is-local', isLocal);
+      els.uploadAction.tabIndex = isLocal ? 0 : -1;
+      els.uploadAction.setAttribute(
+        'aria-label',
+        isLocal ? 'Adicionar arquivos indisponivel: requer o servidor local ativo' : 'Adicionar arquivos'
+      );
+    }
+    if (els.uploadButton) {
+      els.uploadButton.title = isLocal
+        ? 'Upload requer o servidor local ativo'
+        : 'Adicionar arquivo(s)';
+      if (isLocal) {
+        els.uploadButton.setAttribute('aria-describedby', 'uploadLocalHint');
+      } else {
+        els.uploadButton.removeAttribute('aria-describedby');
+      }
+    }
     els.uploadButton.disabled = isLocal;
     els.deleteTrackButton.disabled = isLocal || !state.selectedTrackId;
     els.newPlaylist.disabled = isLocal;
@@ -477,14 +658,11 @@
 
   function updateVuMeters() {
     if (!els.vuLeft && !els.vuRight) return;
-    const volume = Number(els.volume?.value ?? state.audio.volume ?? 0);
-    const levelBase = state.audio.paused
-      ? Math.max(0.02, volume * 0.08)
-      : Math.max(0.08, volume * 0.75);
-    const pulseA = (Math.sin(Date.now() / 180) + 1) / 2;
-    const pulseB = (Math.cos(Date.now() / 220) + 1) / 2;
-    const leftLevel = Math.min(1, Math.max(0.02, levelBase + (state.audio.paused ? 0 : pulseA * 0.16)));
-    const rightLevel = Math.min(1, Math.max(0.02, levelBase * 0.92 + (state.audio.paused ? 0 : pulseB * 0.14)));
+    const gain = Math.max(1, Math.min(4, Number(els.turboGain?.value || 1)));
+    const gainScale = 1 + (gain - 1) * 0.22;
+    const idleLevel = state.audio.paused ? 0.02 : 0.04;
+    const leftLevel = Math.min(1, Math.max(idleLevel, state.vuLevels.left * gainScale));
+    const rightLevel = Math.min(1, Math.max(idleLevel, state.vuLevels.right * gainScale));
 
     if (els.vuLeft) {
       els.vuLeft.style.setProperty('--vu-level', String(leftLevel));
@@ -978,6 +1156,15 @@
     resetShuffleBag();
   }
 
+  function prepareInitialTrack() {
+    if (state.currentTrackId || state.currentIndex !== -1 || state.tracks.length === 0) {
+      return;
+    }
+
+    setQueueFromIndex(0);
+    loadCurrentTrack(false);
+  }
+
   function clearPlaybackErrorState() {
     state.lastPlaybackFailureKey = '';
     if (els.player) {
@@ -1363,6 +1550,9 @@
 
   function updateShuffleButton() {
     els.btnShuffle.classList.toggle('active', state.isShuffle);
+    const label = state.isShuffle ? 'Aleatorio ligado' : 'Aleatorio desligado';
+    els.btnShuffle.title = label;
+    els.btnShuffle.setAttribute('aria-label', label);
   }
 
   function updateRepeatButton() {
@@ -1484,6 +1674,35 @@
       });
     }
 
+    if (els.youtubeForm) {
+      els.youtubeForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        loadYouTubeVideo(els.youtubeUrl?.value || '');
+      });
+    }
+
+    if (els.youtubePlayButton) {
+      els.youtubePlayButton.addEventListener('click', () => {
+        if (state.youtubePlayer && typeof state.youtubePlayer.playVideo === 'function') {
+          state.youtubePlayer.playVideo();
+        } else if (els.youtubeUrl?.value) {
+          loadYouTubeVideo(els.youtubeUrl.value);
+        }
+      });
+    }
+
+    if (els.youtubePauseButton) {
+      els.youtubePauseButton.addEventListener('click', () => {
+        if (state.youtubePlayer && typeof state.youtubePlayer.pauseVideo === 'function') {
+          state.youtubePlayer.pauseVideo();
+        }
+      });
+    }
+
+    if (els.youtubeVolume) {
+      els.youtubeVolume.addEventListener('input', applyYouTubeVolume);
+    }
+
     bindAppearanceModalEvents();
 
     els.navItems.forEach((item) => {
@@ -1526,8 +1745,19 @@
         }
         localStorage.setItem(STORAGE_KEYS.turboGain, String(value));
         syncRangeVisuals();
+        updateVuMeters();
       });
     }
+
+    window.addEventListener('audio-visualizer-levels', (event) => {
+      const detail = event.detail || {};
+      state.vuLevels = {
+        left: Math.max(0, Math.min(1, Number(detail.left) || 0)),
+        right: Math.max(0, Math.min(1, Number(detail.right) || 0)),
+        mix: Math.max(0, Math.min(1, Number(detail.mix) || 0))
+      };
+      updateVuMeters();
+    });
 
     state.audio.addEventListener('timeupdate', () => {
       if (!state.audio.duration) return;
@@ -1613,6 +1843,7 @@
     state.currentView = view;
     els.queueView.classList.toggle('hidden', view !== 'queue');
     els.libraryView.classList.toggle('hidden', view !== 'library');
+    els.youtubeView.classList.toggle('hidden', view !== 'youtube');
     els.playlistsView.classList.toggle('hidden', view !== 'playlists');
     els.settingsView.classList.toggle('hidden', view !== 'settings');
     els.navItems.forEach((item) => {
@@ -1621,6 +1852,7 @@
     const titles = {
       queue: 'Fila de reproducao',
       library: 'Biblioteca de musicas',
+      youtube: 'YouTube',
       playlists: 'Playlists',
       settings: 'Configuracoes'
     };
@@ -1762,11 +1994,13 @@
     initAppearance();
     initNeonVisualizer();
     bindControls();
+    initYouTube();
     initVolume();
     initPreferences();
     initPlayerReservedHeight();
     setView('queue');
     await loadLibrary();
+    prepareInitialTrack();
     if (state.runtimeMode === 'local' && state.tracks.length > 0) {
       setView('library');
     }

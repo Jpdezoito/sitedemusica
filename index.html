@@ -29,7 +29,7 @@
       <nav>
         <a href="#inicio" class="nav-item" data-view="queue">Inicio</a>
         <a href="#musicas" class="nav-item" data-view="library">Biblioteca de musicas</a>
-        <a href="#videos" class="nav-item" data-view="library">Biblioteca de videos</a>
+        <a href="#youtube" class="nav-item" data-view="youtube">Videos do YouTube</a>
         <a href="#fila" class="nav-item active" data-view="queue">Fila de reproducao</a>
         <a href="#playlists" class="nav-item" data-view="playlists">Playlists</a>
         <a href="#config" class="nav-item" data-view="settings">Configuracoes</a>
@@ -40,7 +40,12 @@
       <header class="topbar">
         <h1 class="page-title" id="mainTitle">Fila de reproducao</h1>
         <div class="page-actions" id="pageActions">
-          <button id="uploadButton" class="primary">Adicionar arquivo(s)</button>
+          <span id="uploadAction" class="upload-action">
+            <button id="uploadButton" class="primary">Adicionar arquivo(s)</button>
+            <span id="uploadLocalHint" class="upload-local-hint" role="tooltip">
+              Upload requer o servidor local ativo.
+            </span>
+          </span>
           <button id="deleteTrackButton" class="ghost danger" disabled>Excluir</button>
           <span id="uploadStatus" class="upload-status"></span>
           <input id="uploadInput" class="hidden" type="file" accept=".mp3,.wav,.m4a,.ogg,.flac" multiple>
@@ -110,6 +115,45 @@
                   </table>
                 </div>
               </div>
+            </div>
+          </section>
+
+          <section id="youtubeView" class="view hidden">
+            <div class="youtube-browser">
+              <div class="card youtube-panel">
+                <div class="card-header">
+                  <strong>Navegador YouTube</strong>
+                </div>
+                <div class="card-body">
+                  <form id="youtubeForm" class="youtube-form">
+                    <label for="youtubeUrl">Link ou ID do video</label>
+                    <div class="youtube-load-row">
+                      <input id="youtubeUrl" class="input" type="text" placeholder="Cole um link do YouTube">
+                      <button id="youtubeLoadButton" class="primary" type="submit">Carregar</button>
+                    </div>
+                    <div id="youtubeStatus" class="text-muted">Cole o link do video para abrir aqui.</div>
+                  </form>
+
+                  <div class="youtube-controls">
+                    <button id="youtubePlayButton" class="ghost" type="button">Play</button>
+                    <button id="youtubePauseButton" class="ghost" type="button">Pause</button>
+                    <label class="youtube-volume" for="youtubeVolume">
+                      <span>Volume YouTube</span>
+                      <input id="youtubeVolume" type="range" min="0" max="100" step="1" value="100">
+                    </label>
+                  </div>
+
+                  <p class="youtube-note">
+                    O YouTube fica dentro de um iframe protegido pelo navegador. O volume dele vai ate 100%; o Turbo Gain acima de 100% continua funcionando nos arquivos de musica do app.
+                  </p>
+                </div>
+              </div>
+
+              <section class="youtube-stage" aria-label="Player do YouTube">
+                <div id="youtubePlayer" class="youtube-player">
+                  <div class="youtube-placeholder">Nenhum video carregado</div>
+                </div>
+              </section>
             </div>
           </section>
 
@@ -230,14 +274,34 @@
           <span id="duration">0:00</span>
         </div>
         <div class="controls">
-          <button id="btnShuffle" title="Shuffle">⇄</button>
+          <button id="btnShuffle" title="Aleatorio desligado" aria-label="Aleatorio desligado">
+            <svg class="shuffle-icon" viewBox="0 0 28 20" aria-hidden="true" focusable="false">
+              <g class="shuffle-icon-off">
+                <path d="M3 6h17"></path>
+                <path d="M3 14h17"></path>
+                <path d="M18 3l5 3-5 3"></path>
+                <path d="M18 11l5 3-5 3"></path>
+              </g>
+              <g class="shuffle-icon-on">
+                <path d="M3 5h5c5 0 6 10 11 10h1"></path>
+                <path d="M3 15h5c5 0 6-10 11-10h1"></path>
+                <path d="M18 2l5 3-5 3"></path>
+                <path d="M18 12l5 3-5 3"></path>
+              </g>
+            </svg>
+          </button>
           <button id="btnPrev" title="Anterior">⏮</button>
           <button id="btnPlay" title="Play/Pause">►</button>
           <button id="btnNext" title="Proxima">⏭</button>
-          <button id="btnStop" title="Stop">⏹</button>
+          <button id="btnStop" title="Stop" aria-label="Stop">
+            <span class="stop-icon" aria-hidden="true"></span>
+          </button>
           <button id="btnRepeat" title="Repeat">↻</button>
           <button id="appearanceButton" title="Aparência" aria-label="Abrir aparencia">
-            <span class="btn-icon" aria-hidden="true">⚙️</span>
+            <svg class="btn-icon appearance-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M12 8.4a3.6 3.6 0 1 0 0 7.2 3.6 3.6 0 0 0 0-7.2Z"></path>
+              <path d="M19.4 13.5a7.8 7.8 0 0 0 .1-1.5 7.8 7.8 0 0 0-.1-1.5l2-1.5-2-3.5-2.4 1a8.4 8.4 0 0 0-2.6-1.5L14 2h-4l-.4 3a8.4 8.4 0 0 0-2.6 1.5l-2.4-1-2 3.5 2 1.5a7.8 7.8 0 0 0-.1 1.5 7.8 7.8 0 0 0 .1 1.5l-2 1.5 2 3.5 2.4-1a8.4 8.4 0 0 0 2.6 1.5l.4 3h4l.4-3a8.4 8.4 0 0 0 2.6-1.5l2.4 1 2-3.5-2-1.5Z"></path>
+            </svg>
             <span class="btn-label">Aparência</span>
           </button>
         </div>
