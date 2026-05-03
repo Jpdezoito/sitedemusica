@@ -88,7 +88,10 @@
     let bottomInset = 0;
     let bassImpact = 0;
     let lastParticleBeat = 0;
+    let simulatedMode = false;
+    let fadeFrameId = null;
     const particles = [];
+    const simulatedData = new Uint8Array(1024);
     const BAR_COUNT = 360;
     const SPRING_GREEN = '#00FF7F';
 
@@ -151,13 +154,15 @@
     }
 
     function getBandEnergy(minHz, maxHz) {
-      if (!audioContext || !analyser || !frequencyData) {
+      if (!frequencyData || (!simulatedMode && (!audioContext || !analyser))) {
         return 0;
       }
 
-      const binHz = (audioContext.sampleRate / 2) / analyser.frequencyBinCount;
-      const start = clamp(Math.floor(minHz / binHz), 0, analyser.frequencyBinCount - 1);
-      const end = clamp(Math.ceil(maxHz / binHz), 0, analyser.frequencyBinCount - 1);
+      const binCount = frequencyData.length;
+      const sampleRate = audioContext?.sampleRate || 48000;
+      const binHz = (sampleRate / 2) / binCount;
+      const start = clamp(Math.floor(minHz / binHz), 0, binCount - 1);
+      const end = clamp(Math.ceil(maxHz / binHz), 0, binCount - 1);
 
       if (end <= start) {
         return 0;
@@ -169,6 +174,26 @@
       }
       const average = total / (end - start + 1);
       return clamp(average / 255, 0, 1);
+    }
+
+    function writeSimulatedFrequencyData() {
+      const time = performance.now() / 1000;
+      const kick = Math.max(0, Math.sin(time * Math.PI * 2 * 1.85));
+      const bassPulse = Math.pow(kick, 7);
+      const sweep = (Math.sin(time * 0.72) + 1) / 2;
+      const shimmer = (Math.sin(time * 5.1) + 1) / 2;
+
+      for (let i = 0; i < simulatedData.length; i += 1) {
+        const t = i / simulatedData.length;
+        const bass = Math.exp(-t * 18) * (80 + bassPulse * 165);
+        const midCenter = 0.14 + sweep * 0.34;
+        const mids = Math.exp(-Math.pow((t - midCenter) * 8, 2)) * (34 + shimmer * 92);
+        const highs = Math.exp(-Math.pow((t - 0.72) * 7, 2)) * (22 + (1 - sweep) * 64);
+        const noise = Math.abs((Math.sin(i * 12.989 + time * 13.37) * 43758.5453) % 1);
+        simulatedData[i] = clamp(bass + mids + highs + noise * 18, 0, 255);
+      }
+
+      frequencyData = simulatedData;
     }
 
     function isFullscreenLayout() {
@@ -324,11 +349,15 @@
 
     function render() {
       frameId = null;
-      if (!playing || !enabled || prefersReducedMotion.matches || !analyser) {
+      if (!playing || !enabled || prefersReducedMotion.matches || (!analyser && !simulatedMode)) {
         return;
       }
 
-      analyser.getByteFrequencyData(frequencyData);
+      if (simulatedMode) {
+        writeSimulatedFrequencyData();
+      } else {
+        analyser.getByteFrequencyData(frequencyData);
+      }
 
       const bassTarget = getBandEnergy(20, 160);
       const midsTarget = getBandEnergy(160, 2000);
@@ -383,6 +412,7 @@
 
       const Ctx = window.AudioContext || window.webkitAudioContext;
       if (!Ctx) {
+        audioGraphFailed = true;
         return;
       }
 
@@ -416,6 +446,27 @@
       frequencyData = frequencyData || new Uint8Array(analyser.frequencyBinCount);
     }
 
+    function fadeOutCanvas(frame = 0) {
+      if (!ctx || !canvasWidth || !canvasHeight) return;
+      resizeCanvas();
+      ctx.save();
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.18)';
+      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+      ctx.restore();
+
+      const decay = Math.max(0, 1 - frame / 18);
+      writeLevels(0.02 * decay, 0.015 * decay, 0.01 * decay, 0, 0, 0);
+      publishVuLevels(0.02 * decay, 0.018 * decay, 0.019 * decay);
+
+      if (frame < 18) {
+        fadeFrameId = requestAnimationFrame(() => fadeOutCanvas(frame + 1));
+      } else {
+        fadeFrameId = null;
+        particles.length = 0;
+      }
+    }
+
     function clearAll() {
       prevBassOut = 0;
       prevMidsOut = 0;
@@ -424,6 +475,11 @@
       beatMids = 0;
       beatHighs = 0;
       bassImpact = 0;
+      simulatedMode = false;
+      if (fadeFrameId) {
+        cancelAnimationFrame(fadeFrameId);
+        fadeFrameId = null;
+      }
       particles.length = 0;
       if (ctx) {
         resizeCanvas();
@@ -433,20 +489,30 @@
       publishVuLevels(0, 0, 0);
     }
 
-    async function start() {
+    async function start(options = {}) {
       if (!enabled || prefersReducedMotion.matches) {
         updateLayerVisibility();
         return;
       }
 
-      if (audioEl.currentSrc && /^https?:\/\//i.test(audioEl.currentSrc) && !audioEl.crossOrigin) {
+      if (fadeFrameId) {
+        cancelAnimationFrame(fadeFrameId);
+        fadeFrameId = null;
+      }
+
+      simulatedMode = Boolean(options.simulated);
+
+      if (!simulatedMode && audioEl.currentSrc && /^https?:\/\//i.test(audioEl.currentSrc) && !audioEl.crossOrigin) {
         console.warn('[Visualizer] Fonte externa detectada. Para análise de frequência, o servidor da mídia precisa permitir CORS.');
       }
 
-      await ensureAudioGraph();
-      if (audioGraphFailed) {
-        updateLayerVisibility();
-        return;
+      if (!simulatedMode) {
+        await ensureAudioGraph();
+      }
+
+      if (audioGraphFailed || !analyser) {
+        simulatedMode = true;
+        frequencyData = simulatedData;
       }
       updateLayerVisibility();
 
@@ -462,7 +528,7 @@
         cancelAnimationFrame(frameId);
         frameId = null;
       }
-      clearAll();
+      fadeOutCanvas();
     }
 
     function setEnabled(nextEnabled) {

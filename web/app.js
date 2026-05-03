@@ -364,6 +364,17 @@
             if (window.YT && event.data === window.YT.PlayerState.PLAYING && !state.audio.paused) {
               state.audio.pause();
             }
+            if (window.YT && event.data === window.YT.PlayerState.PLAYING && neonVisualizer) {
+              setPlayButton(true);
+              neonVisualizer.start({ simulated: true });
+            }
+            if (window.YT && (
+              event.data === window.YT.PlayerState.PAUSED ||
+              event.data === window.YT.PlayerState.ENDED
+            ) && neonVisualizer) {
+              neonVisualizer.stop();
+              setPlayButton(false);
+            }
           }
         }
       });
@@ -1688,6 +1699,10 @@
         } else if (els.youtubeUrl?.value) {
           loadYouTubeVideo(els.youtubeUrl.value);
         }
+        if (neonVisualizer) {
+          setPlayButton(true);
+          neonVisualizer.start({ simulated: true });
+        }
       });
     }
 
@@ -1695,6 +1710,10 @@
       els.youtubePauseButton.addEventListener('click', () => {
         if (state.youtubePlayer && typeof state.youtubePlayer.pauseVideo === 'function') {
           state.youtubePlayer.pauseVideo();
+        }
+        if (neonVisualizer) {
+          neonVisualizer.stop();
+          setPlayButton(false);
         }
       });
     }
