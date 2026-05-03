@@ -92,7 +92,7 @@
     let fadeFrameId = null;
     const particles = [];
     const simulatedData = new Uint8Array(1024);
-    const BAR_COUNT = 360;
+    const BASE_BAR_COUNT = 180;
     const SPRING_GREEN = '#00FF7F';
 
     function updateLayerInsets() {
@@ -108,7 +108,7 @@
       if (!ctx || !canvas) return;
       const width = Math.max(1, Math.floor(window.innerWidth || layer.clientWidth || 1));
       const height = Math.max(1, Math.floor(window.innerHeight || layer.clientHeight || 1));
-      const dpr = clamp(window.devicePixelRatio || 1, 1, 2);
+      const dpr = clamp(window.devicePixelRatio || 1, 1, 1.25);
 
       if (width === canvasWidth && height === canvasHeight && dpr === canvasDpr) {
         return;
@@ -211,10 +211,10 @@
 
     function spawnParticles(cx, cy, bassOut) {
       const now = performance.now();
-      if (now - lastParticleBeat < 90) return;
+      if (now - lastParticleBeat < 140) return;
       lastParticleBeat = now;
 
-      const amount = Math.round(5 + bassOut * 12);
+      const amount = Math.round(3 + bassOut * 7);
       const { baseRadius } = getMeshGeometry();
       const emitRadius = baseRadius + bassImpact * 40 + 8;
       for (let i = 0; i < amount; i += 1) {
@@ -231,8 +231,8 @@
         });
       }
 
-      if (particles.length > 180) {
-        particles.splice(0, particles.length - 180);
+      if (particles.length > 80) {
+        particles.splice(0, particles.length - 80);
       }
     }
 
@@ -257,7 +257,7 @@
         const alpha = clamp(particle.life, 0, 1);
         ctx.beginPath();
         ctx.shadowColor = SPRING_GREEN;
-        ctx.shadowBlur = 8 + alpha * 12;
+        ctx.shadowBlur = 4 + alpha * 8;
         ctx.fillStyle = `rgba(0, 255, 127, ${0.12 + alpha * 0.46})`;
         ctx.arc(particle.x, particle.y, particle.size * (0.5 + alpha), 0, Math.PI * 2);
         ctx.fill();
@@ -277,24 +277,27 @@
 
       ctx.save();
       ctx.globalCompositeOperation = 'source-over';
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.22)';
       ctx.fillRect(0, 0, canvasWidth, canvasHeight);
       ctx.restore();
 
       const { cx, cy, baseRadius } = getMeshGeometry();
-      bassImpact = smoothPeak(bassImpact, bassOut, 0.82, 0.13);
+      bassImpact = smoothPeak(bassImpact, bassOut, 0.9, 0.2);
       const pulseRadius = baseRadius + bassImpact * 40;
       const freqBins = frequencyData.length;
       const maxBin = Math.max(1, Math.floor(freqBins * 0.82));
       const avgVolume = clamp(bassOut * 0.48 + midsOut * 0.34 + highsOut * 0.18, 0, 1);
+      const barCount = canvasWidth < 700 ? 96 : (canvasWidth < 1100 ? 132 : BASE_BAR_COUNT);
 
       ctx.save();
       ctx.globalCompositeOperation = 'lighter';
       ctx.lineCap = 'round';
 
-      for (let i = 0; i < BAR_COUNT; i += 1) {
-        const angle = (i / BAR_COUNT) * Math.PI * 2 - Math.PI / 2;
-        const curved = Math.pow(i / BAR_COUNT, 1.72);
+      ctx.shadowBlur = 0;
+
+      for (let i = 0; i < barCount; i += 1) {
+        const angle = (i / barCount) * Math.PI * 2 - Math.PI / 2;
+        const curved = Math.pow(i / barCount, 1.72);
         const bin = Math.min(maxBin - 1, Math.floor(curved * maxBin));
         const raw = frequencyData[bin] / 255;
         const energy = clamp(Math.pow(raw, 1.22), 0, 1);
@@ -309,8 +312,6 @@
         ctx.beginPath();
         ctx.lineWidth = 0.55 + energy * 1.15;
         ctx.strokeStyle = `rgba(0, 255, 127, ${0.12 + energy * 0.58})`;
-        ctx.shadowColor = SPRING_GREEN;
-        ctx.shadowBlur = 2 + energy * 16 + avgVolume * 6;
         ctx.moveTo(x1, y1);
         ctx.lineTo(x2, y2);
         ctx.stroke();
@@ -320,14 +321,14 @@
       ctx.lineWidth = 1.5 + bassOut * 3;
       ctx.strokeStyle = `rgba(0, 255, 127, ${0.32 + avgVolume * 0.32})`;
       ctx.shadowColor = SPRING_GREEN;
-      ctx.shadowBlur = 14 + bassOut * 34;
+      ctx.shadowBlur = 10 + bassOut * 24;
       ctx.arc(cx, cy, pulseRadius, 0, Math.PI * 2);
       ctx.stroke();
 
       ctx.beginPath();
       ctx.lineWidth = 0.8;
       ctx.strokeStyle = `rgba(0, 255, 127, ${0.14 + highsOut * 0.26})`;
-      ctx.shadowBlur = 10 + highsOut * 18;
+      ctx.shadowBlur = 4 + highsOut * 8;
       ctx.arc(cx, cy, pulseRadius * (0.62 + midsOut * 0.04), 0, Math.PI * 2);
       ctx.stroke();
 
@@ -365,9 +366,9 @@
       const midsTarget = getBandEnergy(160, 2000);
       const highsTarget = getBandEnergy(2000, 8000);
 
-      bassLevel = smoothPeak(bassLevel, bassTarget, 0.72, 0.11);
-      midsLevel = smoothPeak(midsLevel, midsTarget, 0.62, 0.14);
-      highsLevel = smoothPeak(highsLevel, highsTarget, 0.78, 0.18);
+      bassLevel = smoothPeak(bassLevel, bassTarget, 0.9, 0.22);
+      midsLevel = smoothPeak(midsLevel, midsTarget, 0.76, 0.24);
+      highsLevel = smoothPeak(highsLevel, highsTarget, 0.82, 0.28);
 
       const bassOut = clamp(Math.pow(bassLevel, 0.86), 0, 1);
       const midsOut = clamp(Math.pow(midsLevel, 0.9), 0, 1);
@@ -424,8 +425,8 @@
       }
 
       analyser = analyser || audioContext.createAnalyser();
-      analyser.fftSize = 2048;
-      analyser.smoothingTimeConstant = 0.76;
+      analyser.fftSize = 1024;
+      analyser.smoothingTimeConstant = 0.58;
 
       try {
         if (!VISUALIZER_SOURCE_CACHE.has(audioEl)) {
