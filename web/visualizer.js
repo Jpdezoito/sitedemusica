@@ -185,10 +185,10 @@
 
       for (let i = 0; i < simulatedData.length; i += 1) {
         const t = i / simulatedData.length;
-        const bass = Math.exp(-t * 18) * (80 + bassPulse * 165);
+        const bass = Math.exp(-t * 18) * (62 + bassPulse * 116);
         const midCenter = 0.14 + sweep * 0.34;
-        const mids = Math.exp(-Math.pow((t - midCenter) * 8, 2)) * (34 + shimmer * 92);
-        const highs = Math.exp(-Math.pow((t - 0.72) * 7, 2)) * (22 + (1 - sweep) * 64);
+        const mids = Math.exp(-Math.pow((t - midCenter) * 8, 2)) * (26 + shimmer * 62);
+        const highs = Math.exp(-Math.pow((t - 0.72) * 7, 2)) * (18 + (1 - sweep) * 44);
         const noise = Math.abs((Math.sin(i * 12.989 + time * 13.37) * 43758.5453) % 1);
         simulatedData[i] = clamp(bass + mids + highs + noise * 18, 0, 255);
       }
@@ -214,23 +214,25 @@
       if (now - lastParticleBeat < 90) return;
       lastParticleBeat = now;
 
-      const amount = Math.round(20 + bassOut * 34);
+      const amount = Math.round(5 + bassOut * 12);
+      const { baseRadius } = getMeshGeometry();
+      const emitRadius = baseRadius + bassImpact * 40 + 8;
       for (let i = 0; i < amount; i += 1) {
         const angle = Math.random() * Math.PI * 2;
-        const speed = 1.5 + Math.random() * 4.8 + bassOut * 4.2;
+        const speed = 0.9 + Math.random() * 2.3 + bassOut * 2.2;
         particles.push({
-          x: cx,
-          y: cy,
+          x: cx + Math.cos(angle) * emitRadius,
+          y: cy + Math.sin(angle) * emitRadius,
           vx: Math.cos(angle) * speed,
           vy: Math.sin(angle) * speed,
           life: 1,
-          decay: 0.012 + Math.random() * 0.018,
-          size: 1.1 + Math.random() * 2.6 + bassOut * 1.6
+          decay: 0.018 + Math.random() * 0.024,
+          size: 0.8 + Math.random() * 1.7 + bassOut * 0.9
         });
       }
 
-      if (particles.length > 520) {
-        particles.splice(0, particles.length - 520);
+      if (particles.length > 180) {
+        particles.splice(0, particles.length - 180);
       }
     }
 
@@ -255,8 +257,8 @@
         const alpha = clamp(particle.life, 0, 1);
         ctx.beginPath();
         ctx.shadowColor = SPRING_GREEN;
-        ctx.shadowBlur = 12 + alpha * 20;
-        ctx.fillStyle = `rgba(0, 255, 127, ${0.18 + alpha * 0.72})`;
+        ctx.shadowBlur = 8 + alpha * 12;
+        ctx.fillStyle = `rgba(0, 255, 127, ${0.12 + alpha * 0.46})`;
         ctx.arc(particle.x, particle.y, particle.size * (0.5 + alpha), 0, Math.PI * 2);
         ctx.fill();
       }
@@ -296,7 +298,7 @@
         const bin = Math.min(maxBin - 1, Math.floor(curved * maxBin));
         const raw = frequencyData[bin] / 255;
         const energy = clamp(Math.pow(raw, 1.22), 0, 1);
-        const barLength = 7 + energy * 118 + avgVolume * 12;
+        const barLength = 5 + energy * 76 + avgVolume * 8;
         const inner = pulseRadius;
         const outer = pulseRadius + barLength;
         const x1 = cx + Math.cos(angle) * inner;
@@ -305,20 +307,20 @@
         const y2 = cy + Math.sin(angle) * outer;
 
         ctx.beginPath();
-        ctx.lineWidth = 0.75 + energy * 1.65;
-        ctx.strokeStyle = `rgba(0, 255, 127, ${0.18 + energy * 0.82})`;
+        ctx.lineWidth = 0.55 + energy * 1.15;
+        ctx.strokeStyle = `rgba(0, 255, 127, ${0.12 + energy * 0.58})`;
         ctx.shadowColor = SPRING_GREEN;
-        ctx.shadowBlur = 4 + energy * 30 + avgVolume * 10;
+        ctx.shadowBlur = 2 + energy * 16 + avgVolume * 6;
         ctx.moveTo(x1, y1);
         ctx.lineTo(x2, y2);
         ctx.stroke();
       }
 
       ctx.beginPath();
-      ctx.lineWidth = 2 + bassOut * 5;
-      ctx.strokeStyle = `rgba(0, 255, 127, ${0.40 + avgVolume * 0.45})`;
+      ctx.lineWidth = 1.5 + bassOut * 3;
+      ctx.strokeStyle = `rgba(0, 255, 127, ${0.32 + avgVolume * 0.32})`;
       ctx.shadowColor = SPRING_GREEN;
-      ctx.shadowBlur = 20 + bassOut * 52;
+      ctx.shadowBlur = 14 + bassOut * 34;
       ctx.arc(cx, cy, pulseRadius, 0, Math.PI * 2);
       ctx.stroke();
 
@@ -330,8 +332,8 @@
       ctx.stroke();
 
       const gradient = ctx.createRadialGradient(cx, cy, 4, cx, cy, pulseRadius * 0.78);
-      gradient.addColorStop(0, `rgba(0, 255, 127, ${0.18 + bassOut * 0.20})`);
-      gradient.addColorStop(0.42, `rgba(0, 255, 127, ${0.06 + midsOut * 0.10})`);
+      gradient.addColorStop(0, `rgba(0, 255, 127, ${0.05 + bassOut * 0.08})`);
+      gradient.addColorStop(0.42, `rgba(0, 255, 127, ${0.025 + midsOut * 0.04})`);
       gradient.addColorStop(1, 'rgba(0, 255, 127, 0)');
       ctx.fillStyle = gradient;
       ctx.shadowBlur = 0;
