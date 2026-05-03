@@ -155,15 +155,15 @@ body > main {
 
 .layout-fullscreen #cornerGlowLayer::before {
   top: calc(43% - var(--vizBottomInset) * 0.18);
-  width: min(54vmin, 500px);
-  height: min(54vmin, 500px);
+  width: min(60vmin, 560px);
+  height: min(60vmin, 560px);
   border-radius: 50%;
   transform:
     translate(-50%, -50%)
     rotate(calc(var(--vizHigh) * 8deg))
-    scale(calc(0.94 + var(--vizBass) * 0.12 + var(--vizBeatBass) * 0.07));
+    scale(calc(0.96 + var(--vizBass) * 0.16 + var(--vizBeatBass) * 0.09));
   transform-origin: center;
-  opacity: calc(0.76 + var(--vizMix) * 0.18);
+  opacity: calc(0.90 + var(--vizMix) * 0.10);
   background:
     radial-gradient(circle at 50% 3%, color-mix(in srgb, #b8ff42 92%, transparent) 0 4%, transparent 12%),
     radial-gradient(circle at 86% 31%, color-mix(in srgb, #9dff37 88%, transparent) 0 4%, transparent 13%),
@@ -185,23 +185,23 @@ body > main {
       #7cff22 360deg
     );
   -webkit-mask:
-    radial-gradient(circle, transparent 0 72%, rgba(0, 0, 0, 0.78) 73%, #000 78%, #000 86%, transparent 87% 100%);
+    radial-gradient(circle, transparent 0 67%, rgba(0, 0, 0, 0.72) 68%, #000 73%, #000 88%, transparent 89% 100%);
   mask:
-    radial-gradient(circle, transparent 0 72%, rgba(0, 0, 0, 0.78) 73%, #000 78%, #000 86%, transparent 87% 100%);
+    radial-gradient(circle, transparent 0 67%, rgba(0, 0, 0, 0.72) 68%, #000 73%, #000 88%, transparent 89% 100%);
   filter:
-    drop-shadow(0 0 calc(12px + var(--vizBass) * 18px) color-mix(in srgb, #88ff1f 74%, transparent))
-    drop-shadow(0 0 calc(30px + var(--vizMids) * 38px) color-mix(in srgb, #9dff33 44%, transparent));
+    drop-shadow(0 0 calc(18px + var(--vizBass) * 26px) color-mix(in srgb, #9aff24 86%, transparent))
+    drop-shadow(0 0 calc(44px + var(--vizMids) * 50px) color-mix(in srgb, #9dff33 56%, transparent));
 }
 
 .layout-fullscreen #cornerGlowLayer::after {
   top: calc(43% - var(--vizBottomInset) * 0.18);
-  width: min(44vmin, 410px);
-  height: min(44vmin, 410px);
+  width: min(48vmin, 450px);
+  height: min(48vmin, 450px);
   border-radius: 50%;
   transform:
     translate(-50%, -50%)
     scale(calc(0.94 + var(--vizMids) * 0.08 + var(--vizBeatMids) * 0.035));
-  opacity: calc(0.34 + var(--vizMids) * 0.28 + var(--vizHigh) * 0.10);
+  opacity: calc(0.48 + var(--vizMids) * 0.32 + var(--vizHigh) * 0.12);
   background:
     radial-gradient(circle at 35% 28%, rgba(255, 255, 255, 0.42) 0 1.2%, transparent 2.8%),
     radial-gradient(circle at 62% 36%, rgba(255, 255, 255, 0.30) 0 1%, transparent 2.6%),
@@ -209,7 +209,7 @@ body > main {
     radial-gradient(circle at 72% 72%, color-mix(in srgb, var(--vizBassColor) 32%, transparent) 0 1.6%, transparent 4.8%),
     radial-gradient(circle, transparent 0 63%, color-mix(in srgb, #8dff2a 34%, transparent) 64% 65%, transparent 66% 100%),
     radial-gradient(circle, color-mix(in srgb, var(--vizMidsColor) 22%, transparent) 0%, transparent 68%),
-    radial-gradient(circle, rgba(134, 255, 34, 0.62) 0 1.2px, transparent 1.8px);
+    radial-gradient(circle, rgba(147, 255, 45, 0.72) 0 1.25px, transparent 1.85px);
   background-size:
     auto,
     auto,
@@ -217,7 +217,7 @@ body > main {
     auto,
     auto,
     auto,
-    14px 14px;
+    13px 13px;
   -webkit-mask:
     radial-gradient(circle, #000 0 68%, transparent 69% 100%);
   mask:
@@ -228,10 +228,59 @@ body > main {
 }
 
 .layout-fullscreen .corner-glow {
-  width: 50vmin;
-  height: 50vmin;
-  filter: blur(26px);
-  opacity: calc(0.08 + var(--vizMix) * 0.16) !important;
+  top: calc(43% - var(--vizBottomInset) * 0.18) !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: min(13vmin, 112px);
+  height: min(13vmin, 112px);
+  border-radius: 50%;
+  filter:
+    blur(5px)
+    drop-shadow(0 0 18px color-mix(in srgb, #98ff2a 74%, transparent));
+  opacity: calc(0.38 + var(--vizBass) * 0.28 + var(--vizBeatBass) * 0.24) !important;
+  background:
+    radial-gradient(circle, rgba(246, 255, 170, 0.96) 0 12%, rgba(144, 255, 37, 0.84) 13% 42%, transparent 70%);
+  mix-blend-mode: screen;
+}
+
+.layout-fullscreen .corner-glow::after {
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.62) 0 8%, transparent 50%);
+}
+
+.layout-fullscreen .corner-glow.tl {
+  transform:
+    translate(-50%, -50%)
+    translate(-24vmin, -8vmin)
+    scale(calc(0.86 + var(--vizBeatBass) * 0.32 + var(--vizBass) * 0.16)) !important;
+}
+
+.layout-fullscreen .corner-glow.tr {
+  transform:
+    translate(-50%, -50%)
+    translate(25vmin, -6vmin)
+    scale(calc(0.76 + var(--vizBeatHigh) * 0.30 + var(--vizHigh) * 0.18)) !important;
+  background:
+    radial-gradient(circle, rgba(255, 255, 204, 0.92) 0 10%, rgba(181, 255, 66, 0.78) 11% 38%, transparent 72%);
+}
+
+.layout-fullscreen .corner-glow.bl {
+  transform:
+    translate(-50%, -50%)
+    translate(-19vmin, 22vmin)
+    scale(calc(0.74 + var(--vizBeatMids) * 0.36 + var(--vizMids) * 0.20)) !important;
+  background:
+    radial-gradient(circle, rgba(211, 255, 122, 0.88) 0 9%, rgba(119, 255, 35, 0.76) 10% 36%, transparent 70%);
+}
+
+.layout-fullscreen .corner-glow.br {
+  transform:
+    translate(-50%, -50%)
+    translate(21vmin, 20vmin)
+    scale(calc(0.70 + var(--vizBeatBass) * 0.28 + var(--vizMix) * 0.20)) !important;
+  background:
+    radial-gradient(circle, rgba(246, 255, 181, 0.86) 0 9%, rgba(151, 255, 41, 0.72) 10% 36%, transparent 70%);
 }
 
 @media (prefers-reduced-motion: reduce) {
