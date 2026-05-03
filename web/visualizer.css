@@ -136,8 +136,10 @@ body > main {
 
 .layout-fullscreen #cornerGlowLayer {
   background:
-    radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--vizMidsColor) 12%, transparent) 0%, transparent 28%),
-    radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--vizHighColor) 10%, transparent) 0%, transparent 42%),
+    radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--vizBassColor) 14%, transparent) 0%, transparent 28%),
+    radial-gradient(ellipse at 44% 26%, color-mix(in srgb, var(--vizMidsColor) 24%, transparent) 0%, transparent 34%),
+    radial-gradient(ellipse at 66% 22%, color-mix(in srgb, var(--vizHighColor) 16%, transparent) 0%, transparent 32%),
+    radial-gradient(ellipse at 28% 72%, color-mix(in srgb, var(--vizBassColor) 18%, transparent) 0%, transparent 36%),
     linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--bg) 78%, #000000) 78%, var(--bg) 100%);
 }
 
@@ -153,54 +155,76 @@ body > main {
 
 .layout-fullscreen #cornerGlowLayer::before {
   top: calc(43% - var(--vizBottomInset) * 0.18);
-  width: min(58vmin, 520px);
-  height: min(58vmin, 520px);
+  width: min(54vmin, 500px);
+  height: min(54vmin, 500px);
   border-radius: 50%;
   transform:
     translate(-50%, -50%)
-    rotate(calc(var(--vizHigh) * 16deg))
-    scale(calc(0.92 + var(--vizBass) * 0.20 + var(--vizBeatBass) * 0.08));
+    rotate(calc(var(--vizHigh) * 8deg))
+    scale(calc(0.94 + var(--vizBass) * 0.12 + var(--vizBeatBass) * 0.07));
   transform-origin: center;
-  opacity: calc(0.34 + var(--vizMix) * 0.42);
+  opacity: calc(0.76 + var(--vizMix) * 0.18);
   background:
-    repeating-conic-gradient(
-      from -6deg,
-      color-mix(in srgb, var(--vizBassColor) 78%, transparent) 0deg 5deg,
-      transparent 5deg 13deg,
-      color-mix(in srgb, var(--vizMidsColor) 72%, transparent) 13deg 18deg,
-      transparent 18deg 30deg,
-      color-mix(in srgb, var(--vizHighColor) 68%, transparent) 30deg 35deg,
-      transparent 35deg 45deg
+    radial-gradient(circle at 50% 3%, color-mix(in srgb, #b8ff42 92%, transparent) 0 4%, transparent 12%),
+    radial-gradient(circle at 86% 31%, color-mix(in srgb, #9dff37 88%, transparent) 0 4%, transparent 13%),
+    radial-gradient(circle at 73% 86%, color-mix(in srgb, #d7ff5b 78%, transparent) 0 5%, transparent 14%),
+    radial-gradient(circle at 16% 69%, color-mix(in srgb, #82ff29 88%, transparent) 0 4%, transparent 13%),
+    radial-gradient(circle at 24% 16%, color-mix(in srgb, #ecff7a 74%, transparent) 0 3%, transparent 11%),
+    conic-gradient(
+      from calc(-16deg + var(--vizHigh) * 18deg),
+      #7cff22 0deg,
+      #dbff57 18deg,
+      #68ff18 44deg,
+      #bfff43 72deg,
+      #56ff17 112deg,
+      #eaff70 150deg,
+      #76ff21 190deg,
+      #cfff51 236deg,
+      #5cff18 288deg,
+      #d8ff62 326deg,
+      #7cff22 360deg
     );
   -webkit-mask:
-    radial-gradient(circle, transparent 0 30%, #000 31% 68%, transparent 69% 100%);
+    radial-gradient(circle, transparent 0 72%, rgba(0, 0, 0, 0.78) 73%, #000 78%, #000 86%, transparent 87% 100%);
   mask:
-    radial-gradient(circle, transparent 0 30%, #000 31% 68%, transparent 69% 100%);
+    radial-gradient(circle, transparent 0 72%, rgba(0, 0, 0, 0.78) 73%, #000 78%, #000 86%, transparent 87% 100%);
   filter:
-    blur(0.2px)
-    drop-shadow(0 0 18px color-mix(in srgb, var(--vizMidsColor) 44%, transparent))
-    drop-shadow(0 0 34px color-mix(in srgb, var(--vizBassColor) 32%, transparent));
+    drop-shadow(0 0 calc(12px + var(--vizBass) * 18px) color-mix(in srgb, #88ff1f 74%, transparent))
+    drop-shadow(0 0 calc(30px + var(--vizMids) * 38px) color-mix(in srgb, #9dff33 44%, transparent));
 }
 
 .layout-fullscreen #cornerGlowLayer::after {
   top: calc(43% - var(--vizBottomInset) * 0.18);
-  width: min(28vmin, 250px);
-  height: min(28vmin, 250px);
+  width: min(44vmin, 410px);
+  height: min(44vmin, 410px);
   border-radius: 50%;
   transform:
     translate(-50%, -50%)
-    scale(calc(0.94 + var(--vizMids) * 0.13 + var(--vizBeatMids) * 0.04));
-  opacity: calc(0.78 + var(--vizHigh) * 0.18);
+    scale(calc(0.94 + var(--vizMids) * 0.08 + var(--vizBeatMids) * 0.035));
+  opacity: calc(0.34 + var(--vizMids) * 0.28 + var(--vizHigh) * 0.10);
   background:
-    radial-gradient(circle at 42% 34%, rgba(255, 255, 255, 0.78) 0 5%, transparent 13%),
-    radial-gradient(circle, color-mix(in srgb, var(--vizBassColor) 80%, #fff2a8) 0 24%, transparent 25%),
-    radial-gradient(circle, transparent 0 37%, color-mix(in srgb, var(--vizMidsColor) 76%, transparent) 38% 41%, transparent 42%),
-    radial-gradient(circle, transparent 0 58%, color-mix(in srgb, var(--vizHighColor) 64%, transparent) 59% 61%, transparent 62%),
-    radial-gradient(circle, color-mix(in srgb, var(--accent) 58%, #ffcc4d) 0 100%);
+    radial-gradient(circle at 35% 28%, rgba(255, 255, 255, 0.42) 0 1.2%, transparent 2.8%),
+    radial-gradient(circle at 62% 36%, rgba(255, 255, 255, 0.30) 0 1%, transparent 2.6%),
+    radial-gradient(circle at 44% 68%, color-mix(in srgb, var(--vizMidsColor) 40%, transparent) 0 2%, transparent 5%),
+    radial-gradient(circle at 72% 72%, color-mix(in srgb, var(--vizBassColor) 32%, transparent) 0 1.6%, transparent 4.8%),
+    radial-gradient(circle, transparent 0 63%, color-mix(in srgb, #8dff2a 34%, transparent) 64% 65%, transparent 66% 100%),
+    radial-gradient(circle, color-mix(in srgb, var(--vizMidsColor) 22%, transparent) 0%, transparent 68%),
+    radial-gradient(circle, rgba(134, 255, 34, 0.62) 0 1.2px, transparent 1.8px);
+  background-size:
+    auto,
+    auto,
+    auto,
+    auto,
+    auto,
+    auto,
+    14px 14px;
+  -webkit-mask:
+    radial-gradient(circle, #000 0 68%, transparent 69% 100%);
+  mask:
+    radial-gradient(circle, #000 0 68%, transparent 69% 100%);
   box-shadow:
-    0 0 calc(28px + var(--vizBass) * 44px) color-mix(in srgb, var(--vizBassColor) 54%, transparent),
-    0 0 calc(58px + var(--vizMids) * 54px) color-mix(in srgb, var(--vizMidsColor) 30%, transparent),
-    inset 0 0 34px rgba(255, 255, 255, 0.18);
+    inset 0 0 38px color-mix(in srgb, var(--vizMidsColor) 18%, transparent),
+    0 0 calc(26px + var(--vizBass) * 28px) color-mix(in srgb, #8cff2c 26%, transparent);
 }
 
 .layout-fullscreen .corner-glow {
