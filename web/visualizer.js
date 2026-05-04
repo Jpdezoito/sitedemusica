@@ -88,12 +88,19 @@
     let bottomInset = 0;
     let bassImpact = 0;
     let lastParticleBeat = 0;
+    let lastCanvasDraw = 0;
     let simulatedMode = false;
     let fadeFrameId = null;
     const particles = [];
     const simulatedData = new Uint8Array(1024);
     const BASE_BAR_COUNT = 180;
     const SPRING_GREEN = '#00FF7F';
+
+    function shouldUseLightCanvas() {
+      const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
+      const narrowScreen = Math.min(window.innerWidth || 0, window.innerHeight || 0) < 760;
+      return coarsePointer || narrowScreen;
+    }
 
     function updateLayerInsets() {
       const player = document.querySelector('.player');
@@ -108,7 +115,7 @@
       if (!ctx || !canvas) return;
       const width = Math.max(1, Math.floor(window.innerWidth || layer.clientWidth || 1));
       const height = Math.max(1, Math.floor(window.innerHeight || layer.clientHeight || 1));
-      const dpr = clamp(window.devicePixelRatio || 1, 1, 1.25);
+      const dpr = shouldUseLightCanvas() ? 1 : clamp(window.devicePixelRatio || 1, 1, 1.25);
 
       if (width === canvasWidth && height === canvasHeight && dpr === canvasDpr) {
         return;
@@ -268,6 +275,13 @@
     function drawParticleMesh(bassOut, midsOut, highsOut, nextBeatBass) {
       if (!ctx || !frequencyData) return;
       resizeCanvas();
+      const lightCanvas = shouldUseLightCanvas();
+      const now = performance.now();
+
+      if (lightCanvas && now - lastCanvasDraw < 50) {
+        return;
+      }
+      lastCanvasDraw = now;
 
       const fullscreen = isFullscreenLayout();
       if (!fullscreen) {
@@ -276,7 +290,9 @@
 
       ctx.save();
       ctx.globalCompositeOperation = 'source-over';
-      ctx.fillStyle = fullscreen ? 'rgba(0, 0, 0, 0.22)' : 'rgba(0, 0, 0, 0.12)';
+      ctx.fillStyle = fullscreen
+        ? (lightCanvas ? 'rgba(0, 0, 0, 0.34)' : 'rgba(0, 0, 0, 0.22)')
+        : (lightCanvas ? 'rgba(0, 0, 0, 0.2)' : 'rgba(0, 0, 0, 0.12)');
       ctx.fillRect(0, 0, canvasWidth, canvasHeight);
       ctx.restore();
 
@@ -286,7 +302,9 @@
       const freqBins = frequencyData.length;
       const maxBin = Math.max(1, Math.floor(freqBins * 0.82));
       const avgVolume = clamp(bassOut * 0.48 + midsOut * 0.34 + highsOut * 0.18, 0, 1);
-      const barCount = canvasWidth < 700 ? 96 : (canvasWidth < 1100 ? 132 : BASE_BAR_COUNT);
+      const barCount = lightCanvas
+        ? (canvasWidth < 700 ? 56 : 72)
+        : (canvasWidth < 700 ? 96 : (canvasWidth < 1100 ? 132 : BASE_BAR_COUNT));
 
       ctx.save();
       ctx.globalCompositeOperation = 'lighter';
@@ -343,10 +361,12 @@
 
       ctx.restore();
 
-      if (nextBeatBass > 0.92 || (bassOut > 0.42 && bassOut - prevBassOut > 0.04)) {
+      if (!lightCanvas && (nextBeatBass > 0.92 || (bassOut > 0.42 && bassOut - prevBassOut > 0.04))) {
         spawnParticles(cx, cy, bassOut);
       }
-      drawParticles();
+      if (!lightCanvas) {
+        drawParticles();
+      }
     }
 
     function render() {
