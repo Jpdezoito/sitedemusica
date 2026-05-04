@@ -1804,9 +1804,13 @@ html.layout-fullscreen .player[data-model='pulse-ring'] #appearanceButton,
       "timeline"
       "controls"
       "volume" !important;
-    gap: 9px !important;
-    max-height: min(58dvh, 380px) !important;
-    padding: 12px 12px max(12px, env(safe-area-inset-bottom)) !important;
+    gap: 12px !important;
+    max-height: min(68dvh, 440px) !important;
+    padding:
+      16px
+      max(18px, env(safe-area-inset-left))
+      max(18px, env(safe-area-inset-bottom))
+      max(18px, env(safe-area-inset-right)) !important;
   }
 
   .layout-fullscreen .now-block,
@@ -1826,6 +1830,9 @@ html.layout-fullscreen .player[data-model='pulse-ring'] #appearanceButton,
   .layout-fullscreen .controls {
     flex-wrap: wrap !important;
     justify-content: center !important;
+    gap: 10px !important;
+    max-width: 320px !important;
+    margin-inline: auto !important;
   }
 
   .layout-fullscreen .controls button,
@@ -1833,10 +1840,26 @@ html.layout-fullscreen .player[data-model='pulse-ring'] #appearanceButton,
   .layout-fullscreen .player[data-model='orbit-sphere'] .controls button,
   html.layout-fullscreen .player[data-model='pulse-ring'] #appearanceButton,
   .layout-fullscreen .player[data-model='orbit-sphere'] #appearanceButton {
-    width: 36px !important;
-    height: 36px !important;
-    min-width: 36px !important;
-    min-height: 36px !important;
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+  }
+
+  .layout-fullscreen .timeline {
+    grid-template-columns: auto minmax(0, 1fr) auto !important;
+    column-gap: 10px !important;
+  }
+
+  .layout-fullscreen .volume {
+    grid-template-columns: max-content minmax(150px, 1fr) !important;
+    column-gap: 10px !important;
+    row-gap: 10px !important;
+    padding-inline: 2px !important;
+  }
+
+  .layout-fullscreen .volume input[type="range"] {
+    min-width: 150px !important;
   }
 }
 
