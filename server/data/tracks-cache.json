@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-03T23:42:52.404Z",
+  "updatedAt": "2026-05-04T04:30:03.330Z",
   "tracks": [
     {
       "id": "edfba9b7229e58f7b9e23037a73b93fb48faec6c",
@@ -30,6 +30,26 @@
       "album": "Desconhecido",
       "durationSec": 241,
       "sizeBytes": 5475654
+    },
+    {
+      "id": "6aab21ed577353d12db651502e29d850585b179d",
+      "filename": "Ao-Meio-Dia,-Eu-Sou-o-Sol.mp3",
+      "relPath": "Ao-Meio-Dia,-Eu-Sou-o-Sol.mp3",
+      "title": "Ao-Meio-Dia,-Eu-Sou-o-Sol",
+      "artist": "Desconhecido",
+      "album": "Desconhecido",
+      "durationSec": 304,
+      "sizeBytes": 7134678
+    },
+    {
+      "id": "d225b98a18710d6fcb6cee1c249d2769eab5280b",
+      "filename": "At-Noon,-I-Am-the-Sun.mp3",
+      "relPath": "At-Noon,-I-Am-the-Sun.mp3",
+      "title": "At-Noon,-I-Am-the-Sun",
+      "artist": "Desconhecido",
+      "album": "Desconhecido",
+      "durationSec": 299,
+      "sizeBytes": 7197654
     },
     {
       "id": "74688526091c699add1557a27609fb6b435c5070",
