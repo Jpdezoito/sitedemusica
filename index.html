@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Meu Player de Músicas</title>
-  <link rel="stylesheet" href="web/themes.css?v=20260508-02">
-  <link rel="stylesheet" href="web/styles.css?v=20260508-02">
-  <link rel="stylesheet" href="web/visualizer.css?v=20260508-02">
-  <script src="web/themes.js?v=20260503-13"></script>
+  <link rel="stylesheet" href="web/themes.css?v=20260509-04">
+  <link rel="stylesheet" href="web/styles.css?v=20260509-04">
+  <link rel="stylesheet" href="web/visualizer.css?v=20260509-04">
+  <script src="web/themes.js?v=20260509-04"></script>
   <script>
     (function () {
       var validThemes = ['minimal', 'darkpro', 'neon', 'retro', 'glass', 'vinyl', 'studio', 'ocean'];
@@ -86,6 +86,19 @@
                     <tbody></tbody>
                   </table>
                 </div>
+                  <!-- Player externo EasyMusic.AI -->
+                  <div class="external-music-player" style="margin-top: 2rem; display: flex; justify-content: center;">
+                    <iframe 
+                      width="100%" 
+                      height="1024" 
+                      src="https://easymusic.ai/pt/music/4942409-1a9f27bf-bc44-f333-a75b-3f9e1880e06f/embed" 
+                      style="border: none; border-radius: 12px; max-width: 600px; width: 100%;"
+                      allow="autoplay; web-share"
+                      loading="lazy"
+                      title="EasyMusic.AI Player"
+                      sandbox="allow-scripts allow-same-origin allow-popups allow-top-navigation"
+                    ></iframe>
+                  </div>
               </div>
             </div>
           </section>
@@ -362,7 +375,7 @@
     </div>
   </div>
 
-  <script src="web/visualizer.js?v=20260503-13"></script>
-  <script src="web/app.js?v=20260503-13"></script>
+  <script src="web/visualizer.js?v=20260509-04"></script>
+  <script src="web/app.js?v=20260509-04"></script>
 </body>
 </html>
