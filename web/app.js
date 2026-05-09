@@ -97,9 +97,9 @@
         throw new Error('Manifesto local nao encontrado');
       }
       const list = Array.isArray(payload) ? payload : (Array.isArray(payload.tracks) ? payload.tracks : []);
-      state.tracks = list
+      state.tracks = sortTracksByTitle(list
         .map((item, index) => normalizeLocalTrack(item, index))
-        .filter(Boolean);
+        .filter(Boolean));
     } catch (_manifestErr) {
       state.tracks = [];
     }
@@ -459,6 +459,14 @@
     return state.tracks.find((track) => track.id === id) || null;
   }
 
+  function sortTracksByTitle(tracks) {
+    return [...tracks].sort((a, b) => {
+      const titleA = String(a?.title || a?.filename || '').trim();
+      const titleB = String(b?.title || b?.filename || '').trim();
+      return titleA.localeCompare(titleB, 'pt-BR', { sensitivity: 'base', numeric: true });
+    });
+  }
+
   function buildLocalStreamUrl(filename) {
     const encodedPath = String(filename || '')
       .split('/')
@@ -631,6 +639,12 @@
   function createCoverElement(trackId) {
     const cover = document.createElement('div');
     cover.className = 'cover';
+    const track = getTrackById(trackId);
+    if (track?.coverUrl) {
+      cover.style.backgroundImage = `url("${track.coverUrl}")`;
+      cover.classList.add('cover-loaded');
+      return cover;
+    }
     if (state.runtimeMode === 'local') {
       cover.classList.add('cover-fallback');
       return cover;
@@ -906,7 +920,8 @@
   function updateDeleteButtonState() {
     const isTrackView = state.currentView === 'queue' || state.currentView === 'library';
     const hasSelection = !!state.selectedTrackId;
-    els.deleteTrackButton.disabled = state.runtimeMode === 'local' || !(isTrackView && hasSelection);
+    const selectedTrack = hasSelection ? getTrackById(state.selectedTrackId) : null;
+    els.deleteTrackButton.disabled = state.runtimeMode === 'local' || selectedTrack?.sourceType === 'easymusic' || !(isTrackView && hasSelection);
   }
 
   function renderQueue() {
@@ -1936,7 +1951,7 @@
         throw new Error(`API tracks status ${resp.status}`);
       }
       const data = await resp.json();
-      state.tracks = Array.isArray(data) ? data : (data.tracks || []);
+      state.tracks = sortTracksByTitle(Array.isArray(data) ? data : (data.tracks || []));
       setRuntimeMode('api');
       renderLibrary();
       renderQueue();

@@ -1,139 +1,193 @@
-﻿{
-    "tracks":  [
-                   {
-                       "filename":  "3-caras.mp3"
-                   },
-                   {
-                       "filename":  "AKASHI-SEIJURO-—-“DOBREM-SE”-(Rap-Pesado).mp3"
-                   },
-                   {
-                       "filename":  "Ao-Meio-Dia,-Eu-Sou-o-Sol.mp3"
-                   },
-                   {
-                       "filename":  "At-Noon,-I-Am-the-Sun.mp3"
-                   },
-                   {
-                       "filename":  "braço-direito.mp3"
-                   },
-                   {
-                       "filename":  "capitães-e-comandantes.mp3"
-                   },
-                   {
-                       "filename":  "CHARIZARD-RAP-(EN-+-KR).mp3"
-                   },
-                   {
-                       "filename":  "-GOEMON-THE-MYSTIC-HELL-(Style-$uicideboy$).mp3"
-                   },
-                   {
-                       "filename":  "LEÃO-x-PANTERA.mp3"
-                   },
-                   {
-                       "filename":  "Mente-acordada-enquanto-o-mundo-dorme-.mp3"
-                   },
-                   {
-                       "filename":  "MULHERES-DO-VELHO-OESTE.mp3"
-                   },
-                   {
-                       "filename":  "pyke.mp3"
-                   },
-                   {
-                       "filename":  "PYKE-VERSÃO-FEMININA.mp3"
-                   },
-                   {
-                       "filename":  "RAP-DO-CHARIZARD.mp3"
-                   },
-                   {
-                       "filename":  "RAP-DO-ITACHI-UCHIHA-—-“SANGUE-E-LUA”.mp3"
-                   },
-                   {
-                       "filename":  "RAP-DO-JIGEN-(Phonk-+-Hip-Hop-Agressivo).mp3"
-                   },
-                   {
-                       "filename":  "Rap-do-Zed,-Yone,-Talon-e-Yasuo.mp3"
-                   },
-                   {
-                       "filename":  "RAP-DO-ZORO-(Boom-bap-+-trap-phonk)-—-~5-min.mp3"
-                   },
-                   {
-                       "filename":  "RAP-NARUTO-x-SASUKE-.mp3"
-                   },
-                   {
-                       "filename":  "RED CROWN .mp3"
-                   },
-                   {
-                       "filename":  "Reis-Sem-Coroa.mp3"
-                   },
-                   {
-                       "filename":  "RISCADO NO ABISMO.mp3"
-                   },
-                   {
-                       "filename":  "SONHO-RESPEITO, ESFORÇO, DISCIPLINA.mp3"
-                   },
-                   {
-                       "filename":  "tf-no-mid.mp3"
-                   },
-                   {
-                       "filename":  "Three cuts in the night.mp3"
-                   },
-                   {
-                       "filename":  "THREE-BLADES-IN-THE-BREL.mp3"
-                   },
-                   {
-                       "filename":  "Título-Colt-e-Poeira-(Troca-de-Tiros-no-Tempo).mp3"
-                   },
-                   {
-                       "filename":  "Três cortes na noite 2.mp3"
-                   },
-                   {
-                       "filename":  "Três cortes na noite.mp3"
-                   },
-                   {
-                       "filename":  "TRÊS-LÂMINAS-NO-BREU.mp3"
-                   },
-                   {
-                       "filename":  "TRIO-FANTASMA.mp3"
-                   },
-                   {
-                       "filename":  "Uncrowned-Kings.mp3"
-                   },
-                   {
-                       "filename":  "Twisted-Fate-\u0026-Yasuo-no-Velho-Oeste.mp3"
-                   },
-                   {
-                       "filename":  "VELHO-OESE-SUL-COREANO.mp3"
-                   },
-                   {
-                       "filename":  "VELHO-OESTE-LEAGUE.mp3"
-                   },
-                   {
-                       "filename":  "Velozmente.mp3"
-                   },
-                   {
-                       "filename":  "VP.mp3"
-                   },
-                   {
-                       "filename":  "Wild-West-League-of-Legends real.mp3"
-                   },
-                   {
-                       "filename":  "Wild-West-League-of-Legends.mp3"
-                   },
-                   {
-                       "filename":  "Yasuo-+-Twisted-Fate-(só-MALE,-cantado).mp3"
-                   },
-                   {
-                       "filename":  "Yasuo-e-Katarina (1).mp3"
-                   },
-                   {
-                       "filename":  "Yasuo-e-Katarina.mp3"
-                   },
-                   {
-                       "filename":  "Yasuo-velho-oeste (1).mp3"
-                   },
-                   {
-                       "filename":  "Yasuo-Velho-oeste.mp3"
-                   },
-                   {
-                       "filename":  "YASUO-x-IRELIA-—-STORM-AND-BLADES.mp3"
-                   }
-               ]
+{
+  "tracks": [
+    {
+      "filename": "-GOEMON-THE-MYSTIC-HELL-(Style-$uicideboy$).mp3"
+    },
+    {
+      "filename": "3-caras.mp3"
+    },
+    {
+      "filename": "300 — Isto é Esparta.mp3",
+      "title": "300 — Isto é Esparta",
+      "artist": "EasyMusic.AI",
+      "album": "EasyMusic",
+      "durationSec": 292,
+      "streamUrl": "https://cdn9.easymusic.ai/audios/190325c1-af88-fef6-2a34-fa35c903e42d.mp3",
+      "coverUrl": "https://cdn9.easymusic.ai/images/190325c1-af88-fef6-2a34-fa35c903e42d.jpeg"
+    },
+    {
+      "filename": "300 — This Is Sparta.mp3",
+      "title": "300 — This Is Sparta",
+      "artist": "EasyMusic.AI",
+      "album": "EasyMusic",
+      "durationSec": 296,
+      "streamUrl": "https://cdn9.easymusic.ai/audios/1a9f27bf-bc44-f333-a75b-3f9e1880e06f.mp3",
+      "coverUrl": "https://cdn9.easymusic.ai/images/1a9f27bf-bc44-f333-a75b-3f9e1880e06f.jpeg"
+    },
+    {
+      "filename": "AKASHI-SEIJURO-—-“DOBREM-SE”-(Rap-Pesado).mp3"
+    },
+    {
+      "filename": "Ao-Meio-Dia,-Eu-Sou-o-Sol.mp3"
+    },
+    {
+      "filename": "At-Noon,-I-Am-the-Sun.mp3"
+    },
+    {
+      "filename": "braço-direito.mp3"
+    },
+    {
+      "filename": "capitães-e-comandantes.mp3"
+    },
+    {
+      "filename": "CHARIZARD-RAP-(EN-+-KR).mp3"
+    },
+    {
+      "filename": "Katakuri — Eu Previ Seu Final.mp3",
+      "title": "Katakuri — Eu Previ Seu Final",
+      "artist": "EasyMusic.AI",
+      "album": "EasyMusic",
+      "durationSec": 368,
+      "streamUrl": "https://cdn9.easymusic.ai/audios/dfd547b2-355e-fbfa-21a5-e03f07fe67d0.mp3",
+      "coverUrl": "https://cdn9.easymusic.ai/images/dfd547b2-355e-fbfa-21a5-e03f07fe67d0.jpeg"
+    },
+    {
+      "filename": "Katakuri — I Foresaw Your Ending.mp3",
+      "title": "Katakuri — I Foresaw Your Ending",
+      "artist": "EasyMusic.AI",
+      "album": "EasyMusic",
+      "durationSec": 206,
+      "streamUrl": "https://cdn9.easymusic.ai/audios/f45ae999-0ded-ff8e-2504-a1683c541657.mp3",
+      "coverUrl": "https://cdn9.easymusic.ai/images/f45ae999-0ded-ff8e-2504-a1683c541657.jpeg"
+    },
+    {
+      "filename": "LEÃO-x-PANTERA.mp3"
+    },
+    {
+      "filename": "Mente-acordada-enquanto-o-mundo-dorme-.mp3"
+    },
+    {
+      "filename": "MULHERES-DO-VELHO-OESTE.mp3"
+    },
+    {
+      "filename": "PYKE-VERSÃO-FEMININA.mp3"
+    },
+    {
+      "filename": "pyke.mp3"
+    },
+    {
+      "filename": "RAP-DO-CHARIZARD.mp3"
+    },
+    {
+      "filename": "RAP-DO-ITACHI-UCHIHA-—-“SANGUE-E-LUA”.mp3"
+    },
+    {
+      "filename": "RAP-DO-JIGEN-(Phonk-+-Hip-Hop-Agressivo).mp3"
+    },
+    {
+      "filename": "Rap-do-Zed,-Yone,-Talon-e-Yasuo.mp3"
+    },
+    {
+      "filename": "RAP-DO-ZORO-(Boom-bap-+-trap-phonk)-—-~5-min.mp3"
+    },
+    {
+      "filename": "RAP-NARUTO-x-SASUKE-.mp3"
+    },
+    {
+      "filename": "RED CROWN .mp3"
+    },
+    {
+      "filename": "Reis-Sem-Coroa.mp3"
+    },
+    {
+      "filename": "RISCADO NO ABISMO.mp3"
+    },
+    {
+      "filename": "SONHO-RESPEITO, ESFORÇO, DISCIPLINA.mp3"
+    },
+    {
+      "filename": "tf-no-mid.mp3"
+    },
+    {
+      "filename": "Three cuts in the night.mp3"
+    },
+    {
+      "filename": "Three Legends — Honor Into Thunder.mp3",
+      "title": "Three Legends — Honor Into Thunder",
+      "artist": "EasyMusic.AI",
+      "album": "EasyMusic",
+      "durationSec": 280,
+      "streamUrl": "https://cdn9.easymusic.ai/audios/c4b9a79f-067b-f2dc-6541-83e14e96f522.mp3",
+      "coverUrl": "https://cdn9.easymusic.ai/images/c4b9a79f-067b-f2dc-6541-83e14e96f522.jpeg"
+    },
+    {
+      "filename": "THREE-BLADES-IN-THE-BREL.mp3"
+    },
+    {
+      "filename": "Título-Colt-e-Poeira-(Troca-de-Tiros-no-Tempo).mp3"
+    },
+    {
+      "filename": "Três cortes na noite 2.mp3"
+    },
+    {
+      "filename": "Três cortes na noite.mp3"
+    },
+    {
+      "filename": "Três Lendas — Honra em Trovão.mp3",
+      "title": "Três Lendas — Honra em Trovão",
+      "artist": "EasyMusic.AI",
+      "album": "EasyMusic",
+      "durationSec": 303,
+      "streamUrl": "https://cdn9.easymusic.ai/audios/3a6e922c-aaab-fe10-a53c-3bb86695def0.mp3",
+      "coverUrl": "https://cdn9.easymusic.ai/images/3a6e922c-aaab-fe10-a53c-3bb86695def0.jpeg"
+    },
+    {
+      "filename": "TRÊS-LÂMINAS-NO-BREU.mp3"
+    },
+    {
+      "filename": "TRIO-FANTASMA.mp3"
+    },
+    {
+      "filename": "Twisted-Fate-&-Yasuo-no-Velho-Oeste.mp3"
+    },
+    {
+      "filename": "Uncrowned-Kings.mp3"
+    },
+    {
+      "filename": "VELHO-OESE-SUL-COREANO.mp3"
+    },
+    {
+      "filename": "VELHO-OESTE-LEAGUE.mp3"
+    },
+    {
+      "filename": "Velozmente.mp3"
+    },
+    {
+      "filename": "VP.mp3"
+    },
+    {
+      "filename": "Wild-West-League-of-Legends real.mp3"
+    },
+    {
+      "filename": "Wild-West-League-of-Legends.mp3"
+    },
+    {
+      "filename": "Yasuo-+-Twisted-Fate-(só-MALE,-cantado).mp3"
+    },
+    {
+      "filename": "Yasuo-e-Katarina (1).mp3"
+    },
+    {
+      "filename": "Yasuo-e-Katarina.mp3"
+    },
+    {
+      "filename": "Yasuo-velho-oeste (1).mp3"
+    },
+    {
+      "filename": "Yasuo-Velho-oeste.mp3"
+    },
+    {
+      "filename": "YASUO-x-IRELIA-—-STORM-AND-BLADES.mp3"
+    }
+  ]
 }

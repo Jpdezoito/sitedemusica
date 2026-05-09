@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const { Readable } = require('stream');
 const express = require('express');
 const cors = require('cors');
 const mime = require('mime');
@@ -16,7 +17,10 @@ const MUSIC_DIR = process.env.MUSIC_DIR && process.env.MUSIC_DIR.trim()
     : path.resolve(PROJECT_ROOT, process.env.MUSIC_DIR))
   : path.resolve(PROJECT_ROOT, 'music');
 const WEB_DIR = PROJECT_ROOT;
+const DATA_DIR = path.resolve(__dirname, '..', 'data');
+const EXTERNAL_TRACKS_FILE = path.join(DATA_DIR, 'external-tracks.json');
 const ALLOWED_EXTENSIONS = new Set(['.mp3', '.wav', '.m4a', '.ogg', '.flac']);
+const EASYMUSIC_ORIGIN = 'https://easymusic.ai';
 
 const app = express();
 app.use(cors());
@@ -25,6 +29,25 @@ app.use(express.json());
 const musicScanner = createMusicScanner(MUSIC_DIR);
 const playlistsStore = createPlaylistsStore();
 let queue = [];
+
+async function readExternalTracks() {
+  try {
+    const raw = await fs.promises.readFile(EXTERNAL_TRACKS_FILE, 'utf8');
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed.tracks) ? parsed.tracks : [];
+  } catch (err) {
+    if (err.code === 'ENOENT') return [];
+    throw err;
+  }
+}
+
+function sortTracksByTitle(tracks) {
+  return [...tracks].sort((a, b) => {
+    const titleA = String(a?.title || a?.filename || '').trim();
+    const titleB = String(b?.title || b?.filename || '').trim();
+    return titleA.localeCompare(titleB, 'pt-BR', { sensitivity: 'base', numeric: true });
+  });
+}
 
 const uploadStorage = multer.diskStorage({
   destination: (_req, _file, cb) => {
@@ -74,7 +97,8 @@ app.get('/api/tracks', async (req, res) => {
     if (refresh) {
       await musicScanner.rescan();
     }
-    res.json(musicScanner.getTracks());
+    const externalTracks = await readExternalTracks();
+    res.json(sortTracksByTitle([...musicScanner.getTracks(), ...externalTracks]));
   } catch (err) {
     res.status(500).json({ error: 'Falha ao listar músicas', details: err.message });
   }
@@ -218,6 +242,84 @@ app.delete('/api/playlists/:id', async (req, res) => {
     res.json({ ok: true });
   } catch (err) {
     res.status(500).json({ error: 'Falha ao remover playlist', details: err.message });
+  }
+});
+
+function parseEasyMusicShareId(value) {
+  const raw = String(value || '').trim();
+  const match = raw.match(/\/music\/([^/?#"'<>]+)\/embed/i) || raw.match(/music\/([^/?#"'<>]+)/i);
+  const shareId = match ? match[1] : raw;
+  const separator = shareId.indexOf('-');
+  if (separator <= 0 || separator >= shareId.length - 1) {
+    return null;
+  }
+  return {
+    shareId,
+    musicId: shareId.slice(0, separator),
+    contentId: shareId.slice(separator + 1)
+  };
+}
+
+async function fetchEasyMusicClip(shareId) {
+  const parsed = parseEasyMusicShareId(shareId);
+  if (!parsed) {
+    const error = new Error('Link do EasyMusic invalido');
+    error.status = 400;
+    throw error;
+  }
+
+  const url = new URL('/api/music/clip', EASYMUSIC_ORIGIN);
+  url.searchParams.set('musicId', parsed.musicId);
+  url.searchParams.set('contentId', parsed.contentId);
+  url.searchParams.set('share', 'true');
+
+  const response = await fetch(url, {
+    headers: {
+      'Accept': 'application/json',
+      'User-Agent': 'sitedeminhasmusicas/1.0'
+    }
+  });
+  if (!response.ok) {
+    const error = new Error(`EasyMusic status ${response.status}`);
+    error.status = response.status;
+    throw error;
+  }
+
+  const data = await response.json();
+  return { parsed, data, content: data.content || data.music?.completeContent || data.music?.firstContent || null };
+}
+
+app.get('/api/easymusic/stream', async (req, res) => {
+  try {
+    const { content } = await fetchEasyMusicClip(req.query.shareId || req.query.url);
+    if (!content || !content.audio_url) {
+      return res.status(404).json({ error: 'Audio do EasyMusic nao encontrado' });
+    }
+
+    const headers = {
+      'Accept': 'audio/mpeg,*/*',
+      'User-Agent': 'sitedeminhasmusicas/1.0'
+    };
+    if (req.headers.range) {
+      headers.Range = req.headers.range;
+    }
+
+    const upstream = await fetch(content.audio_url, { headers });
+    if (!upstream.ok && upstream.status !== 206) {
+      return res.status(upstream.status).json({ error: 'Falha ao streamar EasyMusic' });
+    }
+
+    res.status(upstream.status);
+    ['accept-ranges', 'content-length', 'content-range', 'content-type'].forEach((header) => {
+      const value = upstream.headers.get(header);
+      if (value) {
+        res.setHeader(header, value);
+      }
+    });
+    res.setHeader('Cache-Control', 'no-store');
+    Readable.fromWeb(upstream.body).pipe(res);
+  } catch (err) {
+    res.status(err.status || 500).json({ error: 'Falha ao streamar EasyMusic', details: err.message });
   }
 });
 

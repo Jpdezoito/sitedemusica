@@ -1,0 +1,83 @@
+{
+  "updatedAt": "2026-05-09T12:45:48.702Z",
+  "tracks": [
+    {
+      "id": "easymusic-4942010-190325c1-af88-fef6-2a34-fa35c903e42d",
+      "sourceType": "easymusic",
+      "filename": "300 — Isto é Esparta.mp3",
+      "title": "300 — Isto é Esparta",
+      "artist": "EasyMusic.AI",
+      "album": "EasyMusic - dark trap, war-trap, trap metal",
+      "durationSec": 292,
+      "streamUrl": "/api/easymusic/stream?shareId=4942010-190325c1-af88-fef6-2a34-fa35c903e42d",
+      "coverUrl": "https://cdn9.easymusic.ai/images/190325c1-af88-fef6-2a34-fa35c903e42d.jpeg",
+      "externalUrl": "https://easymusic.ai/pt/music/4942010-190325c1-af88-fef6-2a34-fa35c903e42d/embed",
+      "shareId": "4942010-190325c1-af88-fef6-2a34-fa35c903e42d"
+    },
+    {
+      "id": "easymusic-4942409-1a9f27bf-bc44-f333-a75b-3f9e1880e06f",
+      "sourceType": "easymusic",
+      "filename": "300 — This Is Sparta.mp3",
+      "title": "300 — This Is Sparta",
+      "artist": "EasyMusic.AI",
+      "album": "EasyMusic - trap, dark hip hop, drill",
+      "durationSec": 296,
+      "streamUrl": "/api/easymusic/stream?shareId=4942409-1a9f27bf-bc44-f333-a75b-3f9e1880e06f",
+      "coverUrl": "https://cdn9.easymusic.ai/images/1a9f27bf-bc44-f333-a75b-3f9e1880e06f.jpeg",
+      "externalUrl": "https://easymusic.ai/pt/music/4942409-1a9f27bf-bc44-f333-a75b-3f9e1880e06f/embed",
+      "shareId": "4942409-1a9f27bf-bc44-f333-a75b-3f9e1880e06f"
+    },
+    {
+      "id": "easymusic-4941973-dfd547b2-355e-fbfa-21a5-e03f07fe67d0",
+      "sourceType": "easymusic",
+      "filename": "Katakuri — Eu Previ Seu Final.mp3",
+      "title": "Katakuri — Eu Previ Seu Final",
+      "artist": "EasyMusic.AI",
+      "album": "EasyMusic - trap, dark trap, aggressive hip-hop",
+      "durationSec": 368,
+      "streamUrl": "/api/easymusic/stream?shareId=4941973-dfd547b2-355e-fbfa-21a5-e03f07fe67d0",
+      "coverUrl": "https://cdn9.easymusic.ai/images/dfd547b2-355e-fbfa-21a5-e03f07fe67d0.jpeg",
+      "externalUrl": "https://easymusic.ai/pt/music/4941973-dfd547b2-355e-fbfa-21a5-e03f07fe67d0/embed",
+      "shareId": "4941973-dfd547b2-355e-fbfa-21a5-e03f07fe67d0"
+    },
+    {
+      "id": "easymusic-4943182-f45ae999-0ded-ff8e-2504-a1683c541657",
+      "sourceType": "easymusic",
+      "filename": "Katakuri — I Foresaw Your Ending.mp3",
+      "title": "Katakuri — I Foresaw Your Ending",
+      "artist": "EasyMusic.AI",
+      "album": "EasyMusic - trap, dark trap, hip-hop, aggressive electronic",
+      "durationSec": 206,
+      "streamUrl": "/api/easymusic/stream?shareId=4943182-f45ae999-0ded-ff8e-2504-a1683c541657",
+      "coverUrl": "https://cdn9.easymusic.ai/images/f45ae999-0ded-ff8e-2504-a1683c541657.jpeg",
+      "externalUrl": "https://easymusic.ai/pt/music/4943182-f45ae999-0ded-ff8e-2504-a1683c541657/embed",
+      "shareId": "4943182-f45ae999-0ded-ff8e-2504-a1683c541657"
+    },
+    {
+      "id": "easymusic-4938588-c4b9a79f-067b-f2dc-6541-83e14e96f522",
+      "sourceType": "easymusic",
+      "filename": "Three Legends — Honor Into Thunder.mp3",
+      "title": "Three Legends — Honor Into Thunder",
+      "artist": "EasyMusic.AI",
+      "album": "EasyMusic - trap, dark trap, cinematic/epic hybrid",
+      "durationSec": 280,
+      "streamUrl": "/api/easymusic/stream?shareId=4938588-c4b9a79f-067b-f2dc-6541-83e14e96f522",
+      "coverUrl": "https://cdn9.easymusic.ai/images/c4b9a79f-067b-f2dc-6541-83e14e96f522.jpeg",
+      "externalUrl": "https://easymusic.ai/pt/music/4938588-c4b9a79f-067b-f2dc-6541-83e14e96f522/embed",
+      "shareId": "4938588-c4b9a79f-067b-f2dc-6541-83e14e96f522"
+    },
+    {
+      "id": "easymusic-4938493-3a6e922c-aaab-fe10-a53c-3bb86695def0",
+      "sourceType": "easymusic",
+      "filename": "Três Lendas — Honra em Trovão.mp3",
+      "title": "Três Lendas — Honra em Trovão",
+      "artist": "EasyMusic.AI",
+      "album": "EasyMusic - trap, horrorcore / dark trap, cinematic orchestral (epic war score)",
+      "durationSec": 303,
+      "streamUrl": "/api/easymusic/stream?shareId=4938493-3a6e922c-aaab-fe10-a53c-3bb86695def0",
+      "coverUrl": "https://cdn9.easymusic.ai/images/3a6e922c-aaab-fe10-a53c-3bb86695def0.jpeg",
+      "externalUrl": "https://easymusic.ai/pt/music/4938493-3a6e922c-aaab-fe10-a53c-3bb86695def0/embed",
+      "shareId": "4938493-3a6e922c-aaab-fe10-a53c-3bb86695def0"
+    }
+  ]
+}
