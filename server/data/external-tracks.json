@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-09T12:45:48.702Z",
+  "updatedAt": "2026-05-09T14:50:15.673Z",
   "tracks": [
     {
       "id": "easymusic-4942010-190325c1-af88-fef6-2a34-fa35c903e42d",
@@ -52,6 +52,19 @@
       "coverUrl": "https://cdn9.easymusic.ai/images/f45ae999-0ded-ff8e-2504-a1683c541657.jpeg",
       "externalUrl": "https://easymusic.ai/pt/music/4943182-f45ae999-0ded-ff8e-2504-a1683c541657/embed",
       "shareId": "4943182-f45ae999-0ded-ff8e-2504-a1683c541657"
+    },
+    {
+      "id": "easymusic-4944308-6627a13c-988d-f7f3-accc-de066ea72248",
+      "sourceType": "easymusic",
+      "filename": "Not Faith, It’s Logic.mp3",
+      "title": "Not Faith, It’s Logic",
+      "artist": "EasyMusic.AI",
+      "album": "EasyMusic - dark melodic hip-hop, boom bap, trap-influenced hip-hop",
+      "durationSec": 198,
+      "streamUrl": "/api/easymusic/stream?shareId=4944308-6627a13c-988d-f7f3-accc-de066ea72248",
+      "coverUrl": "https://cdn9.easymusic.ai/images/6627a13c-988d-f7f3-accc-de066ea72248.jpeg",
+      "externalUrl": "https://easymusic.ai/pt/music/4944308-6627a13c-988d-f7f3-accc-de066ea72248/embed",
+      "shareId": "4944308-6627a13c-988d-f7f3-accc-de066ea72248"
     },
     {
       "id": "easymusic-4938588-c4b9a79f-067b-f2dc-6541-83e14e96f522",
