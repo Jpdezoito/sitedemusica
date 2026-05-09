@@ -46,11 +46,16 @@ body > main {
 
 .layout-fullscreen #app,
 .layout-fullscreen .app {
-  z-index: auto;
+  z-index: 30;
+}
+
+.layout-fullscreen .main {
+  position: relative;
+  z-index: 31;
 }
 
 .layout-fullscreen .player {
-  z-index: 80;
+  z-index: 120;
 }
 
 .corner-glow {
@@ -198,5 +203,54 @@ body > main {
 @media (max-width: 700px), (pointer: coarse) {
   .particle-mesh-canvas {
     display: none;
+  }
+}
+
+html.theme-neon.layout-fullscreen .player,
+html.theme-neon.layout-fullscreen .player[data-model] {
+  position: fixed !important;
+  inset: auto 0 0 0 !important;
+  display: grid !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  transform: none !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 104px !important;
+  max-height: min(34dvh, 240px) !important;
+  overflow: visible !important;
+  z-index: 120 !important;
+  pointer-events: auto !important;
+  grid-template-columns: minmax(220px, 1.15fr) minmax(260px, 1.6fr) auto minmax(210px, 0.9fr) !important;
+  grid-template-areas: "now timeline controls volume" !important;
+  align-items: center !important;
+  padding:
+    14px
+    clamp(16px, 3vw, 44px)
+    max(14px, env(safe-area-inset-bottom)) !important;
+}
+
+@media (max-width: 1100px) {
+  html.theme-neon.layout-fullscreen .player,
+  html.theme-neon.layout-fullscreen .player[data-model] {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    grid-template-areas:
+      "now controls"
+      "timeline timeline"
+      "volume volume" !important;
+    max-height: min(42dvh, 300px) !important;
+  }
+}
+
+@media (max-width: 640px), (max-height: 520px) {
+  html.theme-neon.layout-fullscreen .player,
+  html.theme-neon.layout-fullscreen .player[data-model] {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-areas:
+      "now"
+      "timeline"
+      "controls"
+      "volume" !important;
+    max-height: min(68dvh, 440px) !important;
   }
 }
