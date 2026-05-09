@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-09T14:50:15.673Z",
+  "updatedAt": "2026-05-09T18:52:11.693Z",
   "tracks": [
     {
       "id": "easymusic-4942010-190325c1-af88-fef6-2a34-fa35c903e42d",
@@ -91,6 +91,19 @@
       "coverUrl": "https://cdn9.easymusic.ai/images/3a6e922c-aaab-fe10-a53c-3bb86695def0.jpeg",
       "externalUrl": "https://easymusic.ai/pt/music/4938493-3a6e922c-aaab-fe10-a53c-3bb86695def0/embed",
       "shareId": "4938493-3a6e922c-aaab-fe10-a53c-3bb86695def0"
+    },
+    {
+      "id": "easymusic-4946550-d6493930-e281-f3ab-68c1-1e260233fb7a",
+      "sourceType": "easymusic",
+      "filename": "Tubarão Branco — Rei do Abismo.mp3",
+      "title": "Tubarão Branco — Rei do Abismo",
+      "artist": "EasyMusic.AI",
+      "album": "EasyMusic - film score, cinematic horror, dark ambient",
+      "durationSec": 296,
+      "streamUrl": "/api/easymusic/stream?shareId=4946550-d6493930-e281-f3ab-68c1-1e260233fb7a",
+      "coverUrl": "https://cdn9.easymusic.ai/images/d6493930-e281-f3ab-68c1-1e260233fb7a.jpeg",
+      "externalUrl": "https://easymusic.ai/pt/music/4946550-d6493930-e281-f3ab-68c1-1e260233fb7a/embed",
+      "shareId": "4946550-d6493930-e281-f3ab-68c1-1e260233fb7a"
     }
   ]
 }
