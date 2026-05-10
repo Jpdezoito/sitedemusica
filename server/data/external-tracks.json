@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-05-09T18:52:11.693Z",
+  "updatedAt": "2026-05-09T20:23:24.479Z",
   "tracks": [
     {
       "id": "easymusic-4942010-190325c1-af88-fef6-2a34-fa35c903e42d",
@@ -26,6 +26,19 @@
       "coverUrl": "https://cdn9.easymusic.ai/images/1a9f27bf-bc44-f333-a75b-3f9e1880e06f.jpeg",
       "externalUrl": "https://easymusic.ai/pt/music/4942409-1a9f27bf-bc44-f333-a75b-3f9e1880e06f/embed",
       "shareId": "4942409-1a9f27bf-bc44-f333-a75b-3f9e1880e06f"
+    },
+    {
+      "id": "easymusic-4946697-2a0258b8-01b5-f94b-a6a8-7c853d49b6dd",
+      "sourceType": "easymusic",
+      "filename": "Great White Shark — Shadow of the Ocean.mp3",
+      "title": "Great White Shark — Shadow of the Ocean",
+      "artist": "EasyMusic.AI",
+      "album": "EasyMusic - film score, cinematic horror, dark ambient orchestral",
+      "durationSec": 303,
+      "streamUrl": "/api/easymusic/stream?shareId=4946697-2a0258b8-01b5-f94b-a6a8-7c853d49b6dd",
+      "coverUrl": "https://cdn9.easymusic.ai/images/2a0258b8-01b5-f94b-a6a8-7c853d49b6dd.jpeg",
+      "externalUrl": "https://easymusic.ai/pt/music/4946697-2a0258b8-01b5-f94b-a6a8-7c853d49b6dd/embed",
+      "shareId": "4946697-2a0258b8-01b5-f94b-a6a8-7c853d49b6dd"
     },
     {
       "id": "easymusic-4941973-dfd547b2-355e-fbfa-21a5-e03f07fe67d0",
@@ -104,6 +117,19 @@
       "coverUrl": "https://cdn9.easymusic.ai/images/d6493930-e281-f3ab-68c1-1e260233fb7a.jpeg",
       "externalUrl": "https://easymusic.ai/pt/music/4946550-d6493930-e281-f3ab-68c1-1e260233fb7a/embed",
       "shareId": "4946550-d6493930-e281-f3ab-68c1-1e260233fb7a"
+    },
+    {
+      "id": "easymusic-4947777-c00a0555-db57-f171-68f1-43c84bb816db",
+      "sourceType": "easymusic",
+      "filename": "Zoro — Três Lâminas, Um Caminho.mp3",
+      "title": "Zoro — Três Lâminas, Um Caminho",
+      "artist": "EasyMusic.AI",
+      "album": "EasyMusic.AI",
+      "durationSec": 224,
+      "streamUrl": "/api/easymusic/stream?shareId=4947777-c00a0555-db57-f171-68f1-43c84bb816db",
+      "coverUrl": "https://cdn9.easymusic.ai/images/c00a0555-db57-f171-68f1-43c84bb816db.jpeg",
+      "externalUrl": "https://easymusic.ai/pt/music/4947777-c00a0555-db57-f171-68f1-43c84bb816db/embed",
+      "shareId": "4947777-c00a0555-db57-f171-68f1-43c84bb816db"
     }
   ]
 }
