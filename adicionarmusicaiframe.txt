@@ -1,0 +1,54 @@
+Fiz assim:
+
+1. Peguei o `shareId` do iframe:
+```text
+4947865-bc89531a-8e6d-fd2e-9a30-5c57e1eb6924
+```
+
+2. Consultei a API do EasyMusic usando esse ID para descobrir os dados reais da música:
+```text
+https://easymusic.ai/api/music/clip?musicId=4947865&contentId=bc89531a-8e6d-fd2e-9a30-5c57e1eb6924&share=true
+```
+
+3. A API retornou:
+```text
+Título: Zoro — Three Blades, One Path
+Duração: 236.72 segundos
+Áudio: https://cdn9.easymusic.ai/audios/bc89531a-8e6d-fd2e-9a30-5c57e1eb6924.mp3
+Capa: https://cdn9.easymusic.ai/images/bc89531a-8e6d-fd2e-9a30-5c57e1eb6924.jpeg
+Tags: 808 agressivo, hiphop, rap
+```
+
+4. Adicionei a música no arquivo local da biblioteca:
+```text
+music/tracks.json
+```
+
+Com esta entrada:
+```json
+{
+  "filename": "Zoro — Three Blades, One Path.mp3",
+  "title": "Zoro — Three Blades, One Path",
+  "artist": "EasyMusic.AI",
+  "album": "EasyMusic",
+  "durationSec": 237,
+  "streamUrl": "https://cdn9.easymusic.ai/audios/bc89531a-8e6d-fd2e-9a30-5c57e1eb6924.mp3",
+  "coverUrl": "https://cdn9.easymusic.ai/images/bc89531a-8e6d-fd2e-9a30-5c57e1eb6924.jpeg"
+}
+```
+
+5. Também adicionei no arquivo usado pelo servidor local:
+```text
+server/data/external-tracks.json
+```
+
+Com `id`, `sourceType`, `streamUrl` interno e `shareId`.
+
+6. Tirei o iframe extra do `index.html`, porque essa tela que você mostrou não usa iframe. Ela lê as músicas dos JSONs.
+
+7. Validei se os JSONs estavam certos com Node:
+```bash
+node -e "const fs=require('fs'); JSON.parse(fs.readFileSync('server/data/external-tracks.json','utf8')); JSON.parse(fs.readFileSync('music/tracks.json','utf8')); console.log('JSON OK')"
+```
+
+8. Simulei a ordenação da biblioteca e confirmei que ela fica junto das músicas do Zoro.

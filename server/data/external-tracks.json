@@ -41,6 +41,19 @@
       "shareId": "4946697-2a0258b8-01b5-f94b-a6a8-7c853d49b6dd"
     },
     {
+      "id": "easymusic-4954401-cb615962-b172-f105-9953-c0f7b1894ece",
+      "sourceType": "easymusic",
+      "filename": "Yasuo — Vento no Velho Oeste.mp3",
+      "title": "Yasuo — Vento no Velho Oeste",
+      "artist": "EasyMusic.AI",
+      "album": "EasyMusic - trap, hip-hop, spaghetti western",
+      "durationSec": 259,
+      "streamUrl": "/api/easymusic/stream?shareId=4954401-cb615962-b172-f105-9953-c0f7b1894ece",
+      "coverUrl": "https://cdn9.easymusic.ai/images/cb615962-b172-f105-9953-c0f7b1894ece.jpeg",
+      "externalUrl": "https://easymusic.ai/pt/music/4954401-cb615962-b172-f105-9953-c0f7b1894ece/embed",
+      "shareId": "4954401-cb615962-b172-f105-9953-c0f7b1894ece"
+    },
+    {
       "id": "easymusic-4941973-dfd547b2-355e-fbfa-21a5-e03f07fe67d0",
       "sourceType": "easymusic",
       "filename": "Katakuri — Eu Previ Seu Final.mp3",
