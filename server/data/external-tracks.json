@@ -130,6 +130,19 @@
       "coverUrl": "https://cdn9.easymusic.ai/images/c00a0555-db57-f171-68f1-43c84bb816db.jpeg",
       "externalUrl": "https://easymusic.ai/pt/music/4947777-c00a0555-db57-f171-68f1-43c84bb816db/embed",
       "shareId": "4947777-c00a0555-db57-f171-68f1-43c84bb816db"
+    },
+    {
+      "id": "easymusic-4947865-bc89531a-8e6d-fd2e-9a30-5c57e1eb6924",
+      "sourceType": "easymusic",
+      "filename": "Zoro — Three Blades, One Path.mp3",
+      "title": "Zoro — Three Blades, One Path",
+      "artist": "EasyMusic.AI",
+      "album": "EasyMusic - 808 agressivo, hiphop, rap",
+      "durationSec": 237,
+      "streamUrl": "/api/easymusic/stream?shareId=4947865-bc89531a-8e6d-fd2e-9a30-5c57e1eb6924",
+      "coverUrl": "https://cdn9.easymusic.ai/images/bc89531a-8e6d-fd2e-9a30-5c57e1eb6924.jpeg",
+      "externalUrl": "https://easymusic.ai/pt/music/4947865-bc89531a-8e6d-fd2e-9a30-5c57e1eb6924/embed",
+      "shareId": "4947865-bc89531a-8e6d-fd2e-9a30-5c57e1eb6924"
     }
   ]
 }
