@@ -391,16 +391,8 @@ button:disabled {
   display: block;
 }
 
-.youtube-placeholder {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  background: #111827;
-  font-weight: 600;
-}
+  /* Removido bloco inválido e duplicado */
+
 
 .table-wrap {
   overflow: auto;
@@ -507,7 +499,7 @@ tr:hover {
   gap: 16px;
   min-height: 0;
 }
-
+  /* Removido bloco solto inválido, já definido corretamente em .app */
 #playlistList {
   list-style: none;
   margin: 0;
@@ -973,7 +965,7 @@ html .player[data-model='pulse-ring'] #appearanceButton .btn-label {
 
 .timeline input[type="range"] {
   flex: 1;
-  min-width: 120px;
+  left: 260px;
 }
 
 .volume {
