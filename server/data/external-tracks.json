@@ -195,6 +195,19 @@
       "coverUrl": "https://cdn9.easymusic.ai/images/a57ce8f9-3229-f4f7-6913-2ec3b2ef4342.jpeg",
       "externalUrl": "https://easymusic.ai/pt/music/4958066-a57ce8f9-3229-f4f7-6913-2ec3b2ef4342/embed",
       "shareId": "4958066-a57ce8f9-3229-f4f7-6913-2ec3b2ef4342"
+    },
+    {
+      "id": "easymusic-5025163-173bb620-0e75-f4a2-9c70-9e2f39cffc2e",
+      "sourceType": "easymusic",
+      "filename": "Yasuo, Twisted Fate, Pyke e Olaf.mp3",
+      "title": "Yasuo, Twisted Fate, Pyke e Olaf",
+      "artist": "EasyMusic.AI",
+      "album": "EasyMusic - Dark 808-driven trap with ominous sub-bass drops, distorted 808 slides, sparse kick patterns, and crisp snare snaps drenched in short plate reverb.",
+      "durationSec": 239,
+      "streamUrl": "/api/easymusic/stream?shareId=5025163-173bb620-0e75-f4a2-9c70-9e2f39cffc2e",
+      "coverUrl": "https://cdn9.easymusic.ai/images/173bb620-0e75-f4a2-9c70-9e2f39cffc2e.jpeg",
+      "externalUrl": "https://easymusic.ai/pt/music/5025163-173bb620-0e75-f4a2-9c70-9e2f39cffc2e/embed",
+      "shareId": "5025163-173bb620-0e75-f4a2-9c70-9e2f39cffc2e"
     }
   ]
 }
