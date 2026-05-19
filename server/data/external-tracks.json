@@ -182,6 +182,19 @@
       "coverUrl": "https://cdn9.easymusic.ai/images/bc89531a-8e6d-fd2e-9a30-5c57e1eb6924.jpeg",
       "externalUrl": "https://easymusic.ai/pt/music/4947865-bc89531a-8e6d-fd2e-9a30-5c57e1eb6924/embed",
       "shareId": "4947865-bc89531a-8e6d-fd2e-9a30-5c57e1eb6924"
+    },
+    {
+      "id": "easymusic-4958066-a57ce8f9-3229-f4f7-6913-2ec3b2ef4342",
+      "sourceType": "easymusic",
+      "filename": "Pantheon — Tip of the Spear.mp3",
+      "title": "Pantheon — Tip of the Spear",
+      "artist": "EasyMusic.AI",
+      "album": "EasyMusic - trap metal, cinematic dark trap, cinematic orchestral (war/drumline percussion)",
+      "durationSec": 327,
+      "streamUrl": "/api/easymusic/stream?shareId=4958066-a57ce8f9-3229-f4f7-6913-2ec3b2ef4342",
+      "coverUrl": "https://cdn9.easymusic.ai/images/a57ce8f9-3229-f4f7-6913-2ec3b2ef4342.jpeg",
+      "externalUrl": "https://easymusic.ai/pt/music/4958066-a57ce8f9-3229-f4f7-6913-2ec3b2ef4342/embed",
+      "shareId": "4958066-a57ce8f9-3229-f4f7-6913-2ec3b2ef4342"
     }
   ]
 }
