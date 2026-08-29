@@ -90,6 +90,33 @@
     }
   ];
 
+  // EasyMusic blocks direct requests to its CDN (HTTP 403). On the static
+  // GitHub Pages version we therefore use the provider's official embed.
+  const EASYMUSIC_SHARE_IDS_BY_CONTENT_ID = {
+    '190325c1-af88-fef6-2a34-fa35c903e42d': '4942010-190325c1-af88-fef6-2a34-fa35c903e42d',
+    '1a9f27bf-bc44-f333-a75b-3f9e1880e06f': '4942409-1a9f27bf-bc44-f333-a75b-3f9e1880e06f',
+    '2a0258b8-01b5-f94b-a6a8-7c853d49b6dd': '4946697-2a0258b8-01b5-f94b-a6a8-7c853d49b6dd',
+    'cb615962-b172-f105-9953-c0f7b1894ece': '4954401-cb615962-b172-f105-9953-c0f7b1894ece',
+    'cecd88d8-1766-f4d9-9779-bae3843a312f': '4954509-cecd88d8-1766-f4d9-9779-bae3843a312f',
+    '57779799-e4dc-f181-9e70-d7717cac56ad': '4955525-57779799-e4dc-f181-9e70-d7717cac56ad',
+    'dfd547b2-355e-fbfa-21a5-e03f07fe67d0': '4941973-dfd547b2-355e-fbfa-21a5-e03f07fe67d0',
+    'f45ae999-0ded-ff8e-2504-a1683c541657': '4943182-f45ae999-0ded-ff8e-2504-a1683c541657',
+    '6627a13c-988d-f7f3-accc-de066ea72248': '4944308-6627a13c-988d-f7f3-accc-de066ea72248',
+    'c4b9a79f-067b-f2dc-6541-83e14e96f522': '4938588-c4b9a79f-067b-f2dc-6541-83e14e96f522',
+    '3a6e922c-aaab-fe10-a53c-3bb86695def0': '4938493-3a6e922c-aaab-fe10-a53c-3bb86695def0',
+    'd6493930-e281-f3ab-68c1-1e260233fb7a': '4946550-d6493930-e281-f3ab-68c1-1e260233fb7a',
+    'c00a0555-db57-f171-68f1-43c84bb816db': '4947777-c00a0555-db57-f171-68f1-43c84bb816db',
+    'bc89531a-8e6d-fd2e-9a30-5c57e1eb6924': '4947865-bc89531a-8e6d-fd2e-9a30-5c57e1eb6924',
+    'a57ce8f9-3229-f4f7-6913-2ec3b2ef4342': '4958066-a57ce8f9-3229-f4f7-6913-2ec3b2ef4342',
+    '173bb620-0e75-f4a2-9c70-9e2f39cffc2e': '5025163-173bb620-0e75-f4a2-9c70-9e2f39cffc2e'
+  };
+
+  function getEasyMusicEmbedUrl(streamUrl) {
+    const match = String(streamUrl || '').match(/\/audios\/([a-f0-9-]+)\.mp3/i);
+    const shareId = match ? EASYMUSIC_SHARE_IDS_BY_CONTENT_ID[match[1].toLowerCase()] : '';
+    return shareId ? `https://easymusic.ai/pt/music/${shareId}/embed` : '';
+  }
+
   async function loadLocalLibrary() {
     try {
       const payload = await resolveLocalManifest();
@@ -142,6 +169,9 @@
     youtubePlayer: null,
     youtubeApiPromise: null,
     youtubeVideoId: '',
+    externalEmbedUrl: '',
+    externalPlayerPanel: null,
+    externalPlayerFrame: null,
     vuLevels: { left: 0, right: 0, mix: 0 },
     audio: new Audio()
   };
@@ -503,6 +533,7 @@
     const parsedName = filename.split('/').pop() || filename;
     const titleFromFile = parsedName.replace(/\.[^/.]+$/, '').replace(/[-_]+/g, ' ').trim();
 
+    const streamUrl = raw.streamUrl || buildLocalStreamUrl(filename);
     return {
       id: String(raw.id || `local-${index}-${filename.toLowerCase()}`),
       filename,
@@ -510,8 +541,49 @@
       artist: raw.artist || 'Artista desconhecido',
       album: raw.album || 'Sem álbum',
       durationSec: Number(raw.durationSec) || 0,
-      streamUrl: raw.streamUrl || buildLocalStreamUrl(filename)
+      streamUrl,
+      embedUrl: raw.embedUrl || getEasyMusicEmbedUrl(streamUrl)
     };
+  }
+
+  function ensureExternalPlayerPanel() {
+    if (state.externalPlayerPanel) return state.externalPlayerPanel;
+    const panel = document.createElement('div');
+    panel.className = 'external-track-modal hidden';
+    panel.innerHTML = `
+      <div class="external-track-backdrop" data-close-external-player></div>
+      <section class="external-track-dialog" role="dialog" aria-modal="true" aria-label="Player EasyMusic">
+        <div class="external-track-header">
+          <strong>Player da música</strong>
+          <button type="button" class="ghost" data-close-external-player>Fechar</button>
+        </div>
+        <iframe title="Player EasyMusic" allow="autoplay; web-share" sandbox="allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation"></iframe>
+      </section>`;
+    document.body.appendChild(panel);
+    panel.querySelectorAll('[data-close-external-player]').forEach((button) => {
+      button.addEventListener('click', closeExternalPlayer);
+    });
+    state.externalPlayerPanel = panel;
+    state.externalPlayerFrame = panel.querySelector('iframe');
+    return panel;
+  }
+
+  function openExternalPlayer(track) {
+    if (!track?.embedUrl) return false;
+    const panel = ensureExternalPlayerPanel();
+    if (state.externalEmbedUrl !== track.embedUrl) {
+      state.externalPlayerFrame.src = track.embedUrl;
+      state.externalEmbedUrl = track.embedUrl;
+    }
+    panel.classList.remove('hidden');
+    setUploadStatus('Esta faixa usa o player oficial do EasyMusic. Toque no Play da janela aberta.');
+    return true;
+  }
+
+  function closeExternalPlayer() {
+    if (!state.externalPlayerPanel) return;
+    state.externalPlayerPanel.classList.add('hidden');
+    setPlayButton(false);
   }
 
   function readLocalDurationCache() {
@@ -1273,6 +1345,12 @@
     const trackId = options.trackId || state.currentTrackId;
     if (!trackId || trackId !== state.currentTrackId) return false;
 
+    const currentTrack = getTrackById(trackId);
+    if (currentTrack?.embedUrl && openExternalPlayer(currentTrack)) {
+      setPlayButton(false);
+      return true;
+    }
+
     const requestId = ++state.playRequestId;
 
     try {
@@ -1306,6 +1384,20 @@
     if (!currentId) return;
     state.currentTrackId = currentId;
     const currentTrack = getTrackById(currentId);
+    if (currentTrack?.embedUrl) {
+      state.playRequestId += 1;
+      state.lastPlaybackFailureKey = '';
+      state.audio.pause();
+      state.audio.removeAttribute('src');
+      state.audio.load();
+      if (autoplay) openExternalPlayer(currentTrack);
+      setPlayButton(false);
+      updateNowPlaying();
+      renderQueue();
+      renderLibrary();
+      return;
+    }
+    closeExternalPlayer();
     const url = currentTrack?.streamUrl || apiUrl(`/api/stream/${encodeURIComponent(currentId)}`);
     state.playRequestId += 1;
     state.lastPlaybackFailureKey = '';
@@ -1457,6 +1549,7 @@
     state.playRequestId += 1;
     state.audio.pause();
     state.audio.currentTime = 0;
+    closeExternalPlayer();
     clearPlaybackErrorState();
     setPlayButton(false);
   }
