@@ -137,7 +137,9 @@
     renderPlaylistDetail();
     updateDeleteButtonState();
     state.localDurationJobId += 1;
-    hydrateLocalDurations(state.localDurationJobId);
+    if (shouldHydrateLocalDurations()) {
+      hydrateLocalDurations(state.localDurationJobId);
+    }
   }
 
   const state = {
@@ -631,6 +633,15 @@
     });
   }
 
+  function shouldHydrateLocalDurations() {
+    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    const isTouchPhone = window.matchMedia('(pointer: coarse)').matches
+      && Math.min(window.screen.width, window.screen.height) < 900;
+    const isLimitedConnection = Boolean(connection?.saveData)
+      || ['slow-2g', '2g', '3g'].includes(String(connection?.effectiveType || '').toLowerCase());
+    return !isTouchPhone && !isLimitedConnection;
+  }
+
   async function hydrateLocalDurations(jobId) {
     if (state.runtimeMode !== 'local') return;
     if (jobId !== state.localDurationJobId) return;
@@ -658,6 +669,8 @@
     let changed = false;
     for (const track of state.tracks) {
       if (jobId !== state.localDurationJobId) return;
+      // Não disputa a conexão com a música que o usuário acabou de iniciar.
+      if (!state.audio.paused) return;
       if ((track.durationSec || 0) > 0) continue;
       const duration = await loadAudioDurationSeconds(track.streamUrl);
       if (duration <= 0) continue;
