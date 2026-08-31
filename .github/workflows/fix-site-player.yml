@@ -1,0 +1,43 @@
+name: Corrigir player do site
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-site-player.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix-player:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Priorizar player interno
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('web/app.js')
+          s = p.read_text(encoding='utf-8')
+
+          old_play = """    const currentTrack = getTrackById(trackId);\n    if (currentTrack?.embedUrl && openExternalPlayer(currentTrack)) {\n      setPlayButton(false);\n      return true;\n    }\n\n    const requestId = ++state.playRequestId;"""
+          new_play = """    const currentTrack = getTrackById(trackId);\n    const requestId = ++state.playRequestId;"""
+
+          old_load = """    const currentTrack = getTrackById(currentId);\n    if (currentTrack?.embedUrl) {\n      state.playRequestId += 1;\n      state.lastPlaybackFailureKey = '';\n      state.audio.pause();\n      state.audio.removeAttribute('src');\n      state.audio.load();\n      if (autoplay) openExternalPlayer(currentTrack);\n      setPlayButton(false);\n      updateNowPlaying();\n      renderQueue();\n      renderLibrary();\n      return;\n    }\n    closeExternalPlayer();"""
+          new_load = """    const currentTrack = getTrackById(currentId);\n    closeExternalPlayer();"""
+
+          if old_play not in s:
+              raise SystemExit('Bloco playCurrentAudio esperado nao encontrado')
+          if old_load not in s:
+              raise SystemExit('Bloco loadCurrentTrack esperado nao encontrado')
+
+          s = s.replace(old_play, new_play, 1)
+          s = s.replace(old_load, new_load, 1)
+          p.write_text(s, encoding='utf-8')
+      - name: Commit da correção
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add web/app.js
+          git commit -m "Volta a reproduzir músicas no player do site"
+          git push
