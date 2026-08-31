@@ -1359,11 +1359,6 @@
     if (!trackId || trackId !== state.currentTrackId) return false;
 
     const currentTrack = getTrackById(trackId);
-    if (currentTrack?.embedUrl && openExternalPlayer(currentTrack)) {
-      setPlayButton(false);
-      return true;
-    }
-
     const requestId = ++state.playRequestId;
 
     try {
@@ -1397,19 +1392,6 @@
     if (!currentId) return;
     state.currentTrackId = currentId;
     const currentTrack = getTrackById(currentId);
-    if (currentTrack?.embedUrl) {
-      state.playRequestId += 1;
-      state.lastPlaybackFailureKey = '';
-      state.audio.pause();
-      state.audio.removeAttribute('src');
-      state.audio.load();
-      if (autoplay) openExternalPlayer(currentTrack);
-      setPlayButton(false);
-      updateNowPlaying();
-      renderQueue();
-      renderLibrary();
-      return;
-    }
     closeExternalPlayer();
     const url = currentTrack?.streamUrl || apiUrl(`/api/stream/${encodeURIComponent(currentId)}`);
     state.playRequestId += 1;
