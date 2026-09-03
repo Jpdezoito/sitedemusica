@@ -108,11 +108,13 @@
     'c00a0555-db57-f171-68f1-43c84bb816db': '4947777-c00a0555-db57-f171-68f1-43c84bb816db',
     'bc89531a-8e6d-fd2e-9a30-5c57e1eb6924': '4947865-bc89531a-8e6d-fd2e-9a30-5c57e1eb6924',
     'a57ce8f9-3229-f4f7-6913-2ec3b2ef4342': '4958066-a57ce8f9-3229-f4f7-6913-2ec3b2ef4342',
-    '173bb620-0e75-f4a2-9c70-9e2f39cffc2e': '5025163-173bb620-0e75-f4a2-9c70-9e2f39cffc2e'
+    '173bb620-0e75-f4a2-9c70-9e2f39cffc2e': '5025163-173bb620-0e75-f4a2-9c70-9e2f39cffc2e',
+    '2d18f483-8a7c-ff5f-938b-8d9fac2fe046': '4840331-2d18f483-8a7c-ff5f-938b-8d9fac2fe046'
   };
+  const EASYMUSIC_TIMER_MARGIN_SECONDS = 120;
 
   function getEasyMusicEmbedUrl(streamUrl) {
-    const match = String(streamUrl || '').match(/\/audios\/([a-f0-9-]+)\.mp3/i);
+    const match = String(streamUrl || '').match(/\/(?:audios|origin)\/([a-f0-9-]+)\.(?:mp3|m4a)/i);
     const shareId = match ? EASYMUSIC_SHARE_IDS_BY_CONTENT_ID[match[1].toLowerCase()] : '';
     return shareId ? `https://easymusic.ai/pt/music/${shareId}/embed` : '';
   }
@@ -174,6 +176,8 @@
     externalEmbedUrl: '',
     externalPlayerPanel: null,
     externalPlayerFrame: null,
+    externalAdvanceTimer: null,
+    externalAdvanceDeadline: 0,
     vuLevels: { left: 0, right: 0, mix: 0 },
     audio: new Audio()
   };
@@ -570,6 +574,34 @@
     return panel;
   }
 
+  function clearExternalAdvanceTimer() {
+    if (state.externalAdvanceTimer) {
+      window.clearTimeout(state.externalAdvanceTimer);
+      state.externalAdvanceTimer = null;
+    }
+    state.externalAdvanceDeadline = 0;
+  }
+
+  function scheduleExternalAdvance(track) {
+    clearExternalAdvanceTimer();
+    const durationSeconds = Number(track?.durationSec) || 0;
+    if (durationSeconds <= 0) {
+      setUploadStatus('Toque no Play do EasyMusic. Use Próxima quando a música terminar.');
+      return;
+    }
+
+    const waitSeconds = Math.ceil(durationSeconds + EASYMUSIC_TIMER_MARGIN_SECONDS);
+    state.externalAdvanceDeadline = Date.now() + (waitSeconds * 1000);
+    state.externalAdvanceTimer = window.setTimeout(() => {
+      state.externalAdvanceTimer = null;
+      state.externalAdvanceDeadline = 0;
+      if (state.currentTrackId !== track.id) return;
+      nextTrack(false, { reason: 'easymusic-timer', allowAutoSkip: true });
+    }, waitSeconds * 1000);
+
+    setUploadStatus(`Toque no Play do EasyMusic. A próxima faixa será aberta em aproximadamente ${formatSeconds(waitSeconds)}.`);
+  }
+
   function openExternalPlayer(track) {
     if (!track?.embedUrl) return false;
     const panel = ensureExternalPlayerPanel();
@@ -578,11 +610,13 @@
       state.externalEmbedUrl = track.embedUrl;
     }
     panel.classList.remove('hidden');
-    setUploadStatus('Esta faixa usa o player oficial do EasyMusic. Toque no Play da janela aberta.');
+    scheduleExternalAdvance(track);
+    setPlayButton(true);
     return true;
   }
 
   function closeExternalPlayer() {
+    clearExternalAdvanceTimer();
     if (!state.externalPlayerPanel) return;
     state.externalPlayerPanel.classList.add('hidden');
     setPlayButton(false);
@@ -1359,6 +1393,9 @@
     if (!trackId || trackId !== state.currentTrackId) return false;
 
     const currentTrack = getTrackById(trackId);
+    if (currentTrack?.embedUrl) {
+      return openExternalPlayer(currentTrack);
+    }
     const requestId = ++state.playRequestId;
 
     try {
@@ -1393,9 +1430,25 @@
     state.currentTrackId = currentId;
     const currentTrack = getTrackById(currentId);
     closeExternalPlayer();
-    const url = currentTrack?.streamUrl || apiUrl(`/api/stream/${encodeURIComponent(currentId)}`);
     state.playRequestId += 1;
     state.lastPlaybackFailureKey = '';
+
+    if (currentTrack?.embedUrl) {
+      state.audio.pause();
+      state.audio.removeAttribute('src');
+      state.audio.load();
+      if (autoplay) {
+        openExternalPlayer(currentTrack);
+      } else {
+        setPlayButton(false);
+      }
+      updateNowPlaying();
+      renderQueue();
+      renderLibrary();
+      return;
+    }
+
+    const url = currentTrack?.streamUrl || apiUrl(`/api/stream/${encodeURIComponent(currentId)}`);
     state.audio.src = url;
     state.audio.load();
     if (autoplay) {
@@ -1551,6 +1604,11 @@
 
   function togglePlayPause() {
     if (state.currentIndex === -1) return;
+    const currentTrack = getTrackById(state.currentTrackId);
+    if (currentTrack?.embedUrl) {
+      openExternalPlayer(currentTrack);
+      return;
+    }
     if (state.audio.paused) {
       void playCurrentAudio({
         trackId: state.currentTrackId,
