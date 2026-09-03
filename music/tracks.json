@@ -287,6 +287,15 @@
       "durationSec": 243,
       "streamUrl": "https://cdn3.easymusic.ai/origin/585f5947-61fe-f707-9c74-af3885f3d950.m4a",
       "coverUrl": "https://cdn9.easymusic.ai/images/585f5947-61fe-f707-9c74-af3885f3d950.jpeg"
+    },
+    {
+      "filename": "Era dos Gigantes.m4a",
+      "title": "Era dos Gigantes",
+      "artist": "EasyMusic.AI",
+      "album": "EasyMusic",
+      "durationSec": 0,
+      "streamUrl": "https://cdn3.easymusic.ai/origin/2d18f483-8a7c-ff5f-938b-8d9fac2fe046.m4a",
+      "coverUrl": "https://cdn9.easymusic.ai/images/2d18f483-8a7c-ff5f-938b-8d9fac2fe046.jpeg"
     }
   ]
 }
